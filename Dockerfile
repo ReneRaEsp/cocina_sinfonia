@@ -29,6 +29,9 @@ COPY . .
 # Configura Git seguro y ejecuta composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV SYMFONY_SKIP_SCRIPT=1
+# Copiar entorno de producción para que Symfony pueda cargarlo
+COPY .env.production .env
+# Git seguro + instalación de dependencias PHP
 RUN git config --global --add safe.directory /var/www/html && \
     composer install --no-dev --optimize-autoloader
 
