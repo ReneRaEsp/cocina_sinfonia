@@ -1,0 +1,185 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Estadísticas{% endblock %}
+{% block page_title %} Sigue la evolución de tu negocio {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+<body>
+<div class="" style="background-color: #fff;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);border-radius: 20px; width: 100% !important;">
+    <div class="row">
+         <div class="col-lg-6" style="display:flex;flex-direction: column;padding: 0% 8%">
+            <div style="display:flex;justify-content:center;;"><h3>Platos mas pedidos</h3></div>
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+        <div class="col-lg-6" style="display:flex;flex-direction: column;padding: 0% 8%">
+            <div style="display:flex;justify-content:center;;"><h3>Histórico Anual</h3></div>
+            <canvas id="myChart2" width="400" height="400"></canvas>
+        </div>
+        
+    </div>
+
+</div>
+<br><br>
+
+<div class="" style="background-color: #fff;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);border-radius: 20px; width: 100% !important;">
+    <div class="row" style="justify-content: center;">
+         <div class="col-lg-6" style="display:flex;flex-direction: column;padding: 2% 8%">
+          <div class="input-group mb-3">
+                <input type="text" id="search-input" class="form-control" placeholder="Busca un plato" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" onclick="datosIniciales()" type="button" id="button-addon2"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                <div id="search-results"  class="position-absolute start-0 mt-1">
+                    <!-- Aquí se mostrarán los resultados de la búsqueda -->
+                </div>
+                
+        </div>
+    
+            <div style="display:flex;justify-content:center;"><h3>Platos mas pedidos (Última semana)</h3></div>
+            <canvas id="myChart3" width="400" height="400"></canvas>
+        </div>        
+    </div>
+
+</div>
+
+<br><br>
+
+<div id="appStatsComida" style="max-width: 100vw;" data-statscomida="{{ allcomidarepetitions|json_encode }}"></div>
+
+</body>
+
+<script>    
+
+const data = {{ chartData|raw }};
+var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart1 = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                legend: {
+                    position: 'top',
+                },
+                }
+            },
+        });
+
+        
+
+
+
+
+
+const dataMonth = {{ chartDataMonth|raw }};
+    var ctx = document.getElementById('myChart2').getContext('2d');
+var myChart2 = new Chart(ctx, {
+    type: 'line',
+    data: dataMonth,
+            options: {
+                plugins: {
+                    filler: {
+                        propagate: false,
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: (ctx) => {
+                                var index = ctx[0].dataIndex;
+                                return ctx[0].dataset.dishNames[index]
+                            },
+                        }
+                    }
+                },
+                
+                interaction: {
+                    intersect: false,
+                },
+            },
+});
+
+
+const chartWeek = {{ chartWeek|raw }};
+var ctx = document.getElementById('myChart3').getContext('2d');
+        var myChart3 = new Chart(ctx, {
+             type: 'line',
+                data: chartWeek,
+                options: {
+                    responsive: true,
+                },
+        });
+
+
+// Buscador de comida
+var src = {{ allcomida|json_encode|raw }}
+
+
+        function onSelectItem(item, element) {
+            $.ajax({
+                type: 'POST',
+                data: { id: item.value, name: item.label},
+                 url: "{{ path('comida_semana') }}",
+                 success: function (response){
+
+                    myChart3.data.labels = response.chartDishWeek.labels;
+                    myChart3.data.datasets = response.chartDishWeek.datasets;
+
+                    // Actualizar el gráfico
+                    myChart3.update();
+
+                 },
+                 error: function (response) {
+                    console.log(response)
+
+                 }
+
+            })
+        }
+ 
+
+        $('#search-input').autocomplete({
+            source: src,
+            onSelectItem: onSelectItem,
+        })
+
+        function datosIniciales(){
+
+             $.ajax({
+                type: 'POST',
+                 url: "{{ path('restablecer_semana') }}",
+                 success: function (response){
+
+                    myChart3.data.labels = response.chartDishWeek.labels;
+                    myChart3.data.datasets = response.chartDishWeek.datasets;
+
+                    // Actualizar el gráfico
+                    myChart3.update();
+
+                 },
+                 error: function (response) {
+                    console.log(response)
+
+                 }
+
+            })
+
+
+        }
+
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,243 @@
+{% extends 'base.html.twig' %}
+{# {% extends '@AdminLTE/layout/default-layout.html.twig' %} #}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+
+{% block title %}Fichaje{% endblock %}
+
+{% block page_title %}
+	Fichaje personal
+{% endblock %}
+
+{% block page_content %}
+<div class="new-container">
+
+
+  {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
+    <div class="flex flex-col space-y-1.5 p-6">
+      <h3 class="tracking-tight text-2xl font-bold">Fichaje trabajador</h3>
+      <p class="text-sm text-gray-500">Por favor complete los horarios de inicio y finalización de sus turnos.</p>
+    </div>
+    <div class="p-6">
+      <div class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            {% if fichajeMannana == false %}
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="morning-start"
+            >
+              Inicio Mañana
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="morning-start"              
+              type="time"
+            />
+          </div>
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="morning-end"
+            >
+              Fin Mañana
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="morning-end"              
+              type="time"
+            />
+          </div>
+          {% else %}
+              <label
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                for="morning-start"
+              >
+                Inicio Mañana
+              </label>
+              <input
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="morning-start"              
+                type="time" disabled {% if horaInicioAm is not empty %} value="{{ horaInicioAm }}" {% endif %}  />
+            </div>
+            <div class="space-y-2">
+              <label
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                for="morning-end"
+              >
+                Fin Mañana
+              </label>
+              <input
+                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                id="morning-end"              
+                type="time" disabled {% if horaFinAm is not empty %} value="{{ horaFinAm }}" {% endif %}/>
+            </div>
+
+          {% endif %}
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+          {% if fichajeTarde == false %}
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="afternoon-start"
+            >
+              Inicio Tarde
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="afternoon-start"              
+              type="time"  />
+          </div>
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="afternoon-end"
+            >
+              Fin tarde
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="afternoon-end"              
+              type="time"  />
+          </div>
+        </div>
+
+        {% else %}
+
+        <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="afternoon-start"
+            >
+              Inicio Tarde
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="afternoon-start"              
+              type="time" disabled {% if horaInicioPm is not empty %} value="{{ horaInicioPm }}" {% endif %} />
+          </div>
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="afternoon-end"
+            >
+              Fin tarde
+            </label>
+            <input
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              id="afternoon-end"              
+              type="time" disabled {% if horaFinPm is not empty %} value="{{ horaFinPm }}" {% endif %}   />
+          </div>
+        </div>
+        {% endif %}
+
+        {% if fichajeMannana == true and fichajeTarde == true %}
+        <button
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-blue-500 text-white"
+             onclick="InsertFichaje()" id="bttn-fichaje" disabled style="cursor:no-drop;">
+          Fichar
+        </button>
+        {% else %}
+        <button
+          class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-blue-500 text-white"
+             onclick="InsertFichaje()" id="bttn-fichaje" >
+          Fichar
+        </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div
+  >
+      <h3 class="tracking-tight text-2xl font-bold">Histórico</h3>
+      <p class="text-sm text-gray-500">Aquí puede ver el historial de los tiempos de turno registrados.</p>
+      <div id="appFichaje" data-fichajes="{{ fichajesUser|json_encode }}" style="width: 90vw;"></div>
+    {% else %}
+      <h3 class="tracking-tight text-2xl font-bold">Histórico</h3>
+      <p class="text-sm text-gray-500">Aquí puede ver el historial de todos los trabajadores.</p>
+      <div id="appFichaje" data-fichajes="{{ fichajes|json_encode }}" style="width: 90vw;"></div>
+    {% endif %}
+    <div class="p-6">
+      
+    </div>
+</div>
+
+<script>
+
+function InsertFichaje(){
+
+                var morningStartValue = document.getElementById('morning-start').value.trim();
+                var morningEndValue = document.getElementById('morning-end').value.trim();
+                var afternoonStartValue = document.getElementById('afternoon-start').value.trim();
+                var afternoonEndValue = document.getElementById('afternoon-end').value.trim();
+
+                // Verificar si al menos uno de los campos está vacío
+                if (((morningStartValue !== '' || morningEndValue !== '') && (morningStartValue === '' || morningEndValue === '')) || ((afternoonStartValue !== '' || afternoonEndValue !== '') && (afternoonStartValue === '' || afternoonEndValue === ''))) {
+                     Swal.fire({
+                        icon: 'warning',
+                        title: 'Atención',
+                        text: 'Por favor, añada ambas horas si es turno de mañana o si es turno de tarde',
+                    });
+                } else {
+                    $.ajax({
+                        url: "{{ path('insert_fichaje') }}",
+                        type: 'POST',
+                        data: {
+                            inicioMannana: morningStartValue,
+                            finMannana: morningEndValue,
+                            inicioTarde: afternoonStartValue,
+                            finTarde: afternoonEndValue,
+                        },
+
+                        success: function (response){
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Fichaje Correcto',
+                                text: 'Se ha registrado correctamente',
+                            });
+
+                            if(morningStartValue != '' && morningEndValue != '' && afternoonStartValue!= '' && afternoonEndValue != ''){
+
+                                $('#morning-start').prop('disabled', true);
+                                $('#morning-end').prop('disabled', true);
+                                $('#afternoon-start').prop('disabled', true);
+                                $('#afternoon-end').prop('disabled', true);
+                                $('#bttn-fichaje').prop('disabled', true);
+
+                            } else if(morningStartValue != '' && morningEndValue != ''){
+
+                                $('#morning-start').prop('disabled', true);
+                                $('#morning-end').prop('disabled', true);
+
+                            } else if(afternoonStartValue!= '' && afternoonEndValue != ''){
+                                $('#afternoon-start').prop('disabled', true);
+                                $('#afternoon-end').prop('disabled', true);
+                            }
+
+
+                        },
+
+                        error: function(response){
+
+                        }
+
+
+                    })
+
+                }
+
+
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Ventas{% endblock %}
+{% block page_title %} Ventas {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+<body>
+
+<div id="appVentas" style="max-width: 100vw;" data-ventas="{{ ventas|json_encode }}"></div>
+
+
+    {# Bloque JavaScript #}
+    <script>
+    var table = new Tabulator("#table-stock", {
+//    height:"331px",
+    layout:"fitColumns",
+    tooltipsHeader: false,
+    data:{{ ventas|json_encode|raw }},
+    pagination:"local",
+    paginationSize:20,
+    paginationSizeSelector:[25, 50, 100],
+    groupBy:"fecha",
+    groupHeader: function(value, count, data, group) { 
+        var total = 0; // Inicializar el total en cero
+        for (var i = 0; i < data.length; i++) { // Recorrer todos los elementos del grupo
+            total += data[i].cantidad; // Sumar la cantidad de cada elemento al total
+        }
+        total_dec = parseFloat(total.toFixed(2));
+        return value + " (" + count + " ventas) <bold>Total:</bold> " + total_dec+" €"; // Devolver el encabezado personalizado
+    },
+    groupStartOpen:false, // Agrupaciones colapsadas por defecto
+    movableColumns:true,
+    paginationCounter:"rows",
+    pagination:"local",
+    columns:[
+        {title:"Id", field:"id", sorter:"string", headerFilter:"input"},
+        {title:"Fecha", field:"fecha",sorter:"date", headerFilter:"input"},
+        {title:"Cantidad", field:"cantidad",sorter:"number", hozAlign:"center", headerFilter:"input", formatter: "money",formatterParams: {symbol: "€",symbolAfter: true, thousand: ".",decimal: ",", precision: 2}},
+        {title:"Método de pago", field:"metodo_pago",sorter:"string",hozAlign:"center",headerFilter:'select', headerFilterParams:{
+          values: {
+                      '':'Todos',
+                      {% for mpago in mpagos %}
+                        '{{mpago}}':'{{mpago}}',
+                      {% endfor %}
+          }, defaultValue:'',
+             includeAll: true,
+          
+        }},
+            ],
+        });
+
+        //trigger download of data.csv file
+          document.getElementById("download-csv").addEventListener("click", function(){
+              table.download("csv", "ventas.csv");
+          });
+
+          //trigger download of data.xlsx file
+          document.getElementById("download-xlsx").addEventListener("click", function(){
+              table.download("xlsx", "ventas.xlsx");
+          });
+
+
+          //trigger download of data.pdf file
+          document.getElementById("download-pdf").addEventListener("click", function(){
+              table.download("pdf", "ventas.pdf", {
+                  orientation:"portrait", //set page orientation to portrait
+                  title:"Ventas", //add title to report
+                  
+              });
+          });
+
+
+{# function esTablet() {
+             return window.innerWidth <= 1200;
+            }
+
+            // Verificar si es una tablet y establecer el nivel de zoom
+            if (esTablet()) {
+            document.body.style.zoom = "60%"; // Establece un nivel de zoom del 50% solo para tablets
+            } #}
+    </script>
+</body>
+
+{% endblock %}

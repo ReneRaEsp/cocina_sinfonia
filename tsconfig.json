@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {},
+  "files": [
+    "./assets/components/stock/Stock.vue",
+    "./assets/components/stock/Index.vue"
+  ]
+}

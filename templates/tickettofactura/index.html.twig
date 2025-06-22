@@ -1,0 +1,185 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/dist/index.global.min.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/packages/moment/index.global.min.js') }}"></script>
+    <script src="{{ asset('bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    
+{% endblock %}
+
+{% block title %}Facturas Emitidas{% endblock %}
+{% block page_title %} Facturas Emitidas{% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+<body>
+
+<div id="appTfacturas" data-tfacturas="{{ tickettofactura | json_encode }}" ></div>
+
+<div class="container mx-auto bg-white rounded-lg shadow-md p-6">
+    <div class="row m-4">
+        <div class="col-12 col-md-4 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+            <h4 id="tramo-titulo">{{tramo}} - Facturas Ry Tickets Emitidos</h4>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+            <div class="input-group" style="background-color: #f0f0f0; border-radius: 5px; padding: 5px;">
+                <input class="input-tramos form-control flatpickr-input" placeholder="Selecciona una fecha" name="date" id="date-trimestre" style="border: none; outline: none; background: transparent;">
+                <span class="input-group-text" style="background: transparent; border: none;">
+                    <i class="fa-solid fa-calendar"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-center align-items-center flex-wrap">
+            <select class="custom-select mb-2 mb-md-0" id="año-tramo">
+                {% for año in años %}
+                <option value="{{ año }}">{{ año }}</option>
+                {% endfor %}
+            </select>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(0)">1er trimestre</button>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(1)">2do trimestre</button>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(2)">3er trimestre</button>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(3)">4to trimestre</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-0">IVA 0%</h4>
+                <span id="total-iva-0">{{iva0}}€</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-5">IVA 5%</h4>
+                <span id="total-iva-5">{{iva5}}€</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-10">IVA 10%</h4>
+                <span id="total-iva-10">{{iva10}}€</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-21">IVA 21%</h4>
+                <span id="total-iva-21">{{iva21}}€</span>
+            </div>
+        </div>
+        <div class="col-12 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column d-flex align-items-center">
+                <h4 id="iva-total">IVA TOTAL</h4>
+                <span id="total-iva">{{totalimpuestos}}€</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+
+  document.addEventListener('DOMContentLoaded', function() {
+
+    flatpickr('.input-tramos', {
+        maxDate: "today",
+        dateFormat: "d-m-Y",
+        locale: "es",
+        position: "above",
+        onChange: function(selectedDates, dateStr, instance) {
+                    fechaTramo(dateStr);
+                }
+    });
+
+}) 
+
+function fechaTramo(fecha){
+
+
+    $.ajax({
+        type: "POST",
+        url: "{{ path('fecha_tramo_emitida') }}",
+        data: {fecha: fecha},
+        success: function(response){
+
+             var tituloTramo = document.getElementById('tramo-titulo');
+
+            tituloTramo.textContent = response.fecha +' - Facturas y Tickets Emitidos';
+
+            var iva0 = document.getElementById('total-iva-0');
+            var iva5 = document.getElementById('total-iva-5');
+            var iva10 = document.getElementById('total-iva-10');
+            var iva21 = document.getElementById('total-iva-21');
+            var total = document.getElementById('total-iva');
+
+            iva0.textContent = response.iva0.toFixed(2) +' €'
+            iva5.textContent = response.iva5.toFixed(2) +' €'
+            iva10.textContent = response.iva10.toFixed(2) +' €'
+            iva21.textContent = response.iva21.toFixed(2) +' €'
+
+            total.textContent = response.totalimpuestos.toFixed(2) + ' €'
+            
+
+            
+
+        },
+        error: function(response){
+            console.log(response);
+        }
+    })
+}
+
+function buscarTramo(tramo){
+
+    var selectAño = document.getElementById('año-tramo');
+    var año = selectAño.value;
+
+
+    $.ajax({
+        type: "POST",
+        url: "{{ path('buscar_tramo_emitida') }}",
+        data: {tramo: tramo, año: año},
+        success: function(response){
+
+        console.log(response)
+
+            var tituloTramo = document.getElementById('tramo-titulo');
+
+            tituloTramo.textContent = response.tramo+' - Facturas Recibidas';
+
+            var iva0 = document.getElementById('total-iva-0');
+            var iva5 = document.getElementById('total-iva-5');
+            var iva10 = document.getElementById('total-iva-10');
+            var iva21 = document.getElementById('total-iva-21');
+            var total = document.getElementById('total-iva');
+
+            iva0.textContent = response.iva0.toFixed(2) +' €'
+            iva5.textContent = response.iva5.toFixed(2) +' €'
+            iva10.textContent = response.iva10.toFixed(2) +' €'
+            iva21.textContent = response.iva21.toFixed(2) +' €'
+
+            total.textContent = response.totalimpuestos.toFixed(2) + ' €'
+
+            
+
+        },
+        error: function(response){
+            console.log(response);
+        }
+    })
+}
+
+
+</script>
+{% endblock %}

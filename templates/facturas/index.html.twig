@@ -1,0 +1,663 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/dist/index.global.min.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/packages/moment/index.global.min.js') }}"></script>
+    <script src="{{ asset('bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+    
+{% endblock %}
+
+{% block title %}Facturas Recibidas{% endblock %}
+{% block page_title %} Facturas Recibidas {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+<body>
+<!-- Modal -->
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crear nueva factura</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+{# <div class="container">
+	<div class="row">
+		<div class="12 d-flex justify-content-center m-3">
+ 			<button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+       			Añadir factura
+			</button>
+		</div>
+	</div>
+</div> #}
+
+{# <input type="file" name="" id="fileInput"> #}
+
+<div id="facturaModal" class="" style="display: none;" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Agregar Factura Manualmente</h5>
+        <button type="button" class="close closeBtn" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+<form id="facturaForm">
+  <div class="form-group">
+    <label for="nombre">Nombre</label>
+    <input type="text" class="form-control" id="nombre" aria-describedby="nombre" placeholder="Nombre">
+  </div>
+  <div class="form-group">
+    <label for="empresa">Empresa</label>
+    <input type="text" class="form-control" id="empresa" aria-describedby="empresa" placeholder="Empresa">
+  </div>
+  <div class="form-group">
+    <label for="concepto">Concepto</label>
+    <input type="text" class="form-control" id="concepto" aria-describedby="concepto" placeholder="Concepto">
+  </div>
+  <div class="form-group">
+    <label for="nif">Nif / Cif / DNI</label>
+    <input type="text" class="form-control" id="nif" aria-describedby="nif" placeholder="Nif / Cif / DNI">
+  </div>
+  <div class="form-group">
+    <label for="fecha">Fecha</label>
+    <input type="date" class="form-control" id="fecha" aria-describedby="fecha" placeholder="Fecha">
+  </div>
+  <div class="form-group">
+    <label for="baseImponible">Base Imponible</label>
+    <input type="number" class="form-control" id="baseImponible" aria-describedby="baseImponible" placeholder="Base Imponible">
+  </div>
+  <div class="border border-info p-3 m-3 rounded">
+    <div class="form-group">
+      	<label for="impuesto">Impuesto</label>
+    	<input type="number" class="form-control" id="impuesto" aria-describedby="impuesto" placeholder="Impuesto - ejemplo: 22%">
+	<div class="form-text">Ingresar el porcentaje del impuesto</div>
+    	<br />
+	<label for="cantidad">Cantidad</label>
+ 	<input type="number" class="form-control" id="cantidad" aria-describedby="cantidad" placeholder="Cantidad - ejemplo: 20€">
+	<div class="form-text">Ingresar la cantidad del impuesto</div>
+    	<br />
+    	<button onclick="agregarImpuesto()" type="button" class="btn btn-info">Guardar Impuesto</button>
+    </div>
+
+    <div class="form-group">
+	<div id="impuestosArea" class="d-flex flex-direction-column flex-wrap col-12"> 
+     	
+    	</div>
+     </div>
+  </div>
+
+  <div class="form-group">
+    <label for="total">Total</label>
+    <input type="text" class="form-control" id="total" aria-describedby="total" placeholder="Total">
+  </div>
+  <div class="form-group">
+  	<label for="facturaManual" class="form-label">Subir Factura</label>
+  	<input class="form-control" type="file" id="facturaManual">
+   </div>
+</form>
+      </div>
+      <div class="modal-footer">
+        <button onclick="guardarFacturaManualmente()" type="button" class="btn btn-primary saveBtn">Guardar</button>
+        <button type="button" class="btn btn-secondary closeBtn" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-12 d-flex justify-content-center m-3">
+ 			<!--<button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+       			Añadir factura
+			</button>-->
+			<div id="drop-area">
+    				{# <p>Subir una o mas facturas en formato pdf arrastrando y soltando en esta área</p> #}
+  				<form class="my-form">
+                    <input type="file" id="fileElem" multiple accept="application/pdf" style="display:none;" />
+                    <button id="fileSelect" type="button" style="width:100%;">Arrastra un archivo o haz clic para seleccionarlo</button>
+                </form>
+			</div>
+				</div>
+		<div class="col-12 d-flex justify-content-center">
+			<button onclick="showFacturaModal()" type="button" class="btn btn-primary btn-form m-3" id="showFacturaModalBtn">
+       				Añadir factura de forma manual
+			</button>
+		</div>
+	</div>
+</div>
+
+<div id="appFacturas" data-facturas="{{ facturas | json_encode }}" ></div>
+<br>
+<div class="container mx-auto bg-white rounded-lg shadow-md p-6">
+    <div class="row m-4">
+        <div class="col-12 col-md-4 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+            <h4 id="tramo-titulo">{{tramo}} - Facturas Recibidas</h4>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+            <div class="input-group" style="background-color: #f0f0f0; border-radius: 5px; padding: 5px;">
+                <input class="input-tramos form-control flatpickr-input" placeholder="Selecciona una fecha" name="date" id="date-trimestre" style="border: none; outline: none; background: transparent;">
+                <span class="input-group-text" style="background: transparent; border: none;">
+                    <i class="fa-solid fa-calendar"></i>
+                </span>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-center align-items-center flex-wrap">
+            <select class="custom-select mb-2 mb-md-0" id="año-tramo">
+                {% for año in años %}
+                <option value="{{ año }}">{{ año }}</option>
+                {% endfor %}
+            </select>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(0)">1er trimestre</button>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(1)">2do trimestre</button>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(2)">3er trimestre</button>
+            <button class="m-2 v-btn v-btn--elevated v-theme--light v-btn--density-default elevation-2 v-btn--size-default v-btn--variant-elevated bg-light" onclick="buscarTramo(3)">4to trimestre</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-0">IVA 0%</h4>
+                <span id="total-iva-0">{{iva0}}€</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-5">IVA 5%</h4>
+                <span id="total-iva-5">{{iva5}}€</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-10">IVA 10%</h4>
+                <span id="total-iva-10">{{iva10}}€</span>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column">
+                <h4 id="iva-21">IVA 21%</h4>
+                <span id="total-iva-21">{{iva21}}€</span>
+            </div>
+        </div>
+        <div class="col-12 mb-3 d-flex justify-content-center">
+            <div class="rounded-lg shadow-md p-6 w-100 d-flex flex-column d-flex align-items-center">
+                <h4 id="iva-total">IVA TOTAL</h4>
+                <span id="total-iva">{{totalimpuestos}}€</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+</body>
+
+{# Bloque JavaScript #}
+    <script>  
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+    flatpickr('.input-tramos', {
+        maxDate: "today",
+        dateFormat: "d-m-Y",
+        locale: "es",
+        position: "above",
+        onChange: function(selectedDates, dateStr, instance) {
+                    fechaTramo(dateStr);
+                }
+    });
+
+})      
+
+    
+    
+//Funcion para dar el okey de la carga de nuevo  proveedor
+    function showOkDialogBill() {
+    Swal.fire({
+    title: 'Factura añadida',
+    text: 'La factura se ha añadido correctamente',
+    icon: 'success',
+    confirmButtonText: 'OK'
+    });
+}
+
+    function mostrarPDF(url){
+        // Obtener la URL del PDF correspondiente al ID de la factura
+        var url = url;
+
+        // Establecer la URL del iframe en el modal para cargar el PDF
+        var iframe = document.getElementById("pdfIframe");
+        iframe.src = url;
+
+        // Mostrar el modal
+        jQuery("#pdfModal").modal("show");
+    }
+
+    //Limpiamos el iframe del modal
+    function limpiarSrcModal() {
+        jQuery("#pdfModal").modal("hide");
+        var iframe = document.getElementById("pdfIframe");
+        iframe.src = "";
+        
+    };
+
+    // Mantén la clase "modal-open" al hacer clic fuera del modal para cerrarlo
+    jQuery('#pdfModal').on('hidden.bs.modal', function () {
+        jQuery('body').css('padding-right', '');
+    });
+
+    function descargarPdf(url){
+
+         // Obtener la extensión del archivo de la URL
+        const extension = url.split('.').pop().toLowerCase();
+
+        // Comprobar si la extensión es PDF o PNG
+        if (extension === 'pdf') {
+        // Descargar el archivo PDF
+        fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'factura.pdf';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                });
+            } else if (extension === 'png') {
+                // Descargar el archivo PNG
+                fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'factura.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                });
+
+            } else if (extension === 'jpg'){
+                // Descargar el archivo JPG
+                fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'factura.jpg';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                });   
+
+            } else {
+                // Mostrar un mensaje de error si la extensión no es compatible
+                alert('La extensión del archivo no es compatible.');
+            }
+
+    }
+
+    function deleteFactura(url,id){
+
+        // Crea un swal de confirmación
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "¡No podrás deshacer los cambios!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+                // Si se confirma, ejecuta la solicitud AJAX
+                if (result.isConfirmed) {
+                
+                    $.ajax({
+                            url: "{{ path('deletefacturas') }}",
+                            type: "POST",
+                            data: {                              
+                                id: id,
+                                ruta: url
+                            },
+                            success: function(response){
+                                    
+                                    Swal.fire({
+                                    title: 'Eliminación correcta',
+                                    text: response.factura,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                    });
+
+                                    // redibuja la tabla con el método redraw()
+                                    {# var facturas = JSON.stringify(response.facturas)
+                                    table.setData(JSON.parse(facturas)); #}
+                                
+                            },
+                            error: function(xhr, textStatus, errorThrown){
+                                
+                                if (xhr.status === 404 || xhr.status === 500) {
+                                    
+                                    console.log("Error en la llamada AJAX (Error 404 o 500): " + textStatus + " " + errorThrown);
+                                } else {
+                                    console.log("Error en la llamada AJAX (Error): " + xhr.responseText + errorThrown);
+                                }
+                            }
+                            });
+                }
+        });
+         
+
+    }
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        {% if bill_added %}        
+            showOkDialogBill();
+        {% endif %}
+     flatpickr('.flatpickr', {
+        enableTime: true,
+        dateFormat: 'Y-m-d',// Formato de fecha d-m-Y
+        locale: 'es',
+        // Otros ajustes de configuración de Flatpickr aquí, según tus necesidades.
+    });
+});
+
+function buscarTramo(tramo){
+
+    var selectAño = document.getElementById('año-tramo');
+    var año = selectAño.value;
+
+
+    $.ajax({
+        type: "POST",
+        url: "{{ path('buscar_tramo') }}",
+        data: {tramo: tramo, año: año},
+        success: function(response){
+
+        console.log(response)
+
+            var tituloTramo = document.getElementById('tramo-titulo');
+
+            tituloTramo.textContent = response.tramo+' - Facturas Recibidas';
+
+            var iva0 = document.getElementById('total-iva-0');
+            var iva5 = document.getElementById('total-iva-5');
+            var iva10 = document.getElementById('total-iva-10');
+            var iva21 = document.getElementById('total-iva-21');
+            var total = document.getElementById('total-iva');
+
+            iva0.textContent = response.iva0.toFixed(2) +' €'
+            iva5.textContent = response.iva5.toFixed(2) +' €'
+            iva10.textContent = response.iva10.toFixed(2) +' €'
+            iva21.textContent = response.iva21.toFixed(2) +' €'
+
+            total.textContent = response.totalimpuestos.toFixed(2) + ' €'
+
+            
+
+        },
+        error: function(response){
+            console.log(response);
+        }
+    })
+}
+
+
+function fechaTramo(fecha){
+
+
+    $.ajax({
+        type: "POST",
+        url: "{{ path('fecha_tramo') }}",
+        data: {fecha: fecha},
+        success: function(response){
+
+              var tituloTramo = document.getElementById('tramo-titulo');
+
+            tituloTramo.textContent = response.fecha +' - Facturas Recibidas';
+
+            var iva0 = document.getElementById('total-iva-0');
+            var iva5 = document.getElementById('total-iva-5');
+            var iva10 = document.getElementById('total-iva-10');
+            var iva21 = document.getElementById('total-iva-21');
+            var total = document.getElementById('total-iva');
+
+            iva0.textContent = response.iva0.toFixed(2) +' €'
+            iva5.textContent = response.iva5.toFixed(2) +' €'
+            iva10.textContent = response.iva10.toFixed(2) +' €'
+            iva21.textContent = response.iva21.toFixed(2) +' €'
+
+            total.textContent = response.totalimpuestos.toFixed(2) + ' €'
+            
+
+            
+
+        },
+        error: function(response){
+            console.log(response);
+        }
+    })
+}
+
+            let dropArea = document.getElementById('drop-area');
+			let facturaModal = document.getElementById('facturaModal');
+			let impuestosArea = document.getElementById('impuestosArea');
+            const fileElem = document.getElementById('fileElem');
+            const fileSelect = document.getElementById('fileSelect');
+		
+
+			['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+ 				 dropArea.addEventListener(eventName, preventDefaults, false)
+			});
+
+			function preventDefaults (e) {
+ 				e.preventDefault()
+  				e.stopPropagation()
+			};
+
+
+			['dragenter', 'dragover'].forEach(eventName => {
+  				dropArea.addEventListener(eventName, highlight, false)
+			});
+
+			['dragleave', 'drop'].forEach(eventName => {
+				dropArea.addEventListener(eventName, unhighlight, false)
+			});
+
+			function highlight(e) {
+  				dropArea.classList.add('highlight')
+			}
+
+			function unhighlight(e) {
+  				dropArea.classList.remove('highlight')
+			}
+
+
+			dropArea.addEventListener('drop', handleDrop, false);
+
+
+            // Abrir el diálogo de selección de archivos al hacer clic en el botón
+            fileSelect.addEventListener('click', function() {
+                fileElem.click();
+            });
+
+            // Detectar archivos seleccionados a través de clic
+            fileElem.addEventListener('change', function() {
+                handleFiles(fileElem.files);
+            });
+
+            // Función para manejar archivos cuando se arrastran o seleccionan
+            function handleFiles(files) {
+                [...files].forEach(file => {
+                    console.log('Archivo cargado:', file.name);
+                    // Aquí puedes agregar el código para procesar los archivos (subirlos al servidor, etc.)
+
+                    uploadFile(file)
+                });
+            }
+
+			function waitForButtonClick(button) {
+        			return new Promise((resolve) => {
+            				button.addEventListener('click', () => {
+                				resolve();
+            				}, { once: true }); // Escuchar solo una vez
+        			});
+			}
+				
+			async function handleDrop(e) {
+
+                    let dt = e.dataTransfer
+                    let files = dt.files
+  				
+				
+ 				await uploadFile(files[0])
+			}
+
+
+			function uploadFile(file) {
+  				const URL = '/uploadpdfs'
+				
+				let formData = new FormData()
+				formData.append('pdf', file)
+
+				const OPTIONS = {
+					method: "POST",
+					headers: { 'X-Requested-With': 'XMLHttpRequest'},
+					body: formData 
+				}
+
+  				fetch(URL, OPTIONS)
+					{# .then(res => location.reload()) #}
+					.catch(e => console.log)
+
+				document.getElementById('facturaForm').reset()
+			}
+
+			function close() {
+				facturaModal.style.display = 'none'
+			}
+
+			function showFacturaModal() {
+				facturaModal.style.display = 'flex'
+				let closeBtns = document.querySelectorAll('.closeBtn')
+				let saveBtn = document.querySelector('.saveBtn')
+
+				closeBtns.forEach(btn => {
+					btn.addEventListener('click', close)
+				})
+			}
+
+			function deleteImpuesto(e) {
+				const idChild = e.target.parentElement.id;
+				const nodeImpuesto = document.getElementById(idChild);
+				if (nodeImpuesto.parentNode) {
+				  	nodeImpuesto.parentNode.removeChild(nodeImpuesto);
+				}
+			}
+
+			function agregarImpuesto() {
+				const impuesto = document.getElementById('impuesto');
+				const cantidad = document.getElementById('cantidad');
+				const newId = 'impuesto-' + Math.floor((Math.random() * 10000000) + 1);
+				const classesArray = ['d-flex', 'justify-content-between', 'align-items-center', 'col-6', 'bg-secondary', 'rounded', 'p-1', 'm-1'];
+				const classesCloseArray = ['bg-danger', 'text-light', 'py-1', 'px-2', 'rounded', 'pointer'];
+				const closeNode = document.createElement('span');
+				const closeText = document.createTextNode('X');
+				const impuestoNode = document.createElement('div');
+				if (impuesto.value != '' && cantidad.value != '') {
+					impuestoNode.setAttribute('id', newId);
+					const impuestoText = document.createTextNode(impuesto.value + '% - ' + cantidad.value + '€');
+					closeNode.appendChild(closeText);
+					closeNode.addEventListener('click', deleteImpuesto);
+					impuestoNode.appendChild(impuestoText);
+					classesCloseArray.forEach(classItem => {
+						closeNode.classList.add(classItem);
+					});
+					impuestoNode.appendChild(closeNode);
+					classesArray.forEach(classItem => {
+						impuestoNode.classList.add(classItem);
+					});
+					impuestosArea.appendChild(impuestoNode);
+					impuesto.value = '';
+					cantidad.value = '';
+				}	
+			}
+
+			function guardarFacturaManualmente() {
+				const URL = '/uploadpdfmanual'
+				const impuestosArray = [];
+				const nombre = document.getElementById('nombre');
+				const empresa = document.getElementById('empresa');
+				const concepto = document.getElementById('concepto');
+				const nif = document.getElementById('nif');
+				const fecha = document.getElementById('fecha');
+				const baseImponible = document.getElementById('baseImponible');
+				const total = document.getElementById('total');
+				const impuestos = document.getElementById('impuestosArea');
+
+				if (nombre.value != '' && empresa.value != '' && concepto.value != '' && nif.value != '' && fecha.value != '' && baseImponible.value != '' && total.value != '' && impuestos.value != '') {
+					impuestos.children.forEach(impuesto => {
+						let item = {cantidad: impuesto.innerText.split('-')[0].trim().replace('%', ''), impuesto: impuesto.innerText.split('-')[1].trim().split('€')[0]};
+						impuestosArray.push(item);
+					});
+
+					const archivo = document.getElementById('facturaManual');
+				
+					let formData = new FormData();
+					formData.append('nombre', nombre.value);
+					formData.append('empresa', empresa.value);
+					formData.append('concepto', concepto.value);
+					formData.append('nif', nif.value);
+					formData.append('fecha', fecha.value);
+					formData.append('baseImponible', baseImponible.value);
+					formData.append('total', total.value);
+					formData.append('impuestos', JSON.stringify(impuestosArray));
+					formData.append('pdf', archivo.files[0]);
+
+					const OPTIONS = {
+						method: "POST",
+						headers: { 'X-Requested-With': 'XMLHttpRequest'},
+						body: formData 
+					}
+
+	  				fetch(URL, OPTIONS)
+						.then(res => location.reload())
+						.catch(e => console.log)
+
+				}
+			}
+
+
+
+        
+    </script>
+{% endblock %}

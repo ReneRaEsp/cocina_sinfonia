@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  symfony:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DATABASE_URL: "mysql://TU_USUARIO:TU_CONTRASEÑA@host.docker.internal:3306/TU_BASE_DE_DATOS"

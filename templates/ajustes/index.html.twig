@@ -1,0 +1,315 @@
+{% extends 'base.html.twig' %}
+{# {% extends '@AdminLTE/layout/default-layout.html.twig' %} #}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Ajustes{% endblock %}
+
+{% block page_title %}
+	Ajustes
+{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+
+{% block page_content %}
+
+<section style="padding:20px;">
+    <div class="row content-settings">
+        <div class="col-12 register-user-new p-4">
+        <h4><strong>Crea un Usuario</strong></h4>
+        {% if content is empty %}
+                {# Mostrar el formulario del registerAction #}
+                {% block fos_user_content %}
+                {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+                {{ form_widget(form) }}
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="Registrar" />
+                    </div>
+                {{ form_end(form) }}
+                {% endblock fos_user_content %}
+            {% else %}
+            {# Mostrar el contenido del index #}
+                {{ content|raw }}
+        {% endif %}
+        </div>
+     {#   <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 roles-user">
+            <h4><strong> Personaliza tus tablas </strong></h4>
+            <div class="container-switches">
+                    
+                {% for personalizacion in personalizaciones %}
+                <div class="switchers">
+                    <p>{{personalizacion.name}}</p>
+                    <label class="switch">
+                        <input type="checkbox" id="{{personalizacion.id}}" {% if personalizacion.active == 1 or personalizacion.active == true %}checked{% endif %}>
+                        <div class="slider round"></div>
+                    </label>
+                </div>
+                {% endfor %}
+                <button class="btn btn-primary" onclick="changeTheme()"> Aplicar </button>
+            </div>
+        </div> #}
+    </div>
+    <div id="appAjustes" data-ajustes="{{ auditorias | json_encode }}" data-users="{{ users | json_encode }}" ></div>
+   {# <div class="row" style="display: flex;flex-direction: row;justify-content: space-between;">
+        <div class="col-lg-12 col-md-12 col-sm-12 roles-user table-roles" style="top:27px;">
+            <h4><strong>Control de roles</strong></h4>
+            <div id="table-stock"></div>
+        </div>
+    </div>
+    <div class="row" style="display: flex;flex-direction: row;justify-content: space-between;">
+        <div class="col-lg-12 col-md-12 col-sm-12 roles-user table-roles" style="top:27px;">
+            <p><strong>Auditoria de roles</strong></p>
+            <div id="table-auditoria"></div>
+        </div>
+    </div> #}
+
+</section>
+
+<script>
+var isTouchDevice = 'ontouchstart' in window || navigator.msMaxTouchPoints;
+var layout = window.innerWidth < 768 ? "fitDataFill" : "fitColumns";
+var table = new Tabulator("#table-stock", {
+//    height:"331px",
+    resizableColumns: false,
+    layout: 'fitColumns',
+    autoResize: false,
+    tooltipsHeader: false,
+    data:{{ users|json_encode|raw }},
+    pagination:"local",
+    paginationSize:10,
+    paginationSizeSelector:[15, 20, 25],
+    movableColumns:true,
+    paginationCounter:"rows",
+    pagination:"local",
+    columns:[
+        {title:"ID", field:"id", sorter:"string",sorter:"string", headerFilter:"input", hozAlign: "left", visible: false},
+        {title:"Nombre de usuario", field:"username", sorter:"string", headerFilter:"input"},
+        {title:"Roles ", field:"roles",sorter:"string", hozAlign:"center",  headerFilter:'select', headerFilterParams:{
+          values: {
+                      '':'Todos',
+                      'ROLE_USER': 'ROLE_USER',
+                      'ROLE_ADMIN': 'ROLE_ADMIN',
+                      'ROLE_CAMARERO': 'ROLE_CAMARERO',
+                      'ROLE_GESTOR': 'ROLE_GESTOR',
+                      
+          }, defaultValue:'',
+             includeAll: true,
+          
+        } , clearable:true,editor:"list", editorParams:{
+        autocomplete:"true", allowEmpty:true,listOnEmpty:true, valuesLookup:true,
+            values: {
+                    'ROLE_USER': 'ROLE_USER',
+                    'ROLE_ADMIN': 'ROLE_ADMIN',
+                    'ROLE_CAMARERO': 'ROLE_CAMARERO',
+                    'ROLE_GESTOR': 'ROLE_GESTOR',
+                },
+                touchEdit: false,
+        },cellEdited:function(cell){
+            var newValue = cell.getValue();
+            var email = cell.getRow().getData().email;
+
+             if(newValue !== null && newValue !== undefined && newValue !== ''){
+            $.ajax({
+                url: "{{ path('set_role') }}",
+                type: "POST",
+                data: {
+                    value: newValue,
+                    email: email
+                },
+                success: function(response){
+                    console.log(response)
+                    Swal.fire({
+                            title: response.texto,
+                            text: 'Se ha registrado correctamente la modificacion',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                            });
+                },
+                error: function(xhr, status, error){
+                      var response = xhr.responseJSON;
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.error,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                            });
+                }
+            });
+        }
+             
+        }},
+        {title: "", field:"", headerSort:true, hozAlign:"center", formatter: function(cell) {
+                    var id = cell.getRow().getData().id;
+                        return "<button type='button' class='trash btn btn-danger' onclick='deleteUser("+id+")'><i class='fa-solid fa-trash'></i></button>";
+                        
+                }}
+            ],
+        });
+
+
+var table_auditoria = new Tabulator("#table-auditoria", {
+//    height:"331px",
+    layout: layout,
+    tooltipsHeader: false,
+    virtualDomHoz: "scroll",
+    pagination:"local",
+    data:{{ auditorias|json_encode|raw }},
+    paginationSize:5,
+    paginationSizeSelector:[10, 15, 20],
+    movableColumns:true,
+    paginationCounter:"rows",
+    pagination:"local",
+    columns:[
+        {title:"Nombre de usuario", field:"usuario", sorter:"string", headerFilter:"input"},
+        {title:"Modificado por", field:"modificado", sorter:"string", headerFilter:"input"},
+        {title:"Fecha modificación", field:"fecha",sorter:"date", headerFilter:"input"},
+        {title:"Roles anteriores", field:"rol_anterior", sorter:"string", headerFilter:"input"},
+        {title:"Roles actuales", field:"rol_nuevo",sorter:"date", headerFilter:"input"},
+        
+            ],
+        });
+
+
+        var checked;
+
+        $(document).ready(function() {
+            // Obtenemos todos los interruptores
+            const $switchers = $(".switchers input[type='checkbox']");
+
+            // Al hacer clic en un interruptor
+            $switchers.on("click", function() {
+                // Desactivamos todos los interruptores primero
+                $switchers.prop("checked", false);
+
+                // Luego activamos solo el interruptor que se hizo clic
+                $(this).prop("checked", true);
+
+                 // Mostrar el estado de cada interruptor en la consola
+                $switchers.each(function(index, checkbox) {
+                    if($(checkbox).prop("checked")){
+                        checked = $(checkbox).attr("id");
+                    }
+                });
+            });
+        });
+
+        function changeTheme(){
+
+            jQuery.ajax({
+                url: "{{ path('updatetheme') }}",
+                data: { check: checked},
+                type: "POST",
+                success: function(response){
+                
+                const mensaje = response.changed
+
+
+                Swal.fire({
+                title: 'Cargando...',
+                html: 'Estamos procesando la acción.<br><div class="spinner-border text-primary" role="status"></div>',
+                text: mensaje,
+                timer: 1000,
+                didOpen: () => {
+                    Swal.showLoading()
+                },
+                willClose: () => {
+                    // Realiza la recarga de la página después de que el SweetAlert se cierre
+                    location.reload(true);
+                },
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false
+            });
+
+                }, 
+                error: function(response){
+                    console.log('Error al actualizar el tema');
+                }
+
+
+
+
+            })
+
+
+        }
+
+        function deleteUser(id){
+
+        // Crea un swal de confirmación
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "¡No podrás deshacer los cambios!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+                // Si se confirma, ejecuta la solicitud AJAX
+                if (result.isConfirmed) {
+                
+                    $.ajax({
+                            url: "{{ path('delete_user') }}",
+                            type: "POST",
+                            data: {                              
+                                id: id
+                            },
+                            success: function(response){
+                                    
+                                    Swal.fire({
+                                    title: 'Eliminación correcta',
+                                    text: response.user,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                    });
+
+                                    // redibuja la tabla con el método redraw()
+                                    var users = JSON.stringify(response.users)
+                                    table.setData(JSON.parse(users));
+                                
+                            },
+                            error: function(xhr, textStatus, errorThrown){
+                                
+                                if (xhr.status === 404 || xhr.status === 500) {
+                                    
+                                    console.log("Error en la llamada AJAX (Error 404 o 500): " + textStatus + " " + errorThrown);
+                                } else {
+                                    console.log("Error en la llamada AJAX (Error): " + xhr.responseText + errorThrown);
+                                }
+                            }
+                            });
+                }
+        });
+         
+
+    }
+
+    {# function esTablet() {
+             return window.innerWidth <= 1200;
+            }
+
+            // Verificar si es una tablet y establecer el nivel de zoom
+            if (esTablet()) {
+            document.body.style.zoom = "60%"; // Establece un nivel de zoom del 50% solo para tablets
+            } #}
+
+
+</script>
+
+
+	
+
+{% endblock %}
+

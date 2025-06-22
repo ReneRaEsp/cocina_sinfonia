@@ -1,0 +1,42 @@
+{# {% extends 'base.html.twig' %} #}
+
+{% block title %}Lista de Iconos{% endblock %}
+
+{% block page_content %}
+ <div class="row">
+    {% for icono in iconos %}
+        <div class="col-3 mb-3">
+            <div class="card icon-card" data-icon="{{ icono }}">
+                <img class="card-img-top" src="{{ asset('icons/' ~ icono) }}" alt="{{ icono }}">
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtén todas las tarjetas de iconos
+    var iconCards = document.querySelectorAll('.icon-card');
+
+    // Agrega un event listener a cada tarjeta
+    iconCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            // Remueve la clase 'selected' de todas las tarjetas
+            iconCards.forEach(function (otherCard) {
+                otherCard.classList.remove('selected');
+            });
+
+            // Agrega la clase 'selected' a la tarjeta actual
+            card.classList.add('selected');
+
+            // Obtén el icono seleccionado
+            var iconoSeleccionado = card.getAttribute('data-icon');
+            
+            // Puedes hacer algo con el icono seleccionado, por ejemplo, imprimirlo en la consola
+            console.log('Icono seleccionado:', iconoSeleccionado);
+        });
+    });
+});
+</script>
+
+{% endblock %}

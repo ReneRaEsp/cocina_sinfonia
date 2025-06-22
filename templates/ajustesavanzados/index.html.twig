@@ -1,0 +1,2475 @@
+{% extends 'base.html.twig' %}
+{# {% extends '@AdminLTE/layout/default-layout.html.twig' %} #}
+
+
+{% block stylesheets %}
+	{{ parent() }}
+	{# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+	<link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+	<script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js" integrity="sha512-pUhApVQtLbnpLtJn6DuzDD5o2xtmLJnJ7oBoMsBnzOkVkpqofGLGPaBJ6ayD2zQe3lCgCibhJBi4cj5wAxwVKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+
+{% endblock %}
+
+{% block title %}Ajustes avanzados{% endblock %}
+
+{% block page_title %}
+	Ajustes Avanzados
+{% endblock %}
+
+{% block page_content %}
+<!-- Código HTML para el modal (suponiendo que estás utilizando Bootstrap) -->
+<div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Seleccionar Icono</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                 <div class="row">
+                    {% for icono in iconos %}
+                        <div class="col-2 mb-2">
+                            <div class="card icon-card" data-icon="{{ icono }}">
+                                <img class="card-img-icon" src="{{ asset('bundles/adminlte/icons/' ~ icono) }}" alt="{{ icono }}">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="selectIcon()" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="miModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Seleccionar Icono</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                 <div class="row">
+                    {% for icono in iconos %}
+                        <div class="col-2 mb-2">
+                            <div class="card icon-card" data-icon="{{ icono }}">
+                                <img class="card-img-icon" src="{{ asset('bundles/adminlte/icons/' ~ icono) }}" alt="{{ icono }}">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <div class="container-buttons-settings">
+    <div class="button-container mx-auto w-100 bg-white rounded-lg shadow-md p-6">
+      <button class="btn btn-outline-primary active" id="button-food" onclick="cambiarVista('container-food')">Control de comidas</button>
+      <button class="btn btn-outline-primary" id="button-tables" onclick="cambiarVista('container-tables')">Control de mesas</button>
+      <button class="btn btn-outline-primary" id="button-qr" onclick="cambiarVista('container-qr')">Generar QRs</button>
+      <button class="btn btn-outline-primary" id="button-info" onclick="cambiarVista('container-info')">Info de tu negocio</button>
+      <button class="btn btn-outline-primary" id="button-impresora" onclick="cambiarVista('container-impresoras')">Impresoras</button>
+    </div>
+  </div>
+
+{# BLOQUE CONTROL COMIDAS #}
+<div class="new-container" id="container-food">
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin: 10px;">
+        <h3>Control de tipo de comida</h3>
+        <h6>Crea, modifica, activa o desactiva cada tipo de comida para visualizarla en tu Comandero</h6>
+    </div>
+	<div class="row">
+		<div class="div-first col-md-6 col-xs-12">
+			<div class="mx-auto w-full bg-white rounded-lg shadow-md p-6">
+				<section id="grid-section" class="w-full p-4 space-y-4">
+					<div class="add-elements">
+						<h2 class="text-2xl font-semibold">Tipos de comida</h2>
+						<button id="add-element-button" class="btn btn-outline-primary">
+							<i class="fa-solid fa-plus"></i>
+						</button>
+					</div>
+					<div class="grid grid-cols-1 gap-4">
+						<div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+							<div class="flex items-center justify-between">
+								<h3 class="text-2xl font-semibold leading-none tracking-tight">Nombre</h3>
+                                <div class="name-and-icon">
+                                    <input id="type-name" class="flex h-10 w-25 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                                    <input type="file" id="file-typeimg" class="custom-file-input">
+                                    <label for="file-typeimg" class="file-label">Seleccionar archivo</label>
+                                    <span class="file-name" id="file-name">No se ha seleccionado archivo</span>
+                                    <button class="btn btn-primary" id="elegir-icono" data-toggle="modal" data-target="#miModal">Elegir Icono</button>
+                                    <button class="div-for-icon" id="div-icon" style="display:none;" data-toggle="modal" data-target="#miModal"><img id="icon-preview" src=""  alt=""></button>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</section>
+                <div class="div-button-save">
+                    <button class="btn btn-primary" onclick="addTipoComida()"> Guardar </button>
+                </div>
+                
+			</div>
+		</div>
+
+		<div class="col-md-6 col-xs-12  mx-auto w-full bg-white rounded-lg shadow-md p-6">
+			<h4>
+				<strong>
+					Controla tus tipos de comida
+				</strong>
+			</h4>
+			<div class="container-switches" id="contenedor">
+
+				{% for tipo_comida in tipos_comida %}
+					<div class="switchers" id="{{tipo_comida.id}}-{{tipo_comida.name}}">
+                        <div>
+						    <span id="{{tipo_comida.name}}" value="{{tipo_comida.name}}">{{tipo_comida.name}}</span>
+                        </div>
+                        <div style="display: flex;align-items: center;">
+                            <label class="switch" style="margin-bottom:0px;">
+                                <input type="checkbox" id="{{tipo_comida.id}}" {% if tipo_comida.active == 1 or tipo_comida.active == true %} checked {% endif %}>
+                                <div class="slider round"></div>
+                            </label>
+                            <div style="padding: 5px;"><button class="btn btn-success" onclick="modificarTipo('{{tipo_comida.name}}','{{tipo_comida.id}}', '{{tipo_comida.ruta}}')"><i class="fa-solid fa-pen-to-square"></i> </button></div>
+                            <div><button class="btn btn-danger" onclick="eliminarTipo('{{tipo_comida.id}}','{{tipo_comida.name}}')"><i class="fa-solid fa-trash"></i> </button></div>
+                        </div>
+					</div>
+				{% endfor %}
+				<button class="btn btn-primary" onclick="enableTipoComida()">
+					Aplicar
+				</button>
+			</div>
+		</div>
+	</div>
+    <div class="linea-separacion"></div>
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin: 19px;">
+        <h3>Control comidas y bebidas</h3>
+        <h6>Asocia diferentes comidas y bebidas a sus diferentes tipos </h6>
+    </div>
+    
+    <div class="accordion" id="accordionExample">
+    {% for tipoComida in tiposyComidas %}
+        <div class="card" id="{{tipoComida.name}}-{{tipoComida.id}}">
+            <div class="card-header" id="heading{{ tipoComida.id }}">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" id="button-{{ tipoComida.id }}" type="button" data-toggle="collapse" data-target="#collapse{{ tipoComida.id }}" aria-expanded="true" aria-controls="collapse{{ tipoComida.id }}"  style="color:black;">
+                        {{ tipoComida.name }}
+                    </button>
+                </h2>
+                <div class="icon-image-wrapper">
+                    {% if tipoComida.icon%}
+                        <img id="icon-preview" 
+                            src="{{ asset(tipoComida.icon) }}" 
+                            alt=""
+                            name = "image-type-{{tipoComida.id}}"
+                            class="{% if tipoComida.icon starts with 'bundles/adminlte/icons/' %}icon-type{% else %}image{% endif %}">
+                    {% endif %}
+                </div>
+            </div>
+            <div id="collapse{{ tipoComida.id }}" class="collapse" aria-labelledby="heading{{ tipoComida.id }}" data-parent="#accordionExample">
+                {% for comida in tipoComida.comidas %}
+                    <button class="food-by-type" onclick='datosComida({{comida.id}}, {{ comida.iscomida ? comida.iscomida : 0 }}, {{comida.extras|json_encode|raw}}, {{comida.numplato}}, "{{comida.img}}")' id="foodtype-{{comida.id}}">
+                        <div class="button-type-food-right">
+                            <span id="span-1-{{comida.id}}">{{ comida.nombre }}</span>
+                            <span id="span-2-{{comida.id}}" style="display:none;">{{ comida.precio }}</span>
+                        </div>
+                    </button>
+                {% endfor %}
+                 <button class="food-by-type" id="add-button-{{ tipoComida.id }}" onclick="addComida('{{ tipoComida.id }}')">
+                        <div class="button-type-food-right"><span><i class="fa-solid fa-plus"></i></span></div>
+                </button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
+
+{# FINAL BLOQUE CONTROL DE COMIDAS #}
+
+{# BLOQUE DE CONTROL DE MESAS #}
+
+<div class="new-container" id="container-tables" style="display:none;">
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin: 10px;">
+        <h3>Control de zonas</h3>
+        <h6>Modifica, activa o desactiva cada zona</h6>
+    </div>
+	<div class="row">
+		<div class="div-first col-md-6 col-xs-12">
+			<div class="mx-auto w-full bg-white rounded-lg shadow-md p-6">
+				<section id="grid-section-zonas" class="w-full p-4 space-y-4">
+					<div class="add-elements-zonas">
+						<h2 class="text-2xl font-semibold">Zonas</h2>
+						<button id="add-element-button-zonas" class="btn btn-outline-primary">
+							<i class="fa-solid fa-plus"></i>
+						</button>
+					</div>
+					<div class="grid grid-cols-1 gap-4">
+						<div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+							<div class="flex items-center justify-between">
+								<h3 class="text-2xl font-semibold leading-none tracking-tight">Nombre</h3>
+                                <div class="name-and-icon">
+                                    <input id="type-name-zonas" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                                </div>
+							</div>
+						</div>
+					</div>
+				</section>
+                <div class="div-button-save">
+                    <button class="btn btn-primary" onclick="addZona()"> Guardar </button>
+                </div>
+                
+			</div>
+		</div>
+
+		<div class="col-md-6 col-xs-6  mx-auto w-full bg-white rounded-lg shadow-md p-6">
+			<h4>
+				<strong>
+					Controla tus zonas
+				</strong>
+			</h4>
+			<div class="container-switches-zonas" id="contenedor-zonas">
+
+				{% for zona in zonas %}
+					<div class="switchers">
+                        <div>
+						    <span id="{{zona.name}}" value="{{zona.name}}">{{zona.name}}</span>
+                        </div>
+                        <div style="display: flex;align-items: center;">
+                            <label class="switch" style="margin-bottom:0px;">
+                                <input type="checkbox" id="{{zona.id}}" {% if zona.active == 1 or zona.active == true %} checked {% endif %}>
+                                <div class="slider round"></div>
+                            </label>
+                            <div style="padding: 5px;"><button class="btn btn-success" onclick="modificarZona('{{zona.name}}','{{zona.id}}')"><i class="fa-solid fa-pen-to-square"></i> </button></div>
+                            <div><button class="btn btn-danger" onclick="eliminarZona('{{zona.id}}','{{zona.name}}')"><i class="fa-solid fa-trash"></i> </button></div>
+                        </div>
+					</div>
+				{% endfor %}
+				<button class="btn btn-primary" onclick="enableZonas()">
+					Aplicar
+				</button>
+			</div>
+		</div>
+	</div>
+
+    <div class="linea-separacion"></div>
+
+
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin: 19px;">
+        <h3>Control de mesas</h3>
+        <h6>Añade mesas y asocialas a sus zonas</h6>
+    </div>
+    
+    <div class="accordion" id="accordionExampleZona">
+    {% for z in zonasDisplay %}
+        <div class="card" id="{{z.id}}-{{z.name}}">
+            <div class="card-header" id="heading{{ z.id }}">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" id="button-{{ z.id }}" type="button" data-toggle="collapse" data-target="#collapseZona{{ z.id }}" aria-expanded="true" aria-controls="collapse{{ z.id }}"  style="color:black;">
+                        {{ z.name }}
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseZona{{ z.id }}" class="collapse" aria-labelledby="heading{{ z.id }}" data-parent="#accordionExampleZona">
+                {% for mesas in z.mesas %}
+                    <button class="food-by-type" id="button-mesa-{{mesas.id}}" onclick="eliminarMesa({{mesas.id}})">
+                        <div class="button-type-food-right"><span>{{ mesas.numero }}</span></div>
+                    </button>
+                {% endfor %}
+                {# {% if not loop.last %} #}
+                    <button class="food-by-type" id="add-button-zona-{{ z.id }}" onclick="addMesa('{{ z.id }}')">
+                        <div class="button-type-food-right"><span><i class="fa-solid fa-plus"></i></span></div>
+                    </button>
+                {# {% endif %} #}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+</div>
+
+{# FIN BLOQUE DE CONTROL DE MESAS #}
+
+{# Bloque de control de QRs #}
+
+<div class="new-container" id="container-qr" style="display:none;">
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin: 10px;">
+        <h3>Genera QRs</h3>
+        <h6>Crea los QRs necearios para tus mesas y que lo clientes puedan pedir desde ella</h6>
+    </div>
+
+    {% for z in zonasDisplay %}
+        <div class="mx-auto w-100 bg-white rounded-lg shadow-md p-6" id="{{z.id}}-{{z.name}}">
+               <strong>{{ z.name}}</strong> 
+        </div>
+        {% for mesas in z.mesas %}
+                        <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin:9px;display:flex;justify-content:space-between;">
+                            <span id="num-mesa">Mesa - {{ mesas.numero }}</span>
+                            <div class="div-download-qr">
+                                <input type="number" id="{{mesas.numero}}-qr" class="input-numero" data-mesa="{{ mesas.numero }}" value="0" min="0">
+                                <button onclick="descargarQR({{mesas.numero}})">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                </button>
+                                
+                            </div>  
+                        </div>
+                {% endfor %}
+    {% endfor %}
+</div>
+
+
+{# FIN BLOQUE DE QRs #}
+
+{# Bloque de Info #}
+
+<div class="new-container" id="container-info" style="display:none;">
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin: 10px;">
+        <h3>Información de tu negocio</h3>
+        <h6>Modifica los datos de tu negocio según necesites</h6>
+    </div>
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin:9px;display:flex;flex-direction:column;">
+        {% if info %}
+            {% for i in info %}
+                    <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">{{i.key}}</h3>
+                                    <div class="name-and-icon">
+                                    {% if i.key is not same as("Logo") %}
+                                        <input id="type-{{i.key|lower}}" value="{{ i.value }}" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un {{i.key}}" type="text"/>
+                                    {% else %}
+                                        {% if i.value %}
+                                        <button class="div-for-logo" id="div-logo" onclick="cambiarLogo()" style="display: block; width: 200px; height: 200px; overflow: hidden;">
+                                            <img id="logo-preview" src="{{ asset(i.value) }}" alt="" style="width: 100%; height: 100%; object-fit: contain;">
+                                        </button>
+                                        <input type="file" id="archivoInput" style="display: none;" accept=".png">
+
+                                        {% else %}
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                                <input type="file" id="type-{{i.key|lower}}" onchange="cambiarFoto()" class="custom-file-input" id="inputGroupFile01">
+                                                <label class="custom-file-label" for="inputGroupFile01">Selecciona un archivo</label>
+                                            </div>
+                                        </div>
+                                        <input type="file" id="archivoInput" style="display: none;" accept=".png">
+                                        {% endif %}
+                                    {% endif %}    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+            {% endfor %}
+            {% else %}
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Nombre</h3>
+                                    <div class="name-and-icon">
+                                        <input id="type-nombre" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Dirección</h3>
+                                    <div class="name-and-icon">
+                                        <input id="type-dirección" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Teléfono</h3>
+                                    <div class="name-and-icon">
+                                        <input id="type-teléfono" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Email</h3>
+                                    <div class="name-and-icon">
+                                        <input id="type-email" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">CIF/NIF</h3>
+                                    <div class="name-and-icon">
+                                        <input id="type-cif" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Logo</h3>
+                                    <div class="name-and-icon">
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                                <input type="file" id="type-logo" class="custom-file-input" onchange="cambiarFoto()" placeholder="Selecciona un archivo">
+                                                <label class="custom-file-label" for="inputGroupFile01"></label>
+                                            </div>
+                                        </div>
+                                        <input type="file" id="archivoInput" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+            {% endif %}
+                    <div class="div-button-save">
+                        <button class="btn btn-primary" onclick="actualizarDatos()"> Guardar </button>
+                    </div>        
+    </div>
+</div>
+
+
+{# FIN BLOQUE DE Info #}
+{# Bloque de Impresoras #}
+
+<div class="new-container" id="container-impresoras" style="display:none;">
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin: 10px;">
+        <h3>Información de impresoras</h3>
+        <h6>Modifica los datos de tu negocio según necesites</h6>
+    </div>
+    <div class="mx-auto w-50 bg-white rounded-lg shadow-md p-6" style="margin:9px;display:flex;flex-direction:column;">
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">SN Cocina</h3>
+                                    <div class="name-and-icon">
+                                        <input id="sn-cocina" 
+                                            class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" 
+                                            placeholder="Introduce un nombre" 
+                                            type="text"
+                                            value="{{ sncocina is null ? '' : sncocina }}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+            <section id="grid-section" class="w-full p-4 space-y-4">
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2" data-v0-t="card">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-2xl font-semibold leading-none tracking-tight">SN Barra</h3>
+                                    <div class="name-and-icon">
+                                        <input id="sn-barra" 
+                                               class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" 
+                                               placeholder="Introduce un nombre" 
+                                               type="text"
+                                               value="{{ snbarra is null ? '' : snbarra }}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </section>
+                    <div class="div-button-save">
+                        <button class="btn btn-primary" onclick="actualizarImpresoras()"> Guardar </button>
+                    </div>        
+    </div>
+</div>
+
+
+{# FIN BLOQUE DE Impresoras #}
+
+<script>
+
+var newImgFood = {};
+var newImgFoodType = {};
+
+//  Función para obtener la imagen deL tipo de comida
+
+const inputFile = document.getElementById('file-typeimg');
+const fileName = document.getElementById('file-name');
+
+    // Detectar cambio en el input file
+    inputFile.addEventListener('change', function() {
+        if (inputFile.files.length > 0) {
+            fileName.textContent = inputFile.files[0].name;
+        } else {
+            fileName.textContent = "No se ha seleccionado archivo";
+        }
+    });
+
+    
+
+
+    
+
+
+function cambiarVista(idContainer){
+        var buttonFood = document.getElementById('button-food');
+        var buttonTables = document.getElementById('button-tables');
+        var buttonQr = document.getElementById('button-qr');
+        var buttonInfo = document.getElementById('button-info');
+        var buttonImpresora = document.getElementById('button-impresora');
+
+    if(idContainer === 'container-food'){
+
+        var displayFood = document.getElementById(idContainer);
+        var displayTables = document.getElementById('container-tables');
+        var displayQr = document.getElementById('container-qr');
+        var displayInfo = document.getElementById('container-info');
+        var displayImpresoras = document.getElementById('container-impresoras');
+        
+
+        displayFood.style.display = 'block';
+        displayTables.style.display = 'none';
+        displayQr.style.display = 'none';
+        displayInfo.style.display = 'none';
+        displayImpresoras.style.display = 'none';
+        buttonFood.classList.add("active");
+        buttonTables.classList.remove("active");
+        buttonQr.classList.remove("active");
+        buttonInfo.classList.remove("active");
+        buttonImpresora.classList.remove("active");
+
+
+    } else if( idContainer === 'container-tables') {
+
+        var displayFood = document.getElementById('container-food');
+        var displayTables = document.getElementById(idContainer);
+        var displayQr = document.getElementById('container-qr');
+        var displayInfo = document.getElementById('container-info');
+        var displayImpresoras = document.getElementById('container-impresoras');
+
+        displayFood.style.display = 'none';
+        displayTables.style.display = 'block';
+        displayQr.style.display = 'none';
+        displayInfo.style.display = 'none';
+        displayImpresoras.style.display = 'none';
+        buttonFood.classList.remove("active");
+        buttonQr.classList.remove("active");
+        buttonInfo.classList.remove("active");
+        buttonTables.classList.add("active");
+        buttonImpresora.classList.remove("active");
+
+    } else if( idContainer === 'container-qr'){
+
+        var displayFood = document.getElementById('container-food');
+        var displayTables = document.getElementById('container-tables');
+        var displayInfo = document.getElementById('container-info');
+        var displayQr = document.getElementById(idContainer);
+        var displayImpresoras = document.getElementById('container-impresoras');
+
+        displayFood.style.display = 'none';
+        displayTables.style.display = 'none';
+        displayInfo.style.display = 'none';
+        displayQr.style.display = 'block';
+        displayImpresoras.style.display = 'none';
+        buttonFood.classList.remove("active");
+        buttonQr.classList.add("active");
+        buttonTables.classList.remove("active");
+        buttonInfo.classList.remove("active");
+        buttonImpresora.classList.remove("active");
+
+    } else if( idContainer === 'container-info'){
+
+        var displayFood = document.getElementById('container-food');
+        var displayTables = document.getElementById('container-tables');
+        var displayQr = document.getElementById('container-qr');
+        var displayInfo = document.getElementById(idContainer);
+        var displayImpresoras = document.getElementById('container-impresoras');
+
+        displayFood.style.display = 'none';
+        displayTables.style.display = 'none';
+        displayQr.style.display = 'none';
+        displayInfo.style.display = 'block';
+        displayImpresoras.style.display = 'none';
+        buttonFood.classList.remove("active");
+        buttonQr.classList.remove("active");
+        buttonTables.classList.remove("active");
+        buttonInfo.classList.add("active");
+        buttonImpresora.classList.remove("active");
+
+    } else if( idContainer === 'container-impresoras'){
+
+        var displayFood = document.getElementById('container-food');
+        var displayTables = document.getElementById('container-tables');
+        var displayQr = document.getElementById('container-qr');
+        var displayInfo = document.getElementById('container-info');
+        var displayImpresoras = document.getElementById(idContainer);
+
+        displayFood.style.display = 'none';
+        displayTables.style.display = 'none';
+        displayQr.style.display = 'none';
+        displayInfo.style.display = 'none';
+        displayImpresoras.style.display = 'block';
+        buttonFood.classList.remove("active");
+        buttonQr.classList.remove("active");
+        buttonTables.classList.remove("active");
+        buttonInfo.classList.remove("active");
+        buttonImpresora.classList.add("active");
+
+    }
+}
+
+// BLOQUE DE CONTROL DE COMIDA 
+var iconoSeleccionado = null;
+
+var arrayIcons = new Array();
+
+var arrayImg = new Array();
+
+var elementCounter = 1;
+
+var elementos = [];
+
+elementosSeleccionados = [];
+
+var opcionesSuplementos = {{ extras|json_encode|raw }};
+
+document.getElementById('add-element-button').addEventListener('click', function () {
+    // Crear un nuevo elemento similar al que deseas agregar
+    elementCounter++;
+    var newElement = document.createElement('div');
+    newElement.className = 'rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2';
+    newElement.innerHTML = `
+        <div class="flex items-center justify-between">
+            <div class="add-elements-new"> 
+                <h3 class="text-2xl font-semibold leading-none tracking-tight">Nombre</h3>
+                <button class="delete-button btn btn-danger btn-sm ml-2">X</button>
+            </div>
+            <div class="name-and-icon">
+                <input id="type-name" class="flex h-10 w-25 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                <input type="file" id="file-typeimg-${elementCounter}" class="custom-file-input">
+                <label for="file-typeimg-${elementCounter}" class="file-label">Seleccionar archivo</label>
+                <span class="file-name" id="file-name-${elementCounter}">No se ha seleccionado archivo</span>
+                <button class="btn btn-primary elegir-icono-button"  id="elegir-icono-${elementCounter}" data-index="${elementCounter}">Elegir Icono</button>
+                <button class="div-for-icon" id="div-icon-${elementCounter}" style="display:none;"><img id="icon-preview-${elementCounter}" src=""  alt=""></button>
+            </div>
+        </div>
+    `;
+
+    
+
+    // Agregar el nuevo elemento justo debajo del botón
+    var gridSection = document.getElementById('grid-section');
+    gridSection.appendChild(newElement);
+
+    // Añadir un listener al botón de eliminar
+    var deleteButton = newElement.querySelector('.delete-button');
+    deleteButton.addEventListener('click', function () {
+        // Eliminar el elemento al hacer clic en el botón de eliminar
+        gridSection.removeChild(newElement);
+    });
+
+    // Añadir un listener al botón "Elegir Icono"
+    var elegirIconoButton = newElement.querySelector('.elegir-icono-button');
+    elegirIconoButton.addEventListener('click', function () {
+        abrirModal(this.dataset.index);
+    });
+
+    // Obtener todos los inputs cuyo id comience con 'file-typeimg-'
+    const inputsFileNumber = document.getElementById('file-typeimg-'+ elementCounter);
+
+    
+
+    const fileNameNumber = document.getElementById('file-name-' + elementCounter);
+
+        // Detectar cambio en el input file
+        inputsFileNumber.addEventListener('change', function() {
+
+            if (inputFile.files.length > 0) {
+                fileNameNumber.textContent = inputsFileNumber.files[0].name;
+            } else {
+                fileNameNumber.textContent = "No se ha seleccionado archivo";
+            }
+        });
+});
+
+function abrirModal(newIndex) {
+     console.log('entro abrir modal'+newIndex);
+
+        // Almacenar el índice en una variable local antes de abrir el modal
+        let currentIndex = newIndex;
+
+        // Configurar el botón "Guardar" para almacenar el índice
+        let guardarButton = document.querySelector('#miModal2 .btn-primary');
+        guardarButton.dataset.index = currentIndex;
+    
+
+    // Abre el modal
+    new bootstrap.Modal(document.querySelector("#miModal2")).show();
+}
+
+document.querySelector('#miModal2 .btn-primary').addEventListener('click', function () {
+    // Obtén el índice almacenado en el atributo de datos
+    let currentIndex = parseInt(this.getAttribute('data-index'));
+
+    console.log(currentIndex);
+
+    // Resto del código para manejar la selección del icono
+    var elegiIcono = document.getElementById(`elegir-icono-${currentIndex}`);
+    elegiIcono.style.display = "none";
+
+    var divIcon = document.getElementById(`div-icon-${currentIndex}`);
+
+    // Obtén la referencia a la imagen dentro del div
+    var iconoPreview = divIcon.querySelector(`#icon-preview-${currentIndex}`);
+
+    var rutaCompleta = "{{ asset('bundles/adminlte/icons/') }}" + iconoSeleccionado;
+    // Establece el atributo src de la imagen
+    iconoPreview.src = rutaCompleta;
+
+    // Quita el estilo display: none del div
+    divIcon.style.display = "block";
+
+    // Puedes hacer algo con el icono seleccionado, como agregarlo a un array
+    arrayIcons.push(iconoSeleccionado);
+});
+
+
+	function enableTipoComida() {
+
+        // Selecciona todos los elementos input de tipo checkbox dentro de la clase "container-switches"
+        var checkboxes = document.querySelectorAll('.container-switches input[type="checkbox"]');
+
+        // Convierte la NodeList en un array y extrae los valores de los atributos "id"
+        var infoCheckboxes = Array.from(checkboxes).map(function(input) {
+            return {
+                id: input.id,
+                checked: input.checked
+            };
+        });
+
+                
+
+            jQuery.ajax({
+            url: "{{ path('enableTipoComida') }}",
+            data: {
+            check: infoCheckboxes
+            },
+            type: "POST",
+            success: function (response) {
+
+                    const mensaje = response.changed
+
+
+                    Swal.fire({
+                    title: 'Cargando...',
+                    html: 'Estamos procesando la acción.',
+                    text: mensaje,
+                    timer: 1000,
+                    didOpen: () => {
+                                Swal.showLoading()
+                        },
+                        willClose: () => { // Realiza la recarga de la página después de que el SweetAlert se cierre
+                        location.reload(true);
+                        },
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false
+                        });
+
+            },
+            error: function (response) {
+            console.log('Error al actualizar el tema');
+            }
+
+
+            })
+
+
+}
+
+        function addTipoComida(){
+
+                let formData = new FormData();
+
+                // Seleccionar todos los inputs con id "type-name"
+                var inputs = document.querySelectorAll('input[id="type-name"]');
+
+                var tipoComidaArray = Array.from(inputs).map(function(input) {
+                    return input.value.toUpperCase();
+                });
+
+                //Coger todos los archivos de los inputs
+
+                let inputPrincipal = document.getElementById('file-typeimg');
+
+                 formData.append('files[]', inputPrincipal.files[0]);
+
+                  let otrosInputs = document.querySelectorAll('[id^="file-typeimg-"]');
+
+                   otrosInputs.forEach(input => {
+                        if (input.files.length > 0) {
+                            for (let i = 0; i < input.files.length; i++) {
+                                console.log(input.files[i])
+                                formData.append('files[]', input.files[i]); // Guardar los archivos
+                            }
+                        }
+                    });
+
+
+                        formData.append('newTipoComida', JSON.stringify(tipoComidaArray));
+                        formData.append('arrayIcons', arrayIcons);
+
+                        console.log(arrayIcons);
+
+
+
+            $.ajax({
+            url: "{{ path('addTipoComida') }}",
+            data: formData,
+            type: "POST",
+            processData: false,  // No procesar los datos como cadena de consulta
+            contentType: false,
+            success: function (response) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Añadido',
+                    text: response.added,
+                    });
+
+                    console.log(response)
+
+                    // Obtén el contenedor donde agregarás los nuevos elementos
+                    var contenedor = document.getElementById("contenedor");
+                    var accordionElement = document.getElementById("accordionExample");
+
+                    // Itera sobre el array y crea los elementos HTML
+                    tipoComidaArray.forEach(function(tipoComida, index) {
+                        // Crea el contenedor principal
+                        var switcherContainer = document.createElement("div");
+                        switcherContainer.className = "switchers";
+                        switcherContainer.id = response.tipoComidaID[index] + '-' + response.tipoComida[index] ;
+
+                        // Primer div con el nombre del tipo de comida
+                        var nombreDiv = document.createElement("div");
+                        var nombreSpan = document.createElement("span");
+                        nombreSpan.id = response.tipoComida[index];
+                        nombreSpan.value = response.tipoComida[index];
+                        nombreSpan.textContent = response.tipoComida[index];
+                        nombreDiv.appendChild(nombreSpan);
+
+                        // Segundo div con el switch y los botones
+                        var accionesDiv = document.createElement("div");
+                        accionesDiv.style.display = "flex";
+                        accionesDiv.style.alignItems = "center";
+
+                        // Crea el elemento label
+                        var label = document.createElement("label");
+                        label.className = "switch";
+                        label.style.marginBottom = "0";
+
+                        // Crea el elemento input
+                        var input = document.createElement("input");
+                        input.type = "checkbox";
+                        input.id = response.tipoComidaID[index] ;
+                        input.checked = true;
+
+                        // Crea el elemento div para el slider
+                        var slider = document.createElement("div");
+                        slider.className = "slider round";
+
+                        // Crea el primer botón (modificarTipo)
+                        var buttonModificar = document.createElement("button");
+                        buttonModificar.className = "btn btn-success";
+                        buttonModificar.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
+                        buttonModificar.addEventListener('click', function() {
+                            modificarTipo(response.tipoComida[index] , response.tipoComidaID[index], response.imgs[index] );
+                        });
+
+                        // Crea el segundo botón (eliminarTipo)
+                        var buttonEliminar = document.createElement("button");
+                        buttonEliminar.className = "btn btn-danger";
+                        buttonEliminar.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                        buttonEliminar.addEventListener('click', function() {
+                            eliminarTipo(response.tipoComidaID[index] , response.tipoComida[index] );
+                        });
+
+                        // Crea el div que envuelve el botón con un padding de 5px
+                        var divBotonModificar = document.createElement("div");
+                        divBotonModificar.style.padding = "5px";
+                        divBotonModificar.appendChild(buttonModificar);
+
+                        // Agrega el input y el slider al label
+                        label.appendChild(input);
+                        label.appendChild(slider);
+
+                        // Agrega los botones al segundo div
+                        accionesDiv.appendChild(label);
+                        accionesDiv.appendChild(divBotonModificar);
+                        accionesDiv.appendChild(buttonEliminar);
+
+                        // Agrega los divs al contenedor principal
+                        switcherContainer.appendChild(nombreDiv);
+                        switcherContainer.appendChild(accionesDiv);
+
+                        // Inserta el contenedor en el lugar deseado
+                        contenedor.insertBefore(switcherContainer, contenedor.lastElementChild);
+
+                        var card;
+
+                        console.log(response.imgs[index])
+                        console.log(arrayIcons[index])
+
+                        if(arrayIcons[index] !== undefined){
+                            card = createCard(response.tipoComidaID[index], arrayIcons[index], response.tipoComida[index], 0);
+
+                        } else {
+                            card = createCard(response.tipoComidaID[index], response.imgs[index], response.tipoComida[index], 1);
+
+                        }
+
+                        
+                        accordionElement.appendChild(card);
+
+
+
+
+                    });
+
+
+            },
+            error: function (response) {
+            console.log('Error al actualizar el tema');
+            }
+
+
+            })
+
+            
+        }
+
+
+
+ document.addEventListener('DOMContentLoaded', function () {
+    // Obtén todas las tarjetas de iconos
+    var iconCards = document.querySelectorAll('.icon-card');
+
+    // Agrega un event listener a cada tarjeta
+    iconCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            // Remueve la clase 'selected' de todas las tarjetas
+            iconCards.forEach(function (otherCard) {
+                otherCard.classList.remove('selected-icon');
+            });
+
+            // Agrega la clase 'selected' a la tarjeta actual
+            card.classList.add('selected-icon');
+
+            // Obtén el icono seleccionado
+            iconoSeleccionado = card.getAttribute('data-icon');
+            
+        });
+    });
+});
+
+function abrirSwal(){
+
+    Swal.fire({
+                title: 'Confirmación',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Guardar',
+                cancelButtonText: 'Cancelar',
+                onBeforeOpen: (modalElement) => {
+                    // Agrega el contenido al modal
+                    modalElement.querySelector('.swal2-content').innerHTML = document.querySelector('.modal-body').outerHTML;
+
+                    // Restablece los eventos después de agregar el contenido
+                    restablecerEventos();
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Aquí puedes poner la lógica para guardar
+                    console.log(elementCounter)
+                    selectIconAdd(elementCounter);
+                }
+            });
+
+}
+
+
+function selectIcon(){
+
+    var elegiIcono = document.getElementById('elegir-icono');
+
+    elegiIcono.style.display = "none";
+
+    var divIcon = document.getElementById('div-icon');
+
+    // Obtén la referencia a la imagen dentro del div
+    var iconoPreview = divIcon.querySelector('img');
+
+    var rutaCompleta = "{{ asset('bundles/adminlte/icons/') }}" + iconoSeleccionado;
+    // Establece el atributo src de la imagen
+    iconoPreview.src = rutaCompleta;
+
+    // Quita el estilo display: none del div
+    divIcon.style.display = "block";
+
+    arrayIcons.push(iconoSeleccionado);
+
+
+
+}
+
+function selectIconAdd(newIndex){
+
+    var elegiIcono = document.getElementById('elegir-icono-'+newIndex);
+
+    console.log(elegiIcono)
+
+    elegiIcono.style.display = "none";
+
+    var divIcon = document.getElementById('div-icon-'+newIndex);
+
+    // Obtén la referencia a la imagen dentro del div
+    var iconoPreview = divIcon.querySelector('img');
+
+    var rutaCompleta = "{{ asset('bundles/adminlte/icons/') }}" + iconoSeleccionado;
+    // Establece el atributo src de la imagen
+    iconoPreview.src = rutaCompleta;
+
+    // Quita el estilo display: none del div
+    divIcon.style.display = "block";
+
+    arrayIcons.push(iconoSeleccionado);
+
+
+
+}
+
+function modificarTipo(nombreTipo, idTipo, ruta){
+
+    var currentImgType;
+
+    if(ruta !== '' && newImgFoodType[idTipo]){
+        currentImgType = newImgFoodType[idTipo]
+    } else {
+        currentImgType = ruta
+    }
+
+    Swal.fire({
+    title: 'Ingresa tu información',
+    html:
+      '<div>'+
+      '<input id="input-'+nombreTipo+'" class="swal2-input" value="'+nombreTipo+'" >' +
+      '</div><br>'+ 
+      '<div id="image-container" class="image-container">'+
+      '<input id="swal-input2" type="file" accept="image/png, image/jpeg" class="" style="display:'+ (currentImgType ? 'none' : 'block') + '">'+
+      '<input id="swal-input3" type="file" accept="image/png, image/jpeg" class="" style="display:none">'+
+      '<img id="img-preview" src="' + (currentImgType ? "{{ asset('') }}" + currentImgType : '') + '" style="max-width: 100px; max-height: 100px; display: ' + (currentImgType ? 'block' : 'none') + '; cursor: pointer; margin-bottom: 10px;" title="Haz clic para cambiar la imagen"><br>'+
+      '</div>',
+    showCancelButton: true,
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar',
+    showLoaderOnConfirm: true,
+    preConfirm: () => {
+        // Obtiene los valores del input de texto y el archivo
+        const nombreTipoValue = document.getElementById('input-' + nombreTipo).value;
+        const archivo = document.getElementById('swal-input2').files[0]; // Obtiene el archivo
+        const archivo2 = document.getElementById('swal-input3').files[0]; // Obtiene el archivo
+    
+
+        // Crear FormData para enviar tanto el archivo como otros datos
+        const formData = new FormData();
+        formData.append('nombreTipo', nombreTipoValue);
+        formData.append('idTipo', idTipo);
+        if(archivo){
+            formData.append('archivo', archivo);
+        } else if (archivo2){
+            formData.append('archivo', archivo2);
+        }
+        
+
+        // Retorna una promesa que se resolverá cuando se complete la solicitud AJAX
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "{{ path('modificar_nombre') }}",
+                method: 'POST',
+                data: formData,
+                contentType: false, // Importante para enviar archivos
+                processData: false, // Importante para enviar archivos
+                success: function(response) {
+                    // Actualiza los elementos en el DOM si es exitoso
+                    let spanName = document.getElementById(nombreTipo);
+                    spanName.innerHTML = nombreTipoValue.toUpperCase();
+
+                    let buttonName = document.getElementById('button-' + idTipo);
+                    buttonName.innerHTML = nombreTipoValue.toUpperCase();
+
+                    newImgFoodType[idTipo] = response.ruta
+
+                    let imgType = document.getElementsByName('image-type-' + idTipo);
+
+                    console.log(response.ruta);
+                    console.log(imgType);
+
+                    if (imgType.length > 0) {
+                        imgType[0].src = "{{ asset('') }}" + response.ruta + '?t=' + new Date().getTime(); // Asegúrate de que imgType[0] esté accediendo al primer elemento
+                    } else {
+                        console.error("No se encontró la imagen con el nombre especificado.");
+}
+
+                    
+
+                    resolve('Valor modificado: ' + nombreTipoValue.toUpperCase());
+                },
+                error: function(error) {
+                    reject(error);
+                }
+            });
+        });
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+}).then((result) => {
+    if (result.isConfirmed) {
+        Swal.fire('¡Solicitud completada!', result.value, 'success');
+    }
+});
+
+// Escuchar cuando el usuario hace clic en la imagen para abrir el input file
+document.getElementById('img-preview').addEventListener('click', function() {
+    document.getElementById('swal-input3').click(); // Simula un clic en el input file
+});
+
+// Escuchar cambios en el input file y mostrar la nueva imagen cargada
+document.getElementById('swal-input3').addEventListener('change', function(event) {
+    const archivo = event.target.files[0];
+    if (archivo) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Mostrar la imagen seleccionada
+            const imgPreview = document.getElementById('img-preview');
+            imgPreview.src = e.target.result;
+            imgPreview.style.display = 'block'; // Asegurarse de que se muestre si estaba oculto
+        };
+        reader.readAsDataURL(archivo); // Cargar la imagen seleccionada
+    }
+});
+
+}
+
+
+
+
+function eliminarTipo(idTipo, nombreTipo){
+
+    Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+}).then((result) => {
+    if (result.isConfirmed) {
+
+        divTipo = document.getElementById(idTipo+'-'+nombreTipo);
+        divTipo.remove(); 
+
+        divAccordion = document.getElementById(nombreTipo+'-'+idTipo);
+        divAccordion.remove(); 
+        // Realiza la solicitud AJAX
+        $.ajax({
+            url: "{{ path('eliminar_tipo') }}",
+            method: 'POST',
+            data: {
+                id: idTipo
+            },
+            success: function(response) {
+                // Maneja la respuesta de la solicitud AJAX
+                
+
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado', 'success');
+            },
+            error: function(error) {
+                // Maneja el error de la solicitud AJAX
+                console.error('Error en la solicitud AJAX:', error);
+                Swal.fire('Error', 'Hubo un problema al intentar eliminar el elemento', 'error');
+            }
+        });
+    }
+});
+
+
+
+}
+
+function addComida(idTipo){
+
+    var htmlFragment = '<input id="inputText1" class="swal2-input" placeholder="Nombre" type="text" required>' +
+                  '<input id="inputText2" class="swal2-input" placeholder="Descripción" type="text">' +
+                  '<input id="inputNumber" class="swal2-input" placeholder="Precio" type="number" required>' +
+                  '<label> Selecciona un tipo:</label>' +
+                  '<select id="selectTipo" class="swal2-input" required>' +
+                  '<option value="comida">Comida</option>' +
+                  '<option value="bebida">Bebida</option>' +
+                  '</select><br>' +
+                  '<label> Selecciona si es unitario:</label>' +
+                  '<select id="selectUnitario" class="swal2-input" required>' +
+                  '<option value="si">Sí</option>' +
+                  '<option value="no">No</option>' +
+                  '</select>' +
+                  '<div id="cantidadContainer">' +
+                  '<label> Cantidad:</label>' +
+                  '<input id="inputCantidad" class="swal2-input" placeholder="Cantidad" type="number" required>' +
+                  '</div><br>' +
+                  '<div style="display:flex;align-content: center;flex-direction: row;align-items: center;justify-content:space-around;">'+
+                    '<label>Contabilizar en Stock</label>'+
+                    '<label class="switch" style="margin-bottom:0px;">'+
+                            '<input type="checkbox" id="checkbox-stock" checked="">'+
+                            '<div class="slider round"></div>'+
+                    '</label>'+
+                  '</div><br>' +
+                  '<label class="food-image">Selecciona una imagen:</label>' +
+                  '<input id="inputImg" type="file" accept="image/png, image/jpeg"><br><br>'+ 
+                  '<div id="listaSuplementos" class="suplementos-container">' +    
+                  '<label class="suplementos-label" for="listaSuplementos">Suplementos</label>';
+
+                    // Agregar checkboxes para cada opción, dos en dos
+                    opcionesSuplementos.forEach(function (opcion, index) {
+                        if (index % 2 === 0) {
+                            // Agregar un salto de línea antes de cada par de checkboxes
+                            htmlFragment += '<br>';
+                        }
+                        htmlFragment += '<label class="checkbox-label">' +
+                            '<input type="checkbox" id="checkSuplemento" value="' + opcion.nombre + '" onchange="checkboxChanged(this)">' +
+                            opcion.nombre +
+                            '</label>';
+                    });
+
+                    htmlFragment += '</div>' +
+                        '</div>';
+
+            Swal.fire({
+                title: 'Añade una comida o bebida:',
+                html:htmlFragment,
+                showCancelButton: true,
+                confirmButtonText: 'Enviar',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                customClass: {
+                    popup: 'add-comida', // Clase personalizada para el contenedor del Swal
+                },
+                preConfirm: () => {
+                    // Obtener los valores de los inputs
+                    const nombre = Swal.getPopup().querySelector('#inputText1').value;
+                    const descripcion = Swal.getPopup().querySelector('#inputText2').value;
+                    const precio = Swal.getPopup().querySelector('#inputNumber').value;
+                    const tipo = Swal.getPopup().querySelector('#selectTipo').value;
+                    const unitario = Swal.getPopup().querySelector('#selectUnitario').value;
+                    const cantidad = Swal.getPopup().querySelector('#inputCantidad').value;
+                    const stockar = Swal.getPopup().querySelector('#checkbox-stock');
+                    const checkSuplementoElement = document.querySelector('#checkSuplemento');
+                    const foodImageInput = document.querySelector('#inputImg');
+                    const foodImage = foodImageInput.files[0];
+
+                    if (checkSuplementoElement !== null) {
+                        const suplemento = checkSuplementoElement.checked;
+                        // Hacer algo con la variable suplemento
+                    } 
+                    
+                    // Validación manual
+                    if (!nombre || !precio || !tipo || !unitario || (unitario === 'si' && !cantidad)) {
+                        Swal.showValidationMessage('Todos los campos son obligatorios');
+                    } else {
+
+                        let formData = new FormData();
+
+                // Agregar los valores al FormData
+                formData.append('id', idTipo);
+                formData.append('nombre', nombre);
+                formData.append('desc', descripcion);
+                formData.append('precio', precio);
+                formData.append('tipo', tipo);
+                formData.append('unitario', unitario);
+                formData.append('cantidad', cantidad);
+                formData.append('extra', elementosSeleccionados);
+                formData.append('stockage', stockar.checked);
+                formData.append('img', foodImage);  // Aquí agregas el archivo
+
+                         // Enviar los valores mediante AJAX
+                    return $.ajax({
+                        url: "{{ path('addcomida')}}", // Reemplaza con la URL de tu script PHP
+                        type: 'POST',
+                        data: formData,
+                        processData: false,  // No procesar los datos como cadena de consulta
+                        contentType: false,
+                        success: function (response) {
+
+                            console.log(response.img)
+
+                            Swal.fire('Añadido', 'El elemento ha sido añadido', 'success');
+
+                            // Obtén el elemento padre del botón con el ID "add-button"
+                            var parentElement = document.getElementById("collapse"+idTipo);
+
+                            // Crea un nuevo botón
+                            var newButton = document.createElement("button");
+                            newButton.className = "food-by-type";
+                            newButton.id = "foodtype-"+response.id;
+                            newButton.onclick = function() {
+                                datosComida(response.id, response.iscomida, response.extras, response.img);
+                            };
+                            newButton.innerHTML = '<div class="button-type-food-right"><span id="span-1-'+response.id+'">'+nombre.toUpperCase()+'</span>'+
+                            '<span id="span-2-'+response.id+'"style="display:none;">'+response.precio+'</span>'+
+                            '</div>';
+
+                            // Inserta el nuevo botón justo antes del botón con el ID "add-button"
+                            parentElement.insertBefore(newButton, document.getElementById("add-button-"+idTipo));
+
+                        },
+                        error: function () {
+                            Swal.fire('Error', 'Se produjo un error en la solicitud.', 'error');
+                        }
+                    });
+
+                    }
+
+                   
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+            const selectUnitario = Swal.getPopup().querySelector('#selectUnitario');
+            const cantidadContainer = Swal.getPopup().querySelector('#cantidadContainer');
+
+            selectUnitario.addEventListener('change', function () {
+                if (this.value === 'si') {
+                    cantidadContainer.style.display = 'block';
+                } else {
+                    cantidadContainer.style.display = 'none';
+                }
+            });
+
+            const selectComida = Swal.getPopup().querySelector('#selectTipo');
+            const suplementoContainer = Swal.getPopup().querySelector('#listaSuplementos');
+
+            selectComida.addEventListener('change', function () {
+                if (this.value === 'comida') {
+                    suplementoContainer.style.display = 'block';
+                } else {
+                    suplementoContainer.style.display = 'none';
+                }
+            });
+
+}
+
+function createCard(id, icon, name, num) {
+    // Crear el elemento de la tarjeta
+    var card = document.createElement("div");
+    card.className = "card";
+    card.id=name+"-"+id
+
+    // Crear el encabezado de la tarjeta
+    var cardHeader = document.createElement("div");
+    cardHeader.className = "card-header";
+    cardHeader.id = "heading" + id;
+
+    // Crear el contenedor del título y el botón
+    var titleContainer = document.createElement("h2");
+    titleContainer.className = "mb-0";
+
+    // Crear el botón colapsable
+    var button = document.createElement("button");
+    button.className = "btn btn-link btn-block text-left";
+    button.type = "button";
+    button.id = "button-"+ id;
+    button.setAttribute("data-toggle", "collapse");
+    button.setAttribute("data-target", "#collapse" + id);
+    button.setAttribute("aria-expanded", "true");
+    button.setAttribute("aria-controls", "collapse" + id);
+    button.style.color = "black";
+    button.innerHTML = name;
+
+    // Añadir el botón al contenedor del título
+    titleContainer.appendChild(button);
+
+    // Crear el contenedor de la imagen
+    var imgContainer = document.createElement("div");
+    imgContainer.className = "icon-image-wrapper"
+    var img = document.createElement("img");
+    img.id = "icon-preview";
+    if(num === 0){
+        img.src = "{{ asset('bundles/adminlte/icons/') }}" + icon;
+    } else {
+        img.src = "{{ asset('')}}" + icon;
+    }
+    img.alt = "";
+    img.name = "image-type-"+id;
+    imgContainer.appendChild(img);
+
+    // Añadir el contenedor del título y la imagen al encabezado de la tarjeta
+    cardHeader.appendChild(titleContainer);
+    cardHeader.appendChild(imgContainer);
+
+    // Crear el contenido colapsable
+    var collapse = document.createElement("div");
+    collapse.id = "collapse" + id;
+    collapse.className = "collapse";
+    collapse.setAttribute("aria-labelledby", "heading" + id);
+    collapse.setAttribute("data-parent", "#accordionExample");
+
+    // Crear el botón "Añadir"
+    var addButton = document.createElement("button");
+    addButton.className = "food-by-type";
+    addButton.id = "add-button";
+    addButton.onclick = function () {
+        addComida(id);
+    };
+    var addButtonContent = document.createElement("div");
+    addButtonContent.className = "button-type-food-right";
+    addButtonContent.innerHTML = '<span><i class="fa-solid fa-plus"></i></span>';
+    addButton.appendChild(addButtonContent);
+
+    // Añadir el botón "Añadir" al contenido colapsable
+    collapse.appendChild(addButton);
+
+    // Añadir el encabezado y el contenido colapsable a la tarjeta
+    card.appendChild(cardHeader);
+    card.appendChild(collapse);
+
+    return card;
+}
+
+
+
+ function checkboxChanged(checkbox) {
+    var valor = checkbox.value;
+
+    // Verificar si el checkbox está marcado o desmarcado y actualizar el array en consecuencia
+    if (checkbox.checked) {
+        // Agregar el valor al array si está marcado
+        elementosSeleccionados.push(valor);
+    } else {
+        // Eliminar el valor del array si está desmarcado
+        var index = elementosSeleccionados.indexOf(valor);
+        if (index !== -1) {
+            elementosSeleccionados.splice(index, 1);
+        }
+    }
+
+}
+
+function datosComida(id, iscomida, extras, numplato, img) {
+
+    var currentImg;
+
+    let tipoProducto = iscomida === 1 ? 'Comida' : 'Bebida';
+
+
+    if(img === '' && newImgFood[id]) {
+        currentImg = newImgFood[id];
+    } else {
+        currentImg = img;
+    } 
+
+    
+
+    var nombre = document.getElementById('span-1-'+id).innerText;
+    var precio = document.getElementById('span-2-'+id).innerText;
+    
+
+    if(iscomida){
+        var htmlFragment = '<div>' +
+    '<label for="input1">Nombre</label>' +
+    '<input id="input1" class="swal2-input" value="' + nombre + '">' +
+    '</div>' +
+    '<div>' +
+    '<label for="input2">Precio</label>' +
+    '<input id="input2" class="swal2-input" value="' + precio + '"><br><br>' +
+    '<label for="typeFood">Tipo </label>' +
+    '<select id="typeFood" class="swal2-input" required>' +
+    '<option value="comida">Comida</option>' +
+    '<option value="bebida">Bebida</option>' +
+    '</select><br><br>' +
+    '<div id="listaSuplementos" class="suplementos-container">' +
+    '<label class="suplementos-label" for="listaSuplementos">Suplementos</label>';
+
+    // Agregar checkboxes para cada opción, dos en dos
+    opcionesSuplementos.forEach(function (opcion, index) {
+        if (index % 2 === 0) {
+            // Agregar un salto de línea antes de cada par de checkboxes
+            htmlFragment += '<br>';
+        }
+        var isChecked = extras.includes(opcion.nombre);
+        htmlFragment += '<label class="checkbox-label">' +
+        '<input type="checkbox" value="' + opcion.nombre + '" ' + (isChecked ? 'checked' : '') + ' onchange="checkboxChanged(this)">' +
+        opcion.nombre +
+        '</label>';
+    });
+
+    htmlFragment += '<br><br>' +
+    '<label>Orden plato</label><br>' +
+    '<label class="radio-label">' +
+    '<input type="radio" name="ordenPlato" value="1º" ' + (numplato === 1 ? 'checked' : '') + '>' +
+    '1º Plato' +
+    '</label>' +
+    '<label class="radio-label">' +
+    '<input type="radio" name="ordenPlato" value="2º" ' + (numplato === 2 ? 'checked' : '') + '>' +
+    '2º Plato' +
+    '</label>' +
+    '<label class="radio-label">' +
+    '<input type="radio" name="ordenPlato" value="3º" ' + (numplato === 3 ? 'checked' : '') + '>' +
+    '3º Plato' +
+    '</label>' +
+    '<label class="radio-label">' +
+    '<input type="radio" name="ordenPlato" value="postre" ' + (numplato === 4 ? 'checked' : '') + '>' +
+    'Postre' +
+    '</label><br><br>';
+
+    if(currentImg){
+        htmlFragment +=  '<label>Selecciona una imagen: </label><br>'+
+        '<div id="image-container" class="image-container">'+
+        '<div  onclick="document.getElementById(\'update-img\').click();" style="width: 50%;">'+
+        '<img id="display-image" src="'+currentImg+'" alt="Image" />'+
+        '<input type="file" id="update-img" style="display: none;" onchange="handleFileChange(event);" />'+
+        '</div>'+
+        '</div>';
+
+    } else {
+
+        htmlFragment += '<label> Selecciona una imagen:</label><br>'+
+        '<input type="file" id="update-img" accept="image/png, image/jpeg"> '
+    }
+
+    
+
+    htmlFragment += '</div><br>' +
+        '<label >Eliminar elemento</label>' +
+        '<button class="btn btn-danger" onclick="eliminarComida('+id+')" style="margin:5px;"><i class="fa-solid fa-trash"></i></button>'+
+        '</div>';
+
+    } else {
+
+        if(currentImg){
+            var htmlFragment = '<div>' +
+                '<label for="input1">Nombre</label>' +
+                '<input id="input1" class="swal2-input" value="' + nombre + '">' +
+                '</div>' +
+                '<div>' +
+                '<label for="input2">Precio</label>' +
+                '<input id="input2" class="swal2-input" value="' + precio + '"><br><br>' +
+                '<label for="typeFood">Tipo </label>' +
+                '<select id="typeFood" class="swal2-input" required>' +
+                '<option value="comida">Comida</option>' +
+                '<option value="bebida">Bebida</option>' +
+                '</select><br><br>' +
+                '<label>Selecciona una imagen: </label><br>'+
+                '<div id="image-container" class="image-container">'+
+                '<div  onclick="document.getElementById(\'update-img\').click();" style="width: 50%;">'+
+                '<img id="display-image" src="'+currentImg+'" alt="Image" />'+
+                '<input type="file" id="update-img" style="display: none;" onchange="handleFileChange(event);" />'+
+                '</div>'+
+                '</div><br><br>'+
+                '<label >Eliminar elemento</label>' +
+                '<button class="btn btn-danger" onclick="eliminarComida('+id+')" style="margin:5px;" ><i class="fa-solid fa-trash"></i></button>'+
+                '</div>';
+
+            } else {
+
+                htmlFragment = '<div>' +
+                    '<label for="input1">Nombre</label>' +
+                    '<input id="input1" class="swal2-input" value="' + nombre + '">' +
+                    '</div>' +
+                    '<div>' +
+                    '<label for="input2">Precio</label>' +
+                    '<input id="input2" class="swal2-input" value="' + precio + '"><br><br>' +
+                    '<label for="typeFood">Tipo </label>' +
+                    '<select id="typeFood" class="swal2-input" required>' +
+                    '<option value="comida">Comida</option>' +
+                    '<option value="bebida">Bebida</option>' +
+                    '</select><br><br>' +
+                    '<label> Selecciona una imagen:</label><br>'+
+                    '<input type="file" id="update-img" accept="image/png, image/jpeg"><br><br> '+
+                    '<label >Eliminar elemento</label>' +
+                    '<button class="btn btn-danger" onclick="eliminarComida('+id+')" style="margin:5px;" ><i class="fa-solid fa-trash"></i></button>'+
+                    '</div>';
+            }
+
+    }
+
+    Swal.fire({
+        title: nombre + ' ('+tipoProducto+')',
+        html:htmlFragment,
+        confirmButtonText: 'Aceptar',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        customClass: {
+            popup: 'modal-config-comida'
+        },
+        preConfirm: () => {
+            // Obtener los nuevos valores antes de la confirmación
+            var nuevoNombre = $('#input1').val();
+            var nuevoPrecio = $('#input2').val();
+            var newImg =  document.querySelector('#update-img');
+            const foodImage = newImg.files[0];
+            var ordenPlato = obtenerOrdenPlato();
+            var typeFood = document.getElementById('typeFood').value;
+
+            let formData = new FormData();
+
+            formData.append('id' , id);
+            formData.append('nombre' , nuevoNombre.toUpperCase());
+            formData.append('precio' , nuevoPrecio);
+            formData.append('suplementos' , elementosSeleccionados);
+            formData.append('ordenplato' , ordenPlato);
+            formData.append('img' , foodImage);
+            formData.append('typeFood' , typeFood);
+
+            // Realizar la solicitud AJAX
+            return $.ajax({
+                url: "{{ path('datos_comida') }}",
+                type: 'POST',
+                data: formData,
+                processData: false,  // No procesar los datos como cadena de consulta
+                contentType: false,
+            }).then(response => {
+
+                var spanName = document.getElementById('span-1-' + id);
+                spanName.innerHTML = response.nombre;
+
+                var spanPrice = document.getElementById('span-2-' + id);
+                spanPrice.innerHTML = response.precio;
+
+                if(currentImg){
+                    document.getElementById('display-image').src = response.img;
+
+                } else {
+                    newImgFood[id] = response.img;
+
+                }
+
+                 var button = document.getElementById('foodtype-' + id);
+                if (typeFood === 'comida') {
+                    button.setAttribute('onclick', `datosComida(${id}, 1, ${JSON.stringify(extras)}, ${numplato}, "${currentImg}")`);
+                } else {
+                    button.setAttribute('onclick', `datosComida(${id}, 0, ${JSON.stringify(extras)}, ${numplato}, "${currentImg}")`);
+                }
+
+                
+
+
+
+
+                // Indicar a SweetAlert2 que la operación fue exitosa
+                return { success: true };
+            }).catch(error => {
+                console.error(error);
+                return { success: false };
+            });
+        }
+        }).then((result) => {
+            // Manejar el clic en el botón de confirmar
+            if (result.isConfirmed && result.value.success) {
+                Swal.fire({
+                    title: 'Comida modificada',
+                    icon: 'success'
+                });
+            }
+        });
+}
+
+function handleFileChange(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+            // Actualiza la fuente de la imagen con la nueva imagen
+            document.getElementById('display-image').src = e.target.result;
+        }
+
+        reader.readAsDataURL(file);
+    }
+}
+
+
+function obtenerOrdenPlato() {
+    var radios = document.getElementsByName('ordenPlato');
+
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            return radios[i].value; // Devuelve el valor del radio button seleccionado
+        }
+    }
+
+    // Si no se seleccionó ningún radio button
+    return null;
+}
+
+function eliminarComida(id){
+
+    Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminarlo'
+  }).then((result) => {
+    // Si el usuario hace clic en "Aceptar"
+    if (result.isConfirmed) {
+      // Realiza la solicitud Ajax (reemplaza la URL y los datos con los tuyos)
+      $.ajax({
+        url: "{{ path('eliminar_comida_ajustes') }}",
+        type: 'POST',
+        data: { id: id },
+        success: function(response) {
+          
+            // Muestra un mensaje de éxito
+            Swal.fire('Eliminado', 'El elemento ha sido eliminado correctamente', 'success');
+            var cardComida = document.getElementById('foodtype-'+id);
+            cardComida.remove();
+        },
+        error: function() {
+          // Muestra un mensaje de error en caso de fallo en la solicitud Ajax
+          Swal.fire('Error', 'Error en la solicitud Ajax', 'error');
+        }
+      });
+    }
+  });
+
+
+}
+
+// FIN BLOQUE DE CONTROL DE COMIDA 
+
+// BLOQUE DE CONTROL DE MESAS 
+
+document.getElementById('add-element-button-zonas').addEventListener('click', function () {
+        // Crear un nuevo elemento similar al que deseas agregar
+        var newElement = document.createElement('div');
+        newElement.className = 'rounded-lg border bg-card text-card-foreground shadow-sm p-4 space-y-2';
+        newElement.innerHTML = `
+            <div class="flex items-center justify-between">
+                <div class="add-elements-new"> 
+                    <h3 class="text-2xl font-semibold leading-none tracking-tight">Nombre</h3>
+                    <button class="delete-button btn btn-danger btn-sm ml-2">X</button>
+                </div>
+                <div class="name-and-icon">
+                    <input id="type-name-zonas" class="flex h-10 w-50 border-input bg-background text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border rounded-md p-2" placeholder="Introduce un nombre" type="text"/>
+                </div>
+            </div>
+        `;
+
+        // Agregar el nuevo elemento justo debajo del botón
+        var gridSection = document.getElementById('grid-section-zonas');
+        gridSection.appendChild(newElement);
+
+        // Añadir un listener al botón de eliminar
+        var deleteButton = newElement.querySelector('.delete-button');
+        deleteButton.addEventListener('click', function () {
+            // Eliminar el elemento al hacer clic en el botón de eliminar
+            gridSection.removeChild(newElement);
+        });
+        
+
+    });
+
+function addZona(){
+                // Seleccionar todos los inputs con id "type-name"
+                var inputs = document.querySelectorAll('input[id="type-name-zonas"]');
+
+                var zonasArray = Array.from(inputs).map(function(input) {
+                    return input.value.toUpperCase();
+                });
+
+
+            $.ajax({
+            url: "{{ path('addzona') }}",
+            data: {
+            newZona: zonasArray,
+            },
+            type: "POST",
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Añadido',
+                    text: response.added,
+                    });
+
+                    console.log(response)
+
+                    // Obtén el contenedor donde agregarás los nuevos elementos
+                    var contenedor = document.getElementById("contenedor-zonas");
+                    //var accordionElement = document.getElementById("accordionExample");
+
+                    // Itera sobre el array y crea los elementos HTML
+                    zonasArray.forEach(function(tipoComida, index) {
+                        // Crea el contenedor principal
+                        var switcherContainer = document.createElement("div");
+                        switcherContainer.className = "switchers";
+                        switcherContainer.id = response.tipoComidaID[index] + '-' + response.tipoComida[index] ;
+
+                        // Primer div con el nombre del tipo de comida
+                        var nombreDiv = document.createElement("div");
+                        var nombreSpan = document.createElement("span");
+                        nombreSpan.id = response.tipoComida[index];
+                        nombreSpan.value = response.tipoComida[index];
+                        nombreSpan.textContent = response.tipoComida[index];
+                        nombreDiv.appendChild(nombreSpan);
+
+                        // Segundo div con el switch y los botones
+                        var accionesDiv = document.createElement("div");
+                        accionesDiv.style.display = "flex";
+                        accionesDiv.style.alignItems = "center";
+
+                        // Crea el elemento label
+                        var label = document.createElement("label");
+                        label.className = "switch";
+                        label.style.marginBottom = "0";
+
+                        // Crea el elemento input
+                        var input = document.createElement("input");
+                        input.type = "checkbox";
+                        input.id = response.tipoComidaID[index] ;
+                        input.checked = true;
+
+                        // Crea el elemento div para el slider
+                        var slider = document.createElement("div");
+                        slider.className = "slider round";
+
+                        // Crea el primer botón (modificarTipo)
+                        var buttonModificar = document.createElement("button");
+                        buttonModificar.className = "btn btn-success";
+                        buttonModificar.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>';
+                        buttonModificar.addEventListener('click', function() {
+                            modificarTipo(response.tipoComida[index] , response.tipoComidaID[index] );
+                        });
+
+                        // Crea el segundo botón (eliminarTipo)
+                        var buttonEliminar = document.createElement("button");
+                        buttonEliminar.className = "btn btn-danger";
+                        buttonEliminar.innerHTML = '<i class="fa-solid fa-trash"></i>';
+                        buttonEliminar.addEventListener('click', function() {
+                            eliminarTipo(response.tipoComidaID[index] , response.tipoComida[index] );
+                        });
+
+                        // Crea el div que envuelve el botón con un padding de 5px
+                        var divBotonModificar = document.createElement("div");
+                        divBotonModificar.style.padding = "5px";
+                        divBotonModificar.appendChild(buttonModificar);
+
+                        // Agrega el input y el slider al label
+                        label.appendChild(input);
+                        label.appendChild(slider);
+
+                        // Agrega los botones al segundo div
+                        accionesDiv.appendChild(label);
+                        accionesDiv.appendChild(divBotonModificar);
+                        accionesDiv.appendChild(buttonEliminar);
+
+                        // Agrega los divs al contenedor principal
+                        switcherContainer.appendChild(nombreDiv);
+                        switcherContainer.appendChild(accionesDiv);
+
+                        // Inserta el contenedor en el lugar deseado
+                        contenedor.insertBefore(switcherContainer, contenedor.lastElementChild);
+
+                        //var card = createCard(response.tipoComidaID[index], arrayIcons[index], response.tipoComida[index]);
+                        //accordionElement.appendChild(card);
+
+                        // Obtener el elemento padre donde queremos insertar las tarjetas
+                        const accordionParent = document.getElementById('accordionExampleZona');
+
+                        // Crear el elemento div.card con sus clases y atributos
+                        const cardDiv = document.createElement('div');
+                        cardDiv.className = 'card';
+                        cardDiv.id = `${response.tipoComidaID[index]}-${response.tipoComida[index]}`;
+
+                        // Crear el elemento div.card-header dentro de la tarjeta
+                        const cardHeaderDiv = document.createElement('div');
+                        cardHeaderDiv.className = 'card-header';
+                        cardHeaderDiv.id = `heading${response.tipoComidaID[index]}`;
+
+                        // Crear el elemento h2 dentro del div.card-header
+                        const h2 = document.createElement('h2');
+                        h2.className = 'mb-0';
+
+                        // Crear el botón dentro del h2 con sus atributos y texto
+                        const button = document.createElement('button');
+                        button.className = 'btn btn-link btn-block text-left';
+                        button.id = `button-${response.tipoComidaID[index]}`;
+                        button.type = 'button';
+                        button.setAttribute('data-toggle', 'collapse');
+                        button.setAttribute('data-target', `#collapseZona${response.tipoComidaID[index]}`);
+                        button.setAttribute('aria-expanded', 'true');
+                        button.setAttribute('aria-controls', `collapse${response.tipoComidaID[index]}`);
+                        button.style.color = 'black';
+                        button.innerText = response.tipoComida[index];
+
+                        // Agregar el botón al h2
+                        h2.appendChild(button);
+
+                        // Agregar el h2 al div.card-header
+                        cardHeaderDiv.appendChild(h2);
+
+                        // Crear el div.collapse dentro de la tarjeta
+                        const collapseDiv = document.createElement('div');
+                        collapseDiv.className = 'collapse';
+                        collapseDiv.id = `collapseZona${response.tipoComidaID[index]}`;
+                        collapseDiv.setAttribute('aria-labelledby', `heading${response.tipoComidaID[index]}`);
+                        collapseDiv.setAttribute('data-parent', '#accordionExampleZona');
+
+                        // Crear el botón de añadir mesa dentro del div.collapse
+                        const addButton = document.createElement('button');
+                        addButton.className = 'food-by-type';
+                        addButton.id = `add-button-zona-${response.tipoComidaID[index]}`;
+                        addButton.setAttribute('onclick', `addMesa('${response.tipoComidaID[index]}')`);
+
+                        const addButtonInnerDiv = document.createElement('div');
+                        addButtonInnerDiv.className = 'button-type-food-right';
+
+                        const plusIcon = document.createElement('i');
+                        plusIcon.className = 'fa-solid fa-plus';
+
+                        const spanInsideButton = document.createElement('span');
+                        spanInsideButton.appendChild(plusIcon);
+
+                        addButtonInnerDiv.appendChild(spanInsideButton);
+                        addButton.appendChild(addButtonInnerDiv);
+
+                        // Agregar el botón de añadir mesa al div.collapse
+                        collapseDiv.appendChild(addButton);
+
+                        // Agregar div.card-header y div.collapse a div.card
+                        cardDiv.appendChild(cardHeaderDiv);
+                        cardDiv.appendChild(collapseDiv);
+
+                        // Agregar la tarjeta completa al elemento padre del acordeón
+                        accordionParent.appendChild(cardDiv);
+
+
+
+
+                    });
+
+
+            },
+            error: function (response) {
+            console.log('Error al actualizar el tema');
+            }
+
+
+            })
+
+            
+        }
+
+        function enableZonas() {
+
+        // Selecciona todos los elementos input de tipo checkbox dentro de la clase "container-switches"
+        var checkboxes = document.querySelectorAll('.container-switches-zonas input[type="checkbox"]');
+
+        // Convierte la NodeList en un array y extrae los valores de los atributos "id"
+        var infoCheckboxes = Array.from(checkboxes).map(function(input) {
+            return {
+                id: input.id,
+                checked: input.checked
+            };
+        });
+
+                
+
+            jQuery.ajax({
+            url: "{{ path('enablezona') }}",
+            data: {
+            check: infoCheckboxes
+            },
+            type: "POST",
+            success: function (response) {
+
+                    const mensaje = response.changed
+
+
+                    Swal.fire({
+                    title: 'Cargando...',
+                    html: 'Estamos procesando la acción.',
+                    text: mensaje,
+                    timer: 1000,
+                    didOpen: () => {
+                                Swal.showLoading()
+                        },
+                        showConfirmButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false
+                        });
+
+            },
+            error: function (response) {
+            console.log('Error al actualizar el tema');
+            }
+
+
+            })
+
+
+}
+
+function modificarZona(nombreZona, idZona){
+
+    Swal.fire({
+    title: 'Ingresa tu información',
+    input: 'text',
+    inputValue: nombreZona,
+    showCancelButton: true,
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar',
+    showLoaderOnConfirm: true,
+    preConfirm: (value) => {
+        // Retorna una promesa que se resolverá cuando se complete la solicitud AJAX
+        return new Promise((resolve) => {
+            // Simula una solicitud AJAX utilizando setTimeout (reemplázalo con tu lógica real)
+            setTimeout(() => {
+
+                $.ajax({
+                    url: "{{ path('modificar_zona') }}",
+                    method: 'POST',
+                    data: { nombreZona: value,
+                            idZona: idZona
+                            },
+                    success: function(response) {
+                         
+                         spanName = document.getElementById(nombreZona);
+                         spanName.innerHTML= value.toUpperCase();
+
+                         buttonName = document.getElementById('button-'+idZona);
+                         buttonName.innerHTML = value.toUpperCase();     
+
+                    },
+                    error: function(error) {
+                        resolve.error(error);
+                     }
+                 });
+
+                // Ejemplo de resolución de la promesa con un mensaje ficticio
+                resolve('Valor modificado: ' + value.toUpperCase());
+            }, 1000); // Simulación de retardo de 1 segundo
+        });
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        // Manejar el resultado de la promesa después de la solicitud AJAX
+        if (result.value) {
+            Swal.fire('¡Solicitud completada!', result.value, 'success');
+        }
+    });
+
+}
+
+
+function eliminarZona(idZona, nombreZona){
+
+
+    Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'Esta acción no se puede deshacer',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+}).then((result) => {
+    if (result.isConfirmed) {
+        // Realiza la solicitud AJAX
+        $.ajax({
+            url: "{{ path('eliminar_zona') }}",
+            method: 'POST',
+            data: {
+                id: idZona
+            },
+            success: function(response) {
+                // Maneja la respuesta de la solicitud AJAX
+                divTipo = document.getElementById(idZona+'-'+nombreZona);
+                divTipo.remove(); 
+
+                Swal.fire('Eliminado', 'El elemento ha sido eliminado', 'success');
+            },
+            error: function(error) {
+                // Maneja el error de la solicitud AJAX
+                console.error('Error en la solicitud AJAX:', error);
+                Swal.fire('Error', 'Debes eliminar primero las mesas asociadas a la zona', 'error');
+            }
+        });
+    }
+});
+
+
+
+}
+
+function addMesa(idTipo){
+
+Swal.fire({
+                title: 'Añade una mesa:',
+                html:
+                    `<div>
+                            <input id="inputText1" class="swal2-input" placeholder="Numero de mesa" type="text" required><br>
+                            <p>Elige una imagen:</p>
+                            <div class="image-options">
+                                <label>
+                                    <input type="radio" name="mesaImage" value="circle.png">
+                                    <img src="/img/circle.png" alt="Imagen 1">
+                                </label>
+                                <label>
+                                    <input type="radio" name="mesaImage" value="rounded-rectangle.png">
+                                    <img src="/img/rounded-rectangle.png" alt="Imagen 2">
+                                </label>
+                                <label>
+                                    <input type="radio" name="mesaImage" value="square.png">
+                                    <img src="/img/square.png" alt="Imagen 3">
+                                </label>
+                                <label>
+                                    <input type="radio" name="mesaImage" value="rectangulo.png">
+                                    <img src="/img/rectangulo.png" alt="Imagen 4">
+                                </label>
+                            </div>
+
+                        </div>
+                    `,
+                showCancelButton: true,
+                confirmButtonText: 'Enviar',
+                cancelButtonText: 'Cancelar',
+                showLoaderOnConfirm: true,
+                customClass: {
+                    popup: 'add-comida', // Clase personalizada para el contenedor del Swal
+                },
+                preConfirm: () => {
+                    const numero = Swal.getPopup().querySelector('#inputText1').value;
+                    const selectedImage = document.querySelector('input[name="mesaImage"]:checked');
+                    
+                    if (!numero || !selectedImage) {
+                        Swal.showValidationMessage('Todos los campos son obligatorios');
+                    } else {
+                        const imageUrl = selectedImage.value;
+
+                        return $.ajax({
+                            url: "{{ path('addmesa')}}",
+                            type: 'POST',
+                            data: {
+                                id: idTipo,
+                                numero: numero,
+                                imageUrl: imageUrl
+                            },
+                            success: function (response) {
+                                Swal.fire('Añadido', 'El elemento ha sido añadido', 'success');
+
+                                // Crear y agregar el botón con la imagen seleccionada
+                                var parentElement = document.getElementById("collapseZona"+idTipo);
+                                var newButton = document.createElement("button");
+                                newButton.className = "food-by-type";
+                                newButton.id = "button-mesa-"+idTipo;
+                                newButton.setAttribute("onclick", "eliminarMesa(" + idTipo + ")");
+                                // Crear el div interno para el botón
+                                var innerDiv = document.createElement("div");
+                                innerDiv.className = "button-type-food-right";
+
+                                // Crear el elemento <span> dentro del div interno con el número de mesa (por ejemplo, "8")
+                                var spanElement = document.createElement("span");
+                                spanElement.innerText = numero; // Aquí puedes poner el número de mesa dinámicamente
+
+                                // Agregar el <span> al div interno
+                                innerDiv.appendChild(spanElement);
+
+                                // Agregar el div interno al botón
+                                newButton.appendChild(innerDiv);
+
+                                // Obtener el elemento de referencia (botón "add-button-zona-${idTipo}") antes del cual queremos insertar el nuevo botón
+                                var referenceElement = document.getElementById("add-button-zona-" + idTipo);
+                                parentElement.insertBefore(newButton, referenceElement);
+                            },
+                            error: function () {
+                                Swal.fire('Error', 'Se produjo un error en la solicitud.', 'error');
+                            }
+                        });
+                    }
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+
+}
+
+function eliminarMesa(id){
+
+    Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminarlo'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Aquí puedes colocar la lógica para eliminar el elemento
+                // Por ejemplo, puedes hacer una solicitud AJAX a tu servidor
+                $.ajax({
+                    url: "{{ path('eliminar_mesa_ajustes')}}",
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(response) {
+                        // Maneja la respuesta del servidor si es necesario
+                        Swal.fire('Eliminado', 'El elemento ha sido eliminado.', 'success');
+
+                        var buttonMesa = document.getElementById('button-mesa-'+id);
+                        buttonMesa.remove();
+                    },
+                    error: function(error) {
+                        // Maneja el error si es necesario
+                        Swal.fire('Error', 'Hubo un problema al intentar eliminar el elemento.', 'error');
+                    }
+                });
+            }
+        });
+
+
+}
+
+// FIN BLOQUE MESAS
+
+//BLOQUE QRS
+
+function descargarQR(numMesa){
+        // Esperar a que el documento esté cargado completamente
+        var url = "{{url}}";
+
+        if(url !== 'vacio'){
+            // Obtener todos los inputs con la clase "input-numero"
+        var inputValue = document.getElementById(numMesa+'-qr').value;
+        var qrData = url+"/pedido/mesa/"+numMesa;
+        
+
+        for(var i = 1; i <= inputValue; i++){
+            var fileName = "MESA_"+numMesa+"_QR_"+i;
+            generateAndDownloadQRCode(qrData, fileName);
+        }
+
+
+        } else {
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Advertencia',
+                text: 'Debes rellenar la información de tu negocio antes de descargar los QRs',
+                confirmButtonText: 'Aceptar'
+            });
+
+
+        }
+
+        
+
+
+}
+
+function actualizarDatos(){
+
+    var name = document.getElementById('type-nombre').value;
+    var dir = document.getElementById('type-dirección').value;
+    var telf = document.getElementById('type-teléfono').value;
+    var email = document.getElementById('type-email').value;
+    var cif = document.getElementById('type-cif').value;
+
+    var logo;
+
+    if(document.getElementById('type-logo') && document.getElementById('archivoInput')) {
+    var fileInput = document.getElementById('archivoInput');
+    if (fileInput.files.length > 0 && fileInput.files[0].type.startsWith('image/')) {
+        logo = fileInput.files[0];
+        console.log('if 1'+logo);
+    } else {
+        
+    }
+    } else if(document.getElementById('archivoInput')) {
+    var archivoInput = document.getElementById('archivoInput');
+    if (archivoInput.files.length > 0 && archivoInput.files[0].type.startsWith('image/')) {
+        logo = archivoInput.files[0];
+        console.log('if 2'+logo);
+        } 
+    } else {
+        var fileInput = document.getElementById('type-logo');
+        if (fileInput.files.length > 0 && fileInput.files[0].type.startsWith('image/')) {
+            logo = fileInput.files[0];
+            console.log('if 1'+logo);
+        } 
+    }
+    
+    var data = new FormData();
+        data.append('name', name);
+        data.append('dir', dir);
+        data.append('telf', telf);
+        data.append('email', email);
+        data.append('cif', cif);
+        data.append('logo', logo);
+
+    
+
+    $.ajax({
+            url: "{{ path('addinfo')}}", // Reemplaza esto con la ruta de tu controlador Symfony
+            type: 'POST', // Método HTTP
+            dataType: 'json',
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                Swal.fire('Actualziado', 'La información se ha actualizado correctamente ', 'success');
+            },
+            error: function(xhr, status, error) {
+                // Manejo de errores
+                console.error('Error en la solicitud AJAX:', status, error);
+            }
+        });
+
+
+}
+
+function cambiarLogo() {
+    document.getElementById('archivoInput').click();
+
+    // Escuchar el evento cambio en el input de tipo archivo
+    document.getElementById('archivoInput').addEventListener('change', function() {
+        var archivo = this.files[0];
+        if (archivo) {
+            var lector = new FileReader();
+            lector.onload = function(evento) {
+                var imagen = new Image();
+                imagen.onload = function() {
+                    // Mostrar la nueva imagen en el elemento <img>
+                    document.getElementById('logo-preview').src = imagen.src;
+                };
+                imagen.src = evento.target.result;
+            };
+            lector.readAsDataURL(archivo);
+        }
+    });
+}
+
+function cambiarFoto() {
+    console.log('entro')
+    var archivoInput = document.getElementById('type-logo');
+    var archivo = archivoInput.files[0];
+
+    if (archivo) {
+        var lector = new FileReader();
+        lector.onload = function(evento) {
+            var imagen = new Image();
+            imagen.onload = function() {
+                // Crear el botón con la imagen
+                var botonImagen = document.createElement('button');
+                botonImagen.className = 'div-for-logo';
+                botonImagen.id = 'div-logo';
+                botonImagen.style.display = 'block';
+                botonImagen.style.width = '200px';
+                botonImagen.style.height = '200px';
+                botonImagen.style.overflow = 'hidden';
+                botonImagen.onclick = cambiarLogo;
+
+                // Crear la imagen dentro del botón
+                var imagenPreview = document.createElement('img');
+                imagenPreview.id = 'logo-preview';
+                imagenPreview.src = imagen.src;
+                imagenPreview.alt = '';
+                imagenPreview.style.width = '100%';
+                imagenPreview.style.height = '100%';
+                imagenPreview.style.objectFit = 'contain';
+
+                // Adjuntar la imagen al botón
+                botonImagen.appendChild(imagenPreview);
+
+                // Ocultar el div que contiene el input de archivo original
+                var divOriginal = document.querySelector('.input-group.mb-3');
+                divOriginal.style.display = "none";
+
+                // Insertar el botón con la imagen en su lugar
+                divOriginal.parentNode.insertBefore(botonImagen, divOriginal.nextSibling);
+            };
+            imagen.src = evento.target.result;
+        };
+        lector.readAsDataURL(archivo);
+    }
+}
+
+
+
+
+
+        
+
+
+//FIN BLOQUE QRs
+
+// Bloque impresoras
+function actualizarImpresoras(){
+
+    var sn_cocina = document.getElementById('sn-cocina').value;
+    var sn_barra = document.getElementById('sn-barra').value;
+    
+    $.ajax({
+        url: "{{ path('actualizar_impresoras')}}",
+        type: 'POST',
+        dataType: 'json',
+        data: {sncocina: sn_cocina, snbarra: sn_barra},
+        success: function (response) {
+
+
+        }, 
+        error: function (response) {
+
+
+        }
+
+    })
+            //N411243400366
+                //N411243400542            
+}
+// Fin de bloque impresoras
+</script>
+
+ {% endblock %}

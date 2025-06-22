@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Estadísticas{% endblock %}
+{% block page_title %} Sigue la evolución de tu negocio {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+<body>
+<div class="" style="background-color: #fff;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);border-radius: 20px; width: 100% !important;">
+<div style="padding:1.5vh;"><button class="btn btn-primary" id="randomizeData">Cambiar fecha</button></div>
+    <div class="row">
+        <div class="col-lg-6" style="display:flex;flex-direction: column;padding: 1vh 16vh">
+            <div style="display:flex;justify-content:center;;"><h3>Platos mas pedidos</h3></div>
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="col-lg-6" style="display:flex;flex-direction: column;padding: 1vh 16vh">
+            <div style="display:flex;justify-content:center;;"><h3>Histórico Anual</h3></div>
+            <canvas id="myChart2" width="400" height="400"></canvas>
+        </div>
+        
+    </div>
+
+</div>
+
+<pre>
+    {{ dump(chartDataMonth|raw ) }}
+</pre>
+
+</body>
+
+<script>    
+
+const data = {{ chartData|raw }};
+var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                legend: {
+                    position: 'top',
+                },
+                }
+            },
+        });
+
+         document.getElementById('randomizeData').addEventListener('click', function() {
+        myChart.data.datasets.forEach(dataset => {
+            dataset.data = dataset.data.map(() => Math.floor(Math.random() * 100));
+        });
+        myChart.update();
+    });
+
+
+const dataMonth = {{ chartDataMonth|raw }};
+    var ctx = document.getElementById('myChart2').getContext('2d');
+        var myChart = new Chart(ctx, {
+             type: 'line',
+            data: dataMonth,
+            options: {
+                plugins: {
+                filler: {
+                    propagate: false,
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(context) {
+                        var dataset = myChart.data.datasets[context.datasetIndex]; // Accedemos al dataset
+                        var dishName = dataset.dishNames[context.dataIndex];
+                        var value = context.formattedValue;
+                        console.log(dishName);
+                        return dishName + ': ' + value;
+                    }
+                    }
+                }
+                },
+                interaction: {
+                intersect: false,
+                },
+            },
+        });
+
+        
+
+
+
+</script>
+
+{% endblock %}

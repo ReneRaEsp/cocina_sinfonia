@@ -1,0 +1,316 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Proveedores{% endblock %}
+{% block page_title %} Proveedores {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+
+{% block page_content %}
+<body>
+<div class="container">
+        <div class="row">
+            {#<div class="col-lg-md-xs-12" style="">
+                <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+                Añadir proveedor
+                </button>
+                <span class="v-line"></span>
+                <button id="download-csv" class="btn btn-primary">Descargar CSV</button>
+                <span class="v-line"></span>
+                <button id="download-pdf" class="btn btn-primary">Descargar PDF</button>
+                <span class="v-line"></span>
+                <button id="download-xlsx" class="btn btn-primary">Descargar Excel</button>
+            </div> #}
+        </div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="12 d-flex justify-content-center m-3">
+ 		     <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+                         Añadir proveedor
+               	     </button>
+		</div>
+	</div>
+</div>
+<div id="appProveedores" data-proveedores="{{ proveedores|json_encode }}" ></div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crear nuevo proveedor</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+        {{ form_end(form) }}
+      </div>
+      {# <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> #}
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+{# <div class="container">
+        <div class="row">
+            <div class="col-lg-md-xs-12 table-provider" style="">
+                <div class="form-add">
+                <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+                Añadir proveedor
+                </button>
+                <span class="v-line"></span>
+                <button id="download-csv" class="btn btn-primary">Descargar CSV</button>
+                <span class="v-line"></span>
+                <button id="download-pdf" class="btn btn-primary">Descargar PDF</button>
+                <span class="v-line"></span>
+                <button id="download-xlsx" class="btn btn-primary">Descargar Excel</button>
+                </div>
+                <div style="padding:60px;" id="div-table">
+                  <div id="table-stock"></div>
+                </div> 
+            </div> 
+        </div>
+</div> #}
+
+{# Bloque JavaScript #}
+    <script>
+    var layout = window.innerWidth < 768 ? "fitDataFill" : "fitColumns";
+
+    var table = new Tabulator("#table-stock", {
+    layout:layout,
+    virtualDomHoz: "scroll",
+    tooltipsHeader: false,
+    data:{{ proveedores|json_encode|raw }},
+    pagination:"local",
+    paginationSize:20,
+    paginationSizeSelector:[20, 25, 50],
+    movableColumns:true,
+    paginationCounter:"rows",
+    pagination:"local",
+    columns:[
+        {title:"ID", field:"id", sorter:"string",sorter:"string", headerFilter:"input"},
+        {title:"Nombre", field:"name", sorter:"string", headerFilter:"input", hozAlign:"center",editable:true, formatter:function(cell, formatterParams, onRendered){
+            var cellValue = cell.getValue();
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cellValue;
+            input.style.width = "100%";
+            input.style.height = "100%";
+            input.style.border = "none";
+            input.style.background = "transparent";
+            input.style.textAlign = "center";
+            
+            input.addEventListener("change", function () {
+                var newValue = input.value;
+                var id = cell.getRow().getData().id;
+
+                $.ajax({
+                    url: "{{ path('proveedores_set') }}",
+                    type: "POST",
+                    data: {
+                        colum: 'name',
+                        id: id,
+                        value: newValue
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: response.proveedor,
+                            text: 'Se ha registrado correctamente en la tabla',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log("Error en la llamada AJAX: " + textStatus + " " + errorThrown);
+                    }
+                });
+
+                cell.setValue(newValue);
+            });
+
+            return input;
+        }},
+        {title:"Dirección", field:"dir", sorter:"string",sorter:"string", headerFilter:"input", hozAlign:"center",editable:true, formatter:function(cell, formatterParams, onRendered){
+            var cellValue = cell.getValue();
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cellValue;
+            input.style.width = "100%";
+            input.style.height = "100%";
+            input.style.border = "none";
+            input.style.background = "transparent";
+            input.style.textAlign = "center";
+            
+            input.addEventListener("change", function () {
+                var newValue = input.value;
+                var id = cell.getRow().getData().id;
+
+                $.ajax({
+                    url: "{{ path('proveedores_set') }}",
+                    type: "POST",
+                    data: {
+                        colum: 'dir',
+                        id: id,
+                        value: newValue
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: response.proveedor,
+                            text: 'Se ha registrado correctamente en la tabla',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log("Error en la llamada AJAX: " + textStatus + " " + errorThrown);
+                    }
+                });
+
+                cell.setValue(newValue);
+            });
+
+            return input;
+        }},
+        {title:"Email", field:"email", sorter:"string",sorter:"string", headerFilter:"input", hozAlign:"center",editable:true, formatter:function(cell, formatterParams, onRendered){
+            var cellValue = cell.getValue();
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cellValue;
+            input.style.width = "100%";
+            input.style.height = "100%";
+            input.style.border = "none";
+            input.style.background = "transparent";
+            input.style.textAlign = "center";
+            
+            input.addEventListener("change", function () {
+                var newValue = input.value;
+                var id = cell.getRow().getData().id;
+
+                $.ajax({
+                    url: "{{ path('proveedores_set') }}",
+                    type: "POST",
+                    data: {
+                        colum: 'email',
+                        id: id,
+                        value: newValue
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: response.proveedor,
+                            text: 'Se ha registrado correctamente en la tabla',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log("Error en la llamada AJAX: " + textStatus + " " + errorThrown);
+                    }
+                });
+
+                cell.setValue(newValue);
+            });
+
+            return input;
+        }},
+        {title:"Teléfono", field:"telf", sorter:"number", headerFilter:"input", hozAlign:"center",editable:true, formatter:function(cell, formatterParams, onRendered){
+            var cellValue = cell.getValue();
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cellValue;
+            input.style.width = "100%";
+            input.style.height = "100%";
+            input.style.border = "none";
+            input.style.background = "transparent";
+            input.style.textAlign = "center";
+            
+            input.addEventListener("change", function () {
+                var newValue = input.value;
+                var id = cell.getRow().getData().id;
+
+                $.ajax({
+                    url: "{{ path('proveedores_set') }}",
+                    type: "POST",
+                    data: {
+                        colum: 'telf',
+                        id: id,
+                        value: newValue
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: response.proveedor,
+                            text: 'Se ha registrado correctamente en la tabla',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log("Error en la llamada AJAX: " + textStatus + " " + errorThrown);
+                    }
+                });
+
+                cell.setValue(newValue);
+            });
+
+            return input;
+        }},
+        {title:"CIF/NIF", field:"nif", sorter:"string",sorter:"string", headerFilter:"input"}
+        ],
+        });
+        
+
+        //Funcion para dar el okey de la carga de nuevo  proveedor
+         function showOkDialogProvider() {
+            Swal.fire({
+            title: 'Proveedor añadido',
+            text: 'El proveedor se ha añadido correctamente',
+            icon: 'success',
+            confirmButtonText: 'OK'
+            });
+        }
+
+        {% if provider_added %}        
+        showOkDialogProvider();
+        table.setData({{ proveedores|json_encode|raw }});
+        {% endif %}
+
+         //trigger download of data.csv file
+          document.getElementById("download-csv").addEventListener("click", function(){
+              table.download("csv", "proveedores.csv");
+          });
+
+          //trigger download of data.xlsx file
+          document.getElementById("download-xlsx").addEventListener("click", function(){
+              table.download("xlsx", "proveedores.xlsx");
+          });
+
+
+          //trigger download of data.pdf file
+          document.getElementById("download-pdf").addEventListener("click", function(){
+              table.download("pdf", "proveedores.pdf", {
+                  orientation:"portrait", //set page orientation to portrait
+                  title:"Proveedores", //add title to report
+              });
+          });
+    </script>
+</body>
+{% endblock %}
+
+                    
+                    
+

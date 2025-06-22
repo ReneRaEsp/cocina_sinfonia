@@ -1,0 +1,711 @@
+{% extends 'base.html.twig' %}
+{# {% extends '@AdminLTE/layout/default-layout.html.twig' %} #}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}"> #}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block page_title %}
+	Dashboard
+{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+
+{% block page_content %}
+	<div class="new-container">
+		<div class="row">
+			<div class="col-lg-6 col-sm-6">
+				<div class="row">
+				<div class="col-lg-12 col-sm-12">
+					<div class="container-select-mesa">
+					<div class="row" style="justify-content:center;">
+					{% if comedor %}
+						<div class="col-6 col-lg-6 col-sm-6 col-xs-6" style="display: flex;flex-direction: row;justify-content: center;height: 166px;">
+						<div class="select-mesa">
+								<div class="content-select">
+									<span><bold>Comedor</bold></span>
+									<label for="mi-select">Selecciona una mesa:</label>
+									<select id="mi-select" name="select">
+											<option value=""> Elige una mesa</option>
+										{% for mesa in mesas %}
+											<option value="{{mesa.numero}}">Mesa
+												{{mesa.numero}}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if terraza %}
+						<div class="col-6 col-lg-6 col-sm-6 col-xs-6" style="display: flex;flex-direction: row;justify-content: center;height: 166px;">	
+							<div class="select-mesa">
+								<div class="content-select">
+									<span><bold>Terraza</stro></span>
+									<label for="mi-select-terraza">Selecciona una mesa:</label>
+									<select id="mi-select-terraza" name="select">
+											<option value=""> Elige una mesa</option>
+										{% for mesa in mesas_terraza %}
+											<option value="{{mesa.numero}}">Mesa
+												{{mesa.numero}}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+						{% if barra_zona %}
+						<div class="col-lg-12 col-sm-12" id="" style="display: flex;flex-direction: row;justify-content: center;padding: 32px;">
+							<div class="content-barra">
+								<div id="barra" value="{{barra}}" style="cursor:pointer;">Barra</div> 
+							</div>
+						</div>
+						{% endif %}	
+						</div>			
+					</div>					
+				</div>
+			</div>
+
+		</div>
+
+
+			<div class="col-lg-6 col-sm-6">
+				<div class="row" id="div-pizarra">
+					
+					<div id="view-table-dash" class="col-lg-12 col-sm-12">
+						<label id="tittle-mesa" style="padding:20px;"></label>
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+
+		<hr style="border: 1px solid black;">
+
+
+		<div class="cat-food">
+			<div class="row" style="display: flex;flex-direction: row;align-items: flex-start;">
+			{# Display desktop and tablet #}
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 type-food d-none d-sm-block" style="">
+					<div class="row">
+						<div class="col-lg-4 col-sm-4 col-xs-4" id="display-type-1"> 
+							{% for comida in comida_1 %}
+								<button id='button-{{comida.name}}' class="food-button" onclick='cargarComida("{{comida.id}}")'>
+									<div class="button-type-food-left">
+										{# <i id="icon" class='{{comida.icon}}'></i> #}
+										<img src="{{asset(comida.icon)}}">
+										{{comida.name}}</div>
+								</button>
+
+							{% endfor %}
+						</div>
+						<div class="col-lg-4 col-sm-4 col-xs-4" id="display-type-2">
+							{% for comida in comida_2 %}
+								<button id='button-{{comida.name}}' class="food-button" onclick='cargarComida("{{comida.id}}")'>
+									<div class="button-type-food-left">
+										{# <i id="icon" class='{{comida.icon}}'></i> #}
+										<img src="{{asset(comida.icon)}}">
+										{{comida.name}}</div>
+								</button>
+							{% endfor %}
+
+						</div>
+						<div class="col-lg-4 col-sm-4 col-xs-4" id="display-type-3">
+							{% for comida in comida_3 %}
+								<button id='button-{{comida.name}}' class="food-button" onclick='cargarComida("{{comida.id}}")'>
+									<div class="button-type-food-left">
+										{# <i id="icon" class='{{comida.icon}}'></i> #}
+										<img src="{{asset(comida.icon)}}">
+										{{comida.name}}</div>
+								</button>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 type-food d-block d-sm-none" style="">
+					<div class="row">
+						<div class="col-lg-4 col-sm-4 col-xs-4" id="display-type-1"> 
+							{% for comida in comida_moviles %}
+								<button id='button-{{comida.name}}' class="food-button" onclick='cargarComida("{{comida.id}}")'>
+									<div class="button-type-food-left">
+										{# <i id="icon" class='{{comida.icon}}'></i> #}
+										<img src="{{asset(comida.icon)}}">
+										{{comida.name}}</div>
+								</button>
+
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-8 col-md-4 col-sm-8 col-xs-12" id="food-container" style=""></div>
+			</div>
+		</div>
+
+		<div class="additional-content">
+            <button class="floating-trash" id="floating-trash" onclick="eliminarElemento()"><img src="{{ asset('bundles/adminlte/icons/cubobasura.png') }}" style="width:48px;" alt=""></button>
+        </div>
+
+
+	</div>
+
+	{# Bloque JavaScript #}
+	<script>
+
+	//Definicion de las variables necesarias
+	var mesa;
+	var food_name;
+	var comidaSeleccionada = []; 
+
+
+function cargarComida(id_type_food) {
+
+	$.ajax({
+		url: "{{ path('search_comida') }}",
+		type: 'POST',
+		data: {
+			id_type: id_type_food
+		},
+		success: function (response) { 
+			
+		$('#food-container').empty();
+
+			var $foodContainer = $('#food-container');
+
+            var groupSize = window.innerWidth < 768 ? 4 : 6; // Número de elementos por grupo
+
+            for (var i = 0; i < response.foods.length; i += groupSize) {
+                var group = response.foods.slice(i, i + groupSize); // Obtener un grupo de hasta 4 elementos
+				
+                var $groupContainer = $('<div class="button-group">'); // Crear un contenedor para el grupo
+
+                group.forEach(function (food) {
+					
+					  var extrasString = JSON.stringify(food.extras).replace(/"/g, '\\"');
+					
+                    var $button = $('<button class="food-by-type">');
+					if(food.name === 'VARIS'){
+						$button.append('<div class="button-type-food-right"><span>' + food.name + ' ('+food.precio+'€)</span></div>');
+					} else {
+						$button.append('<div class="button-type-food-right"><span>' + food.name + '</span></div>');
+					}
+
+					$button.on('click', function () {
+						cargarComidaMesa(food.id, food.extras);
+					});
+                    
+                    $groupContainer.append($button);
+                });
+
+                $foodContainer.append($groupContainer);
+            }
+		},
+		error: function (response) {
+				console.log(response);
+		}
+});
+
+}
+
+
+{# Apartado de selección de mesa con JS #}
+var comedor = {{ comedor ? 1 : 0 }};
+var terraza = {{ terraza ? 1 : 0 }};
+var barra = {{ barra_zona ? 1 : 0 }};
+
+if(comedor){
+	
+		const selectElement = document.getElementById('mi-select');
+		selectElement.addEventListener('change', (event) => {
+		if(event.target.value != ''){
+		const selectedOption = event.target.value;
+		mesa = selectedOption;
+		$('#tittle-mesa').empty();
+		$('#tittle-mesa').append('<bold>Mesa '+`${mesa}`+'</bold>');
+
+		// Buscamos que pedidos hay en la mesa seleccionada
+		$.ajax({
+		url: "{{ path('list_comida_mesa') }}",
+		type: 'POST',
+		data: {
+			mesa_id: mesa,
+		},
+		success: function (response) {
+			
+		// Eliminar todo el contenido anterior excepto el label
+		$('#mi-lista').remove();
+		var lista = $('<ul id="mi-lista"></ul>');
+				for (var i = 0; i < response.pedido_mesa.length; i++) {
+				
+				var item = $('<li id="'+response.pedido_mesa[i].id+'" class="li-comida" style="padding: 2px;margin: 5px;">'+response.pedido_mesa[i].comida+'.............'+response.pedido_mesa[i].precio+'</li>');
+				item.on('click', function() {
+					$(this).toggleClass('selected'); // añade/quita clase "selected"
+					var itemId = $(this).attr('id');
+					if ($(this).hasClass('selected')) {
+						comidaSeleccionada.push(itemId);
+						
+					
+					} else {
+						comidaSeleccionada.splice(comidaSeleccionada.indexOf(itemId), 1);
+						
+						
+					}
+				});
+				lista.append(item)
+				}
+
+				// Agregar la lista detrás del label
+  				$('#view-table-dash label').after(lista);
+		},
+		error: function (response) {
+				console.log(response);
+				
+		}
+		});
+
+		} else {
+			mesa = '';
+			$('#mi-lista').remove();
+			// Seleccionar el elemento label por su ID
+			var label = $('#tittle-mesa');
+
+			// Vaciar el contenido del label
+			label.html('');
+
+		}
+		
+		});
+
+}
+
+
+if(terraza){
+
+	const selectElementTerraza = document.getElementById('mi-select-terraza');
+		selectElementTerraza.addEventListener('change', (event) => {
+		if(event.target.value != ''){
+		const selectedOptionTerraza = event.target.value;
+		mesa = selectedOptionTerraza;
+		$('#tittle-mesa').empty();
+		$('#tittle-mesa').append('<bold>Mesa '+`${mesa}`+'</bold>');
+
+		// Buscamos que pedidos hay en la mesa seleccionada
+		$.ajax({
+		url: "{{ path('list_comida_mesa') }}",
+		type: 'POST',
+		data: {
+			mesa_id: mesa,
+		},
+		success: function (response) {
+
+		// Eliminar todo el contenido anterior excepto el label
+		$('#mi-lista').remove();
+		var lista = $('<ul id="mi-lista"></ul>');
+				for (var i = 0; i < response.pedido_mesa.length; i++) {
+				lista.append('<li>'+response.pedido_mesa[i].comida+'</li>');
+				}
+
+				// Agregar la lista detrás del label
+  				$('#view-table-dash label').after(lista);
+		},
+		error: function (response) {
+				console.log(response);
+				
+		}
+		});
+
+		} else {
+			mesa = '';
+			$('#mi-lista').remove();
+			// Seleccionar el elemento label por su ID
+			var label = $('#tittle-mesa');
+
+			// Vaciar el contenido del label
+			label.html('');
+
+		}
+		
+		});
+
+}
+		
+
+
+	if(barra){
+		const selectElementBarra = document.getElementById('barra');
+		selectElementBarra.addEventListener('click', (event) => {	
+		if(event.target.value != ''){
+		const selectedOptionBarra = selectElementBarra.getAttribute('value');
+		mesa = selectedOptionBarra;
+		console.log(mesa)
+		$('#tittle-mesa').empty();
+		$('#tittle-mesa').append('<bold> Barra </bold>');
+		
+		// Buscamos que pedidos hay en la mesa seleccionada
+		$.ajax({
+		url: "{{ path('list_comida_mesa') }}",
+		type: 'POST',
+		data: {
+			mesa_id: mesa,
+		},
+		success: function (response) {
+		// Eliminar todo el contenido anterior excepto el label
+		$('#mi-lista').remove();
+		var lista = $('<ul id="mi-lista"></ul>');
+				for (var i = 0; i < response.pedido_mesa.length; i++) {
+				lista.append('<li>'+response.pedido_mesa[i].comida+'</li>');
+				}
+
+				// Agregar la lista detrás del label
+  				$('#view-table-dash label').after(lista);
+		},
+		error: function (response) {
+				console.log(response);
+				
+		}
+		});
+
+		} else {
+			mesa = '';
+			$('#mi-lista').remove();
+			// Seleccionar el elemento label por su ID
+			var label = $('#tittle-mesa');
+
+			// Vaciar el contenido del label
+			label.html('');
+
+		}
+		
+		});
+	}
+		
+
+{# Fin apartado de selección de mesa con JS #}	
+
+elementosSeleccionados = [];
+
+function cargarComidaMesa(food_id, opcionesSuplementos){
+	console.log(opcionesSuplementos)
+
+	var htmlFragment = '<label for="swal2-input" class="swal2-input-label">Añade un comentario</label>' +
+        '<input class="swal2-input" id="swal2-input" placeholder="" type="text"><br>'+
+		'<label class="suplementos-label" for="listaSuplementos">Suplementos</label>';;
+
+	opcionesSuplementos.forEach(function (opcion, index) {
+                        if (index % 2 === 0) {
+                            // Agregar un salto de línea antes de cada par de checkboxes
+                            htmlFragment += '<br>';
+                        }
+                        htmlFragment += '<label class="checkbox-label">' +
+                            '<input type="checkbox" value="' + opcion.nombre + '" onchange="checkboxChanged(this)">' +
+                            opcion.nombre +
+                            '</label>';
+                    });
+
+var arrayIsComida = {{is_comida|json_encode|raw}};
+
+var esComida = arrayIsComida.findIndex(function(item){
+	return item.id === food_id;
+})
+	
+	if(mesa){
+		if(esComida !== -1 ){
+			Swal.fire({
+		title: "Observaciones",
+		html: htmlFragment,
+		customClass: {
+			popup: 'observaciones-cocina', // Clase personalizada para el contenedor del Swal
+		},
+		preConfirm: function () {
+			var inputValue = document.getElementById('swal2-input').value
+			if (inputValue || inputValue === '') {
+					$.ajax({
+						url: "{{ path('add_comida_mesa') }}",
+						type: 'POST',
+						data: {
+							mesa_id: mesa,
+							food_id: food_id,
+							comentario: inputValue,
+							extras: elementosSeleccionados
+						},
+						success: function (response) {
+
+							console.log(response.pedido_mesa)
+
+							if(response.info){
+								Swal.fire({
+								title: response.info,
+								text: 'No puedes añadir este producto a la mesa ya que no quedan existencias',
+								icon: 'warning',
+								confirmButtonText: 'OK'
+								});
+
+
+							} else {
+								// Eliminar todo el contenido anterior excepto el label
+								$('#mi-lista').remove();
+								var lista = $('<ul id="mi-lista"></ul>');
+								for (var i = 0; i < response.pedido_mesa.length; i++) {
+									var item = $('<li id="'+response.pedido_mesa[i].id+'" class="li-comida" style="padding: 2px;margin: 5px;">'+response.pedido_mesa[i].comida+'.............'+response.pedido_mesa[i].precio+'</li>');
+										item.on('click', function() {
+											$(this).toggleClass('selected'); // añade/quita clase "selected"
+											var itemId = $(this).attr('id');
+											if ($(this).hasClass('selected')) {
+												comidaSeleccionada.push(itemId);
+												
+											
+											} else {
+												comidaSeleccionada.splice(comidaSeleccionada.indexOf(itemId), 1);
+												
+												
+											}
+										});
+										lista.append(item)								}
+
+								// Agregar la lista detrás del label
+								$('#view-table-dash label').after(lista);
+
+							}
+						
+						},
+						error: function (response) {
+								console.log(response);
+								
+						}
+						});
+							}
+						}
+				});
+		} else {
+				$.ajax({
+						url: "{{ path('add_comida_mesa') }}",
+						type: 'POST',
+						data: {
+							mesa_id: mesa,
+							food_id: food_id,
+						},
+						success: function (response) {
+
+							if(response.info){
+								Swal.fire({
+								title: response.info,
+								text: 'No puedes añadir este producto a la mesa ya que no quedan existencias',
+								icon: 'warning',
+								confirmButtonText: 'OK'
+								});
+
+
+							} else {
+								// Eliminar todo el contenido anterior excepto el label
+								$('#mi-lista').remove();
+								var lista = $('<ul id="mi-lista"></ul>');
+								for (var i = 0; i < response.pedido_mesa.length; i++) {
+								var item = $('<li id="'+response.pedido_mesa[i].id+'" class="li-comida" style="padding: 2px;margin: 5px;">'+response.pedido_mesa[i].comida+'.............'+response.pedido_mesa[i].precio+'</li>');
+									item.on('click', function() {
+										$(this).toggleClass('selected'); // añade/quita clase "selected"
+										var itemId = $(this).attr('id');
+										if ($(this).hasClass('selected')) {
+											comidaSeleccionada.push(itemId);
+											
+										
+										} else {
+											comidaSeleccionada.splice(comidaSeleccionada.indexOf(itemId), 1);
+											
+											
+										}
+									});
+									lista.append(item)								}
+
+								// Agregar la lista detrás del label
+								$('#view-table-dash label').after(lista);
+
+							}
+						
+						},
+						error: function (response) {
+								console.log(response);
+								
+						}
+						});
+			
+		}
+		
+		
+
+	} else {
+
+		Swal.fire({
+            title: 'Tienes que elegir una mesa',
+            text: 'No se puede añadir un producto si no has seleccionado una mesa',
+            icon: 'error',
+            confirmButtonText: 'OK'
+            });
+	}
+
+
+
+
+}
+
+function checkboxChanged(checkbox) {
+    var valor = checkbox.value;
+
+    // Verificar si el checkbox está marcado o desmarcado y actualizar el array en consecuencia
+    if (checkbox.checked) {
+        // Agregar el valor al array si está marcado
+        elementosSeleccionados.push(valor);
+    } else {
+        // Eliminar el valor del array si está desmarcado
+        var index = elementosSeleccionados.indexOf(valor);
+        if (index !== -1) {
+            elementosSeleccionados.splice(index, 1);
+        }
+    }
+
+}
+
+function eliminarElemento(){
+                
+                if(comidaSeleccionada.length !== 0){
+
+                        Swal.fire({
+                                title: 'Eliminar elementos',
+                                text: '¿Estás seguro de que deseas eliminar los elementos seleccionados?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Sí, eliminar',
+                                cancelButtonText: 'Cancelar'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // El usuario hizo clic en "Sí, eliminar"
+                                    var datos = {
+                                        mesa: mesa,
+                                        elementosSeleccionados: comidaSeleccionada
+                                    };
+
+                                    // Realizar la solicitud AJAX
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: "{{ path('eliminar_comida')}}",
+                                        data: datos,
+                                        success: function(response) {
+                                            comidaSeleccionada = [];
+                                            var selectedElements = document.querySelectorAll('.selected');
+
+                                            selectedElements.forEach(function(element) {
+                                                element.parentNode.removeChild(element);
+                                            });
+                                            // Manejar la respuesta de la solicitud AJAX (por ejemplo, mostrar un mensaje de éxito)
+                                            Swal.fire('Éxito', 'Los elementos han sido eliminados con éxito', 'success');
+                                        },
+                                        error: function(xhr) {                                            
+                                            if (xhr.status === 400) {
+                                                // Manejar errores con código de estado 400 (u otros códigos de error)
+                                                var errorMessage = xhr.responseText;
+                                                Swal.fire('Error', errorMessage , 'error');
+                                            } else {
+                                                // Otros códigos de error
+                                                alert('Ocurrió un error inesperado.');
+        }
+                                        }
+                                    });
+                                }
+                            });
+
+                }  else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Advertencia',
+                        text: 'No hay elementos seleccionados',
+                        confirmButtonText: 'Aceptar'
+                    });
+
+                }
+
+
+            }
+
+
+			$('#mi-select').change(function(){
+            // Abre un SweetAlert para pedir el número de comensales
+            Swal.fire({
+                title: 'Ingrese el número de comensales',
+                input: 'number',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+                showLoaderOnConfirm: true,
+                preConfirm: (numComensales) => {
+                    // Realiza la solicitud AJAX una vez que se ha ingresado el número de comensales
+                    return $.ajax({
+                        url: "{{ path('add_comensales')}}",
+                        method: 'POST',
+                        data: {
+                            numComensales: numComensales,
+							mesa: mesa,
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Muestra un mensaje de éxito si la solicitud AJAX fue exitosa
+                    Swal.fire({
+                        title: '¡Completado!',
+                        text: 'Se han añadido los comensales correctamente',
+                        icon: 'success'
+                    });
+                }
+            });
+        });
+
+        // Función para manejar la selección en el segundo select (si es necesario)
+        $('#mi-select-terraza').change(function(){
+             Swal.fire({
+                title: 'Ingrese el número de comensales',
+                input: 'number',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'OK',
+                showLoaderOnConfirm: true,
+                preConfirm: (numComensales) => {
+                    // Realiza la solicitud AJAX una vez que se ha ingresado el número de comensales
+                    return $.ajax({
+                        url: "{{ path('add_comensales')}}",
+                        method: 'POST',
+                        data: {
+                            numComensales: numComensales,
+							mesa: mesa,
+                        }
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Muestra un mensaje de éxito si la solicitud AJAX fue exitosa
+                    Swal.fire({
+                        title: '¡Completado!',
+                        text: 'Se han añadido los comensales correctamente',
+                        icon: 'success'
+                    });
+                }
+            });
+        });
+
+</script>
+
+{% endblock %}

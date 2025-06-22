@@ -1,0 +1,223 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+	{{ parent() }}
+	{# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+	<link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+	<script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://unpkg.com/input-panel"></script>
+
+
+{% endblock %}
+
+{% block title %}Caja
+{% endblock %}
+{% block page_title %}
+	Control de caja
+{% endblock %}
+{% block page_subtitle %}{% endblock %}
+
+{% block page_content %}
+	<body>
+		<div class="" style="display: flex;flex-direction: row;justify-content: center;">
+			<div class="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-lg" data-v0-t="card">
+				<div class="flex flex-col space-y-1.5 p-6">
+					<h3 class="text-2xl font-semibold whitespace-nowrap leading-none tracking-tight">Registro de caja</h3>
+					<p class="text-sm text-muted-foreground">Introduce el inicio y fin de caja diario</p>
+				</div>
+				<div class="p-6 flex gap-4">
+					<div class="grid grid-cols-2 gap-4">
+						<div class="space-y-2">
+							<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="quantity">
+								Inicio del día
+							</label>
+							<input id="inicio-caja" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="quantity" placeholder="Introduce la cantidad" type="number" value="{{ inicio is defined ? inicio : '' }}"/>
+						</div>
+						<div class="space-y-2">
+							<label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="price">
+								Fin del día
+							</label>
+							<input id="fin-caja" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="price" placeholder="Introduce la cantidad" type="number"/>
+						</div>
+					</div>
+					<span>Total Caja: {{ganancia}} €</span>
+				</div>
+				<div class="items-center p-6 flex" style="display: flex;justify-content: space-between;">
+					<div>
+						<button onclick="insertCaja()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ml-auto">
+							Guardar
+						</button>
+						<button onclick="cerrarCaja()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ml-auto">
+							Cerrar Caja
+						</button>
+					</div>
+					<div>
+						<button onclick="añadiraCaja()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ml-auto">
+							<i class="fa-solid fa-plus"></i>
+						</button>
+						<button onclick="restaraCaja()" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 ml-auto">
+							<i class="fa-solid fa-minus"></i>
+						</button>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+        <br>
+		
+		<div id="appCaja" style="max-width: 100vw;" data-caja="{{ registros|json_encode }}"></div>
+        <br><br>
+
+	</body>
+	<script>
+
+	function añadiraCaja(){
+
+		Swal.fire({
+            title: 'Añade la cantidad que quieres sumar',
+            showCancelButton: true,
+			input: 'text',
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+            icon: 'info'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hacer la petición AJAX
+                $.ajax({
+                    url: "{{ path('añadircaja')}}",
+                    type: 'POST',
+					data: { cantidad: result.value}, // o 'POST' según tus necesidades
+                    success: function(response) {
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Manejar errores en la solicitud AJAX
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
+
+	}
+
+	function restaraCaja() {
+
+		Swal.fire({
+            title: 'Añade la cantidad que quieres restar',
+            showCancelButton: true,
+			input: 'text',
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+            icon: 'info'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hacer la petición AJAX
+                $.ajax({
+                    url: "{{ path('restarCaja')}}",
+                    type: 'POST',
+					data: { cantidad: result.value}, // o 'POST' según tus necesidades
+                    success: function(response) {
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Manejar errores en la solicitud AJAX
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
+
+	}
+
+    function insertCaja(){
+      var inicio = document.getElementById('inicio-caja').value;
+
+      $.ajax({
+            url: "{{ path('insertcaja') }}",
+            type: 'POST',
+            data: {
+                inicio: inicio,
+                
+            },
+            success: function (response) {
+
+            },
+            error: function (response){
+
+            }
+      })
+    }
+
+
+    function cerrarCaja(){
+      var final = document.getElementById('fin-caja').value;
+
+      console.log(final)
+
+      $.ajax({
+            url: "{{ path('cerrarcaja') }}",
+            type: 'POST',
+            data: {
+                final: final,
+                
+            },
+            success: function (response) {
+				
+				Swal.fire({
+					title: 'Control Caja\n ·Descaudre Caja: '+ response.descuadre.toFixed(2)+'€\n ·Total Calculado: '+response.calculado+'€',
+					icon: 'info',
+					confirmButtonText: 'Aceptar'
+				});
+
+            },
+            error: function (response){
+
+            }
+      })
+    }
+
+	  document.addEventListener("DOMContentLoaded", function() {
+
+		var cierreayerJS = {{ cierreayer|json_encode()|raw }};
+
+		if(cierreayerJS !== ''){
+			// Muestra el SweetAlert2
+        Swal.fire({
+            title: 'La caja del día anterior es de: {{ cierreayer }} €',
+            showCancelButton: true,
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar',
+            icon: 'info'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hacer la petición AJAX
+                $.ajax({
+                    url: "{{ path('insertcaja')}}",
+                    type: 'POST',
+					data: { inicio: cierreayerJS}, // o 'POST' según tus necesidades
+                    success: function(response) {
+                        // Manejar la respuesta del servidor
+                        var inputInicio = document.getElementById('inicio-caja');
+						inputInicio.value= cierreayerJS
+                    },
+                    error: function(xhr, status, error) {
+                        // Manejar errores en la solicitud AJAX
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
+		}
+        
+    });
+  </script>
+{% endblock %}

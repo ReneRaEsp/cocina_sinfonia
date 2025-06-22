@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/dist/index.global.min.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/packages/moment/index.global.min.js') }}"></script>
+    <script src="{{ asset('bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+{% endblock %}
+
+{% block title %}Estadísticas{% endblock %}
+{% block page_title %} Sigue la evolución de tu negocio {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+<body>
+
+{% for zona in zonas %}
+<div class="" style="background-color: #fff;box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);border-radius: 20px; width: 100% !important;">
+    <div style="padding:2%;"><h4>{{zona.name}}</h4> </div>
+    <div class="row">
+        <div class="col-lg-6" style="padding: 1% 2%;">
+            <div style="display: flex; justify-content: center;">
+                <div style="display: flex; align-items: center; background-color: #f0f0f0; border-radius: 5px; padding: 5px; justify-content: center;">
+                    <input class="flatpickr form-control flatpickr-input" placeholder="Selecciona una fecha" name="date" id="date-{{zona.name | replace({' ': '-'})}}" style="border: none; outline: none; width: 75%; background: transparent;">
+                    <span><i class="fa-solid fa-calendar" style="margin-left: 5px;"></i></span>
+                </div>
+            </div>
+
+            <div style="display:flex;justify-content:center;;"><h3>Comensales por franja horaria <span id="span-{{zona.name | replace({' ': '-'})}}">({{diaanterior}})</span></h3></div>
+            <canvas id="myChart-{{zona.name | replace({' ': '-'})}}"></canvas>
+        </div>
+        <div class="col-lg-6" style="padding: 1% 2%;">
+            <div style="display:flex;justify-content:center;;"><h3>Comensales ultima semana</h3></div>
+            <canvas id="myChart2-{{zona.id}}"></canvas>
+        </div>
+        
+    </div>
+
+</div>
+
+<br><br>
+
+{% endfor %}
+
+<div id="appStatsComensales" style="max-width: 100vw;" data-statscomensales="{{ allcomensales|json_encode }}"></div>
+
+</body>
+
+<script>  
+
+var charts = {}; 
+
+{% for zone, data in chartData %}
+    (function(zone, data) {
+        var ctx = document.getElementById('myChart-{{ zone | replace({' ': '-'}) }}').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        charts['{{ zone | replace({' ': '-'}) }}'] = myChart;
+
+        var calendar = document.getElementById('date-{{ zone | replace({' ': '-'}) }}');
+        document.addEventListener('DOMContentLoaded', function() {
+
+            flatpickr(calendar, {
+                maxDate: "today",
+                dateFormat: 'Y-m-d',
+                locale: "es",
+                onChange: function(selectedDates, dateStr, instance) {
+                    cambiarFecha(calendar, '{{ zone }}');
+                }
+            });
+
+        })
+    })('{{ zone | replace({' ': '-'}) }}', {{ data|json_encode|raw }});
+    {% endfor %}
+
+{% for zone, data in chartDataDays %}
+
+var ctx = document.getElementById('myChart2-{{ zone }}').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {{ data|json_encode|raw }},
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }); 
+
+        
+
+{% endfor %}
+
+function cambiarFecha(calendar, zone){
+
+   var date = calendar.value;
+
+    $.ajax({
+        type: 'POST',
+        data: {date: date, zona: zone},
+        url: "{{ path('actualizar_fecha')}}",
+        success: function(response){
+
+             // Obtén la instancia del gráfico del objeto charts
+                var myChartInstance = charts[zone.replace(' ' , '-')];
+
+                if (myChartInstance) {
+                    // Actualiza los datasets del gráfico
+                    myChartInstance.data.datasets = response.newChart.datasets;
+
+                    // Actualizar el gráfico
+                    myChartInstance.update();
+                }
+
+                const [year, month, day] = date.split('-');
+
+                const formattedDate = `${day}-${month}-${year}`;
+
+                var spanDay = document.getElementById('span-'+zone.replace(' ' , '-'));
+
+                spanDay.textContent = '('+formattedDate+')';
+
+        },
+        error: function(response){
+
+            console.log('Error: '+response);
+
+        },
+    })
+
+}
+
+{# document.addEventListener('DOMContentLoaded', function() {
+
+    flatpickr('.flatpickr', {
+        maxDate: "today",
+        dateFormat: "d-m-Y",
+        locale: "es",
+    });
+
+}) #}
+
+
+
+</script>
+
+{% endblock %}

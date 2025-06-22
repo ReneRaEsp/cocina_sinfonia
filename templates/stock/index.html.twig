@@ -1,0 +1,420 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Stock{% endblock %}
+{% block page_title %} Stock {% endblock %}
+{% block page_subtitle %} Visualiza todo tu stock y llevalo al día {% endblock %}
+                
+
+{% block page_content %}
+<body>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Añadir prodcuto  al stock</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+<div class="container">
+	<div class="row">
+		<div class="12 d-flex justify-content-center m-3">
+ 			 <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+				Añadir producto al stock
+			 </button>
+		</div>
+	</div>
+</div>
+
+
+<div id="app" style="max-width: 100vw;" data-stock="{{ stock|json_encode }}"></div>
+ <div class="container">
+        <div class="row">
+            <div class="col-lg-md-xs-12 " style="">
+                <div class="content-form">
+                      <!--  <div class="form-add">
+                            <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+                            Añadir producto al stock
+                            </button>
+                            <span class="v-line"></span>
+                            <button id="download-csv" class="btn btn-primary">Descargar CSV</button>
+                            <span class="v-line"></span>
+                            <button id="download-pdf" class="btn btn-primary">Descargar PDF</button>
+                            <span class="v-line"></span>
+                            <button id="download-xlsx" class="btn btn-primary">Descargar Excel</button>
+                        </div>
+                    </div> -->
+            </div> 
+        </div>
+    </div>
+    <!--<div class="container">
+        <div class="row">
+            <div class="col-lg-md-xs-12 table-stock" style="">
+                <div class="content-form">
+                        <div class="form-add">
+                            <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+                            Añadir producto al stock
+                            </button>
+                            <span class="v-line"></span>
+                            <button id="download-csv" class="btn btn-primary">Descargar CSV</button>
+                            <span class="v-line"></span>
+                            <button id="download-pdf" class="btn btn-primary">Descargar PDF</button>
+                            <span class="v-line"></span>
+                            <button id="download-xlsx" class="btn btn-primary">Descargar Excel</button>
+                        </div>
+                    </div> 
+                <div style="padding:60px;" id="div-table">
+                    <div id="table-stock"></div>
+                </div>
+            </div> 
+        </div>
+    </div>-->
+
+    </body>
+
+
+{# Bloque JavaScript #}
+    <script>
+
+    var data = {{ proveedores|json_encode|raw }}
+    var options = [];
+    for (var i = 0; i < data.length; i++) {
+        options.push({ value: data[i].id, label: data[i].name });
+    }
+
+    var layout = window.innerWidth < 768 ? "fitDataFill" : "fitColumns";
+
+    var table = new Tabulator("#table-stock", {
+    layout:layout,
+    virtualDomHoz: "scroll",
+    autoResize: false,
+    tooltipsHeader: true,
+    data:{{ stock|json_encode|raw }},
+    pagination:"local",
+    paginationSize:20,
+    paginationSizeSelector:[20, 25, 50],
+    movableColumns:true,
+    paginationCounter:"rows",
+    pagination:"local",
+    columns:[
+        {title:"ID", field:"id", sorter:"string"},
+        {title:"Nombre", field:"name", sorter:"string", headerFilter:"input", hozAlign:"center",editable:true, formatter:function(cell, formatterParams, onRendered){
+            var cellValue = cell.getValue();
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cellValue;
+            input.style.width = "100%";
+            input.style.height = "100%";
+            input.style.border = "none";
+            input.style.background = "transparent";
+            input.style.textAlign = "center";
+            
+            input.addEventListener("change", function () {
+                var newValue = input.value;
+                var id = cell.getRow().getData().id;
+                $.ajax({
+                    url: "{{ path('set_stock') }}",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        column: 'nombre',
+                        value: newValue
+                    },
+                    success: function (response) {
+                        {# table.setData(response.stocks); #}
+                        Swal.fire({
+                            title: response.texto,
+                            text: 'Se ha registrado correctamente en el Stock',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        var response = xhr.responseJSON;
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.error,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+                cell.setValue(newValue);
+            });
+
+            return input;
+        }},
+        {title:"Línea de stock", field:"amount", sorter:"number", formatter:"progress", hozAlign:"left"},
+        {title:"Proveedor", field:"p_id", sorter:"string", headerFilter:'select', headerFilterParams:{
+          values: {
+                      '':'Todos',
+                      {% for provider in proveedores %}
+                        '{{provider.name}}':'{{provider.name}}',
+                      {% endfor %}
+          }, defaultValue:'',
+             includeAll: true,
+          
+        } , clearable:true, hozAlign:"center",editor:"list", editorParams:{
+            values: {
+                
+                    {% for provider in proveedores %}
+                        '{{provider.id}}':'{{provider.name}}',
+                    {% endfor %}
+                },
+            
+        },formatter:function(cell, formatterParams, onRendered){
+                  var cellValue = cell.getValue();
+                  var provider = null;
+                  {% for provider in proveedores %}
+                      if('{{provider.id}}' == cellValue){
+                          provider = '{{provider.name}}';
+                          return provider;
+                      }
+                  {% endfor %}
+                  return cellValue;
+        }, cellEdited:function(cell){
+            var newValue = cell.getValue();
+            var id = cell.getRow().getData().id;
+            if (newValue !== null && newValue !== undefined && newValue !== '') {
+            $.ajax({
+                url: "{{ path('set_stock') }}",
+                type: "POST",
+                data: {
+                    id: id,
+                    column: 'proveedor',
+                    value: newValue
+                },
+                success: function(response){
+                    Swal.fire({
+                            title: response.texto,
+                            text: 'Se ha registrado correctamente en el Stock',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                            });
+                },
+                error: function(xhr, status, error){
+                      var response = xhr.responseJSON;
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.error,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                            });
+                }
+            });
+            }
+        }},
+        {# {title:"Tipo", field:"tf_id", hozAlign:"center", headerFilter:'select', headerFilterParams:{
+          values: {
+                      '':'Todos',
+                      {% for tipo in tipos %}
+                        '{{tipo.name}}':'{{tipo.name}}',
+                      {% endfor %}
+          }, defaultValue:'',
+             includeAll: true,
+          
+        }, editor:"list", editorParams:{
+            autocomplete:"true", allowEmpty:true,listOnEmpty:true, valuesLookup:true,
+            values: {
+                    {% for tipo in tipos %}
+                        '{{tipo.id}}':'{{tipo.name}}',
+                    {% endfor %}
+                }
+        }, formatter:function(cell, formatterParams, onRendered){
+                  var cellValue = cell.getValue();
+                  var tipo = null;
+                  {% for tipo in tipos %}
+                      if('{{tipo.id}}' == cellValue){
+                          tipo = '{{tipo.name}}';
+                          return tipo;
+                      }
+                  {% endfor %}
+                  return cellValue;
+        }, cellEdited:function(cell){
+            var newValue = cell.getValue();
+            var id = cell.getRow().getData().id;
+            
+            $.ajax({
+                url: "{{ path('set_stock') }}",
+                type: "POST",
+                data: {
+                    id: id,
+                    column: 'tipo',
+                    value: newValue
+                },
+                success: function(response){
+                    Swal.fire({
+                        title: response.texto,
+                        text: 'Se ha registrado correctamente en el Stock',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                        });
+                },
+                error: function(xhr, status, error){
+                      var response = xhr.responseJSON;
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.error,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                            });
+                }
+            });
+        } }, #}
+        {title:"Descripción", field:"desc", sorter:"string",editable:true, formatter:function(cell, formatterParams, onRendered){
+            var cellValue = cell.getValue();
+            var input = document.createElement("input");
+            input.type = "text";
+            input.value = cellValue;
+            input.style.width = "100%";
+            input.style.height = "100%";
+            input.style.border = "none";
+            input.style.background = "transparent";
+            input.style.textAlign = "center";
+            
+            input.addEventListener("change", function () {
+                var newValue = input.value;
+                var id = cell.getRow().getData().id;
+                $.ajax({
+                    url: "{{ path('set_stock') }}",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        column: 'desc',
+                        value: newValue
+                    },
+                    success: function (response) {
+                        {# table.setData(response.stocks); #}
+                        Swal.fire({
+                            title: response.texto,
+                            text: 'Se ha registrado correctamente en el Stock',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        var response = xhr.responseJSON;
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.error,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+                cell.setValue(newValue);
+            });
+
+            return input;
+        }},
+        {title:"Cantidad", field:"amount", sorter:"number", hozAlign:"center", headerFilter:"number",editable:true, formatter:function(cell, formatterParams, onRendered){
+            var cellValue = cell.getValue();
+            var input = document.createElement("input");
+            input.type = "number";
+            input.value = cellValue;
+            input.style.width = "100%";
+            input.style.height = "100%";
+            input.style.border = "none";
+            input.style.background = "transparent";
+            input.style.textAlign = "center";
+            
+            input.addEventListener("change", function () {
+                var newValue = input.value;
+                var id = cell.getRow().getData().id;
+                $.ajax({
+                    url: "{{ path('set_stock') }}",
+                    type: "POST",
+                    data: {
+                        id: id,
+                        column: 'cantidad',
+                        value: newValue
+                    },
+                    success: function (response) {
+                        {# table.setData(response.stocks); #}
+                        Swal.fire({
+                            title: response.texto,
+                            text: 'Se ha registrado correctamente en el Stock',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        var response = xhr.responseJSON;
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.error,
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+                cell.setValue(newValue);
+            });
+
+            return input;
+        }},
+            ],
+        });
+
+
+        //Funcion para dar el okey de la carga de nuevo  proveedor
+         function showOkDialogProvider() {
+            Swal.fire({
+            title: 'Producto añadido',
+            text: 'El producto se ha añadido correctamente al stock',
+            icon: 'success',
+            confirmButtonText: 'OK'
+            });
+        }
+
+        {% if stock_added %}        
+        showOkDialogProvider();
+        table.setData({{ stock|json_encode|raw }});
+        {% endif %}
+
+          //trigger download of data.csv file
+          document.getElementById("download-csv").addEventListener("click", function(){
+              table.download("csv", "stock.csv");
+          });
+
+          //trigger download of data.xlsx file
+          document.getElementById("download-xlsx").addEventListener("click", function(){
+              table.download("xlsx", "stock.xlsx");
+          });
+
+
+          //trigger download of data.pdf file
+          document.getElementById("download-pdf").addEventListener("click", function(){
+              table.download("pdf", "stock.pdf", {
+                  orientation:"portrait", //set page orientation to portrait
+                  title:"Stocks", //add title to report
+              });
+          });
+
+
+    </script>
+
+</body>
+{% endblock %}

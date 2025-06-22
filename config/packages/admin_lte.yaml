@@ -1,0 +1,31 @@
+# Configuration file for the AdminLTE bundle
+#
+# For more information about the bundle settings visit:
+# https://github.com/kevinpapst/AdminLTEBundle/blob/master/Resources/docs/configurations.md
+#
+# For tabs in the control_sidebar (right screen) add the 'control_sidebar' config key:
+# https://github.com/kevinpapst/AdminLTEBundle/blob/master/Resources/docs/control_sidebar.md
+
+admin_lte:
+    
+    options:
+        default_avatar: 'bundles/adminlte/images/usuario.png'
+        # skin: dark-mode
+        boxed_layout: false
+        collapsed_sidebar: true
+        mini_sidebar: true
+        default_brand_logo: "bundles/adminlte/images/simoftlogo.png"
+
+    knp_menu:
+        enable: false
+        # navbar_user_subscriber: 'App\EventSubscriber\NavbarUserSubscriber'
+
+    routes:
+        adminlte_welcome: dashboard
+        adminlte_login: login
+        adminlte_profile: profile
+        
+
+
+    
+           

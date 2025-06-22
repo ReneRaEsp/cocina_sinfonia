@@ -1,0 +1,3894 @@
+/* .form-login{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 20% 20% 20% 20%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: grey 0px 0px 5px;}
+
+.form-login input, button, label{
+    width: 50%;
+}
+
+.form-login button{
+    margin-top: 10px;
+} */
+
+body {
+  padding-right: 0px !important;
+}
+
+/*Theme the Tabulator element*/
+#table-stock {
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #333;
+  border-radius: 10px;
+  height: 550px;
+}
+
+/* .tabulator-page{
+    color: #ffffff !important;
+} */
+
+/*Theme the header*/
+/* #table-stock .tabulator-header {
+    background-color:rgb(255, 255, 255);
+    color:#ffffff;
+} */
+
+/*Allow column header names to wrap lines*/
+/* #table-stock .tabulator-header .tabulator-col,
+#table-stock .tabulator-header .tabulator-col-row-handle {
+    white-space: normal;
+} */
+
+/*Color the table rows*/
+/* #table-stock .tabulator-tableHolder .tabulator-table .tabulator-row{
+    color:#fff;
+    background-color: #666;
+} */
+
+/*Color even rows*/
+/* #table-stock .tabulator-tableHolder .tabulator-table .tabulator-row:nth-child(even) {
+    background-color: #444;
+} */
+
+.button-type-food {
+  width: 87px;
+  height: 70px;
+  background-color: white;
+  border-radius: 8px;
+  margin: 5px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: 1px solid #605ca8; */
+  box-shadow: 5px 3px 4px rgba(0, 0, 0, 0.4);
+  --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+    0 1px 2px 0 rgba(34, 33, 52, 0.06);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+    0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.food-by-type .button-type-food-right,
+.food-button .button-type-food-left {
+  /* Estilos específicos para el div interno de los botones */
+  width: 87px;
+  height: 70px;
+  background-color: white;
+  border-radius: 8px;
+  margin: 5px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: 1px solid #605ca8; */
+  box-shadow: 5px 3px 4px rgba(0, 0, 0, 0.4);
+  --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+    0 1px 2px 0 rgba(34, 33, 52, 0.06);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+    0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+#icon {
+  font-size: 25px;
+  padding: 5px;
+}
+
+.tabulator-header-filter input {
+  padding: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 25px !important;
+  color: black;
+  border-radius: 8px;
+}
+
+.tabulator-cell {
+  height: 53px !important;
+}
+
+.tabulator-col-resize-handle {
+  height: 40px !important;
+}
+
+/* FORM ADD */
+.form-add {
+  /* width:50%; */
+  padding: 20px;
+}
+
+#view-table-dash {
+  width: 80%;
+  height: 330px;
+  /* border: 2px solid black; */
+  border-radius: 10px;
+  background-color: #fff;
+  overflow: auto;
+  --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+    0 1px 2px 0 rgba(34, 33, 52, 0.06);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+    0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.select-mesa {
+  width: 80%;
+  height: 330px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.content-select {
+  background-color: white;
+  /* border: 1px solid black; */
+  padding: 37px;
+  border-radius: 10px;
+  height: 158px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+    0 1px 2px 0 rgba(34, 33, 52, 0.06);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+    0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.content-barra {
+  background-color: white;
+  /* border: 1px solid black; */
+  padding: 37px;
+  border-radius: 10px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+    0 1px 2px 0 rgba(34, 33, 52, 0.06);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+    0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.dist-mesas {
+  /* border: 1px solid black; */
+  height: 550px;
+  border-radius: 20px;
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.contenido-mesa {
+  /* border: 1px solid black; */
+  --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  height: 550px;
+  border-radius: 20px;
+  overflow: auto;
+  background-color: #fff;
+}
+
+.unique-mesa {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+  align-items: center;
+  width: 6%;
+}
+
+.button-site {
+  display: flex;
+  justify-content: end;
+  padding: 20px;
+}
+
+.button-hip {
+  background-color: #4caf50;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 16px 32px !important;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.button1 {
+  background-color: white;
+  color: black;
+  border: 2px solid #4caf50;
+}
+
+.button1:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+.button2 {
+  background-color: white;
+  color: black;
+  border: 2px solid #008cba;
+}
+
+.button2:hover {
+  background-color: #008cba;
+  color: white;
+}
+
+/* Cambia el color de fondo y cualquier otro estilo que desees */
+.selected {
+  background-color: #605ca8;
+  border-radius: 13px;
+  padding: 4px;
+  color: white;
+  width: 70% !important;
+}
+
+.v-line {
+  border: 1px solid grey;
+  height: 177px;
+  left: 50%;
+  margin: 6px;
+}
+
+.fc-event:focus {
+  box-shadow: none;
+}
+
+.modal.fade .modal-dialog {
+  padding-left: 0 !important;
+}
+
+.modal-open {
+  overflow: auto !important;
+  padding-right: 0 !important;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.additional-content {
+  position: fixed;
+  top: 50%; /* Ajusta según sea necesario */
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  right: 20px;
+  z-index: 999;
+}
+
+.additional-content button {
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 50%;
+  width: 66px;
+  height: 60px;
+  font-size: 13px;
+  text-align: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  margin-bottom: 5px; /* Ajusta el espacio entre botones según sea necesario */
+}
+
+.floating-bind {
+  bottom: 38px;
+}
+
+.floating-inside,
+.floating-outside,
+.floating-barra,
+.floating-trash,
+.floating-kitchen,
+.floating-printer {
+  font-size: 8px;
+}
+
+.mesa-uniones {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 500px;
+  background-color: white;
+  /* border: 1px solid black; */
+  border-radius: 9px;
+  padding: 10px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.tabulator-row.tabulator-group:hover {
+  cursor: pointer;
+  background-color: #ccc !important;
+}
+
+.div-titulo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.container-select-mesa {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.type-food {
+  display: flex;
+  /* border-right: 1px solid black; */
+}
+
+.table-stock {
+  border-radius: 30px 0px 10px 10px;
+  box-shadow: grey 0px 0px 18px;
+}
+
+.table-provider {
+  border-radius: 30px 0px 10px 10px;
+  box-shadow: grey 0px 0px 18px;
+}
+
+.table-personal {
+  border-radius: 30px 0px 10px 10px;
+  box-shadow: grey 0px 0px 18px;
+}
+
+.table-sells {
+  border-radius: 30px 0px 10px 10px;
+  box-shadow: grey 0px 0px 18px;
+}
+
+.calendar-container {
+  max-width: 1500px;
+  /* height: 700px; */
+}
+
+.table-bill {
+  border-radius: 30px 0px 10px 10px;
+  box-shadow: grey 0px 0px 18px;
+}
+
+.register-user,
+.roles-user {
+  padding: 29px;
+  width: 45% !important;
+  box-shadow: grey 0px 0px 18px;
+  border-radius: 30px 0px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  height: 50%;
+}
+
+.table-roles {
+  padding: 29px;
+  width: 90% !important;
+  box-shadow: grey 0px 0px 18px;
+  border-radius: 30px 0px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  height: 50%;
+  margin: 10px;
+}
+
+.register-user > :nth-child(3) {
+  display: none;
+}
+
+/* Formateamos el label que servirá de contenedor */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Ocultamos el checkbox html */
+.switch input {
+  display: none;
+}
+
+/* Formateamos la caja del interruptor sobre la cual se deslizará la perilla de control o slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+/* Pintamos la perilla de control o slider usando el selector before */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+/* Cambiamos el color de fondo cuando el checkbox esta activado */
+input:checked + .slider {
+  background-color: #605ca8;
+}
+
+/* Deslizamos el slider a la derecha cuando el checkbox esta activado */
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Aplicamos efecto de bordes redondeados en slider y en el fondo del slider */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.container-switches {
+  display: flex;
+  flex-direction: column;
+  padding: 21px;
+}
+.container-switches-zonas {
+  display: flex;
+  flex-direction: column;
+  padding: 21px;
+}
+
+.switchers {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.swal2-popup {
+  width: 500px !important;
+  height: 352px;
+  font-size: 14px !important;
+}
+
+.tabulator-header-filter span {
+  height: 25px !important;
+}
+
+.new-container {
+  padding: 50px;
+}
+
+#div-pizarra {
+  display: flex;
+  flex-direction: row;
+}
+
+.bg-info {
+  background-color: #605ca8 !important;
+}
+
+.inner {
+  color: #fff !important;
+}
+
+.icon {
+  padding: 17px !important;
+  font-size: 73px !important;
+}
+
+#div-stats {
+  padding: 36px;
+}
+
+.remove-item {
+  padding: 9px;
+}
+
+.display-mesas-lista {
+  display: flex;
+}
+
+.lista-unidas {
+  padding: 5px 0px 0px 0px;
+  width: 168px;
+}
+
+.div-bind {
+  display: none;
+}
+
+.content-settings {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#state-table-1 {
+  text-align: end;
+  width: 40%;
+  color: #4caf50;
+}
+
+#state-table-2 {
+  text-align: end;
+  width: 40%;
+  color: #d73925;
+}
+
+#state-table-3 {
+  text-align: end;
+  width: 40%;
+}
+
+.span-invisible {
+  display: none;
+}
+
+#gif-table {
+  width: 21%;
+}
+
+#tittle-mesa {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#total-label {
+  padding: 20px;
+  display: block;
+}
+
+.swal2-container.swal2-top-end > .ventana-cocina {
+  width: 460px !important;
+  height: 214px;
+  font-size: 14px !important;
+}
+
+.li-comida {
+  width: 75%;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.show-menu .dropdown-menu {
+  display: block !important;
+}
+
+.container {
+  width: 100%;
+  padding-right: 7.5px;
+  padding-left: 7.5px;
+  margin-right: 8% !important;
+  margin-left: 8% !important;
+}
+
+.table-stock,
+.table-provider,
+.table-personal,
+.table-sells,
+.table-bill {
+  width: 100% !important;
+}
+
+/* .container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+    max-width: 1567px !important;
+} */
+
+.small-box {
+  border-radius: 0.25rem;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.125), 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: flex !important;
+  margin-bottom: 20px;
+  position: relative;
+  justify-content: space-between !important;
+}
+
+.food-button {
+  border: none;
+  background: inherit;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.food-by-type {
+  border: none;
+  margin-left: 5px;
+  margin-right: 5px;
+  background: inherit;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.food-button:focus .button-type-food-left,
+.food-by-type:focus .button-type-food-right {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.8);
+}
+
+.food-button:active,
+.food-by-type:active {
+  transform: translateY(2px);
+}
+
+.food-button:active .button-type-food-left,
+.food-by-type:active .button-type-food-right {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.food-button:focus {
+  outline: none !important;
+}
+
+.food-by-type:focus {
+  outline: none !important;
+}
+
+.container {
+  width: 1467px !important;
+}
+
+/* Anula los estilos predeterminados para todos los tamaños de contenedor */
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  max-width: none !important;
+  /* Anula el máximo ancho establecido anteriormente */
+}
+
+/* Anula los estilos específicos de los diferentes tamaños de contenedor */
+@media (min-width: 1200px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: none !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm {
+    max-width: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .container,
+  .container-md,
+  .container-sm {
+    max-width: none !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .container,
+  .container-sm {
+    max-width: none !important;
+  }
+}
+
+/* También puedes anular estilos específicos para .container dentro de cada media query */
+@media (min-width: 1200px) {
+  .container {
+    max-width: none !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: none !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: none !important;
+  }
+}
+
+.shadow-md {
+  --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color),
+    0 2px 4px -2px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.text-card-foreground {
+  color: hsl(var(--card-foreground));
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.bg-white {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.border {
+  border-width: 1px;
+}
+
+.rounded-xl {
+  border-radius: 0.75rem;
+}
+
+.max-w-lg {
+  max-width: 32rem;
+}
+
+.my-10 {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid {
+  display: grid;
+}
+
+.ring-offset-background {
+  --tw-ring-offset-color: hsl(var(--background));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.bg-blue-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+  border: none;
+}
+
+.hover\:bg-primary\/90:hover {
+  background-color: black;
+}
+
+.add-elements {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.add-elements-zonas {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.add-elements-new {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.delete-button {
+  height: 25%;
+}
+
+.div-button-save {
+  display: flex;
+  justify-content: center;
+}
+.div-button-save > button {
+  width: 50%;
+}
+
+.name-and-icon {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-img-icon {
+  width: 32px;
+}
+
+.icon-card {
+  padding: 7px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.selected-icon {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.8) !important;
+}
+
+.div-for-icon {
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.8) !important;
+  border: none;
+}
+
+.div-for-logo {
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.8) !important;
+  border: none;
+}
+
+.linea-separacion {
+  border-bottom: 1px solid #ccc;
+  margin-top: 10px;
+}
+
+.swal2-container.swal2-center > .add-comida {
+  height: 430px;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.container-buttons-settings {
+      max-width: 800px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .suplementos-container {
+        margin-left: 20px; /* Ajustar el margen izquierdo según sea necesario */
+    }
+    
+    .suplementos-label {
+        margin-left: -20px; /* Ajustar el margen izquierdo según sea necesario */
+    }
+    
+    .checkbox-label {
+        margin-right: 20px; /* Ajustar el margen derecho entre los checkboxes según sea necesario */
+    }
+
+    #mi-lista{
+        padding-left: 40px;
+    }
+
+    #input-comensales{
+      --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+      --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+      box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
+
+ /* .puntos{
+  width: 100% !important;
+ }  */
+ 
+ #none-select{
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+  -webkit-touch-callout: none; /* Desactiva el menú de selección en dispositivos táctiles */
+
+ }
+
+ #logo-trash{
+  width: 47px;
+ }
+#logo-kitchen{
+  width: 47px;
+}
+
+.li-pedido{
+  width: 70% ;
+}
+
+.unique-mesa {
+  cursor: pointer;
+  /* Estilos adicionales según sea necesario */
+}
+
+.unique-mesa.dragging {
+  opacity: 0.5; /* Ejemplo: Opacidad reducida durante el arrastre */
+}
+
+.aviso {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.aviso h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+.aviso p {
+  color: #666;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.aviso a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.modal-config-comida{
+    width: 30% !important;
+    height: 103%;
+
+}
+
+.div-cobros{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 10px;
+    width: 80%;
+}
+
+.container-payments{
+    display: flex;
+    justify-content: center;
+}
+
+#texto-food {
+  text-transform: uppercase;
+}
+
+.div-padlock{
+  display: flex;justify-content: flex-end;padding: 10px;
+}
+
+#padlock-button{
+  font-size: 23px;
+}
+
+#padlock-button:focus{
+outline: none !important;
+}
+
+.avatar-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-label {
+  display: block;
+  margin-top: 10px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.avatar-upload {
+  display: none;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+} */
+
+/* button:hover {
+  background-color: #0056b3;
+} */
+
+.puntos {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.puntos::before {
+  content: '......................................................................................................................................................................................................................................................................................................................................................';
+  display: block;
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.swal2-popup.swal2-modal.custom-swal-large.swal2-show {
+  width: 60vw !important; /* Ajusta el tamaño del popup según tus necesidades */
+  max-width: 70vw !important; /* Asegura que el tamaño máximo sea el especificado */
+  height: auto;
+}
+
+.swal2-popup.swal2-modal.custom-swal-large.swal2-show .swal2-title {
+  font-size: 1.5em !important; /* Ajusta el tamaño del título si es necesario */
+}
+
+.swal2-popup.swal2-modal.custom-swal-large.swal2-show .swal2-content {
+  font-size: 1.2em !important; /* Ajusta el tamaño del contenido si es necesario */
+}
+
+.swal2-popup.swal2-modal.custom-swal-large.swal2-show .swal2-input, 
+.swal2-popup.swal2-modal.custom-swal-large.swal2-show .swal2-textarea {
+  font-size: 1.1em !important; /* Ajusta el tamaño de los campos de entrada si es necesario */
+}
+
+#drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 20px;
+  width: 34%;
+  font-family: sans-serif;
+  /* margin: 100px auto; */
+  /* padding: 20px; */
+  height: 89px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#drop-area.highlight {
+border-color: purple;
+}
+p {
+margin-top: 0;
+}
+.my-form {
+/* margin-bottom: 10px; */
+}
+#gallery {
+margin-top: 10px;
+}
+#gallery img {
+width: 150px;
+margin-bottom: 10px;
+margin-right: 10px;
+vertical-align: middle;
+}
+.button {
+display: inline-block;
+padding: 10px;
+background: #ccc;
+cursor: pointer;
+border-radius: 5px;
+border: 1px solid #ccc;
+}
+.button:hover {
+background: #ddd;
+}
+#fileElem {
+display: none;
+}
+
+.image-container {
+  position: relative;
+  height: 200px;
+  width: 100%;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.image-container img {
+  width: 100%; /* Ajusta el ancho de la imagen al contenedor */
+  height: 100%; /* Ajusta la altura de la imagen al contenedor */
+  object-fit: cover; /* Ajusta la imagen para que cubra el contenedor sin distorsionar */
+  border-radius: 10%;
+}
+
+.custom-file-input {
+  display: none; /* Oculta el input file original */
+}
+
+.file-label {
+  display: inline-block;
+  background-color: #0069D9;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.file-label:hover {
+  background-color: #2980b9;
+}
+
+.file-name {
+  margin-left: 10px;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilo general para ajustar imágenes */
+#icon-preview {
+  max-width: 100%; /* Las imágenes no deben exceder el contenedor */
+  height: auto;    /* Mantener la proporción de las imágenes */
+}
+
+/* Estilo específico para iconos */
+#icon-preview.icon-type {
+  width: 32px;     /* Tamaño fijo para los iconos */
+  height: 32px;
+}
+
+/* Estilo específico para imágenes */
+#icon-preview.image {
+  width: 100%;     /* Ajustar imágenes grandes al contenedor */
+  height: auto;    /* Mantener la proporción de las imágenes */
+  object-fit: cover; /* Asegura que las imágenes se adapten al espacio sin distorsión */
+}
+
+.icon-image-wrapper {
+  width: 3%;  /* Ancho fijo para el contenedor */
+  /* height: 100px; Alto fijo para el contenedor */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ocultar cualquier desbordamiento de la imagen */
+}
+
+#fileSelect:focus-visible {
+  border: none !important;
+}
+
+button:focus {
+
+  outline: none !important;
+}
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.suplementos-container {
+  margin-left: 20px; /* Ajustar el margen izquierdo según sea necesario */
+}
+
+.suplementos-label {
+  margin-left: -20px; /* Ajustar el margen izquierdo según sea necesario */
+}
+
+.checkbox-label {
+  margin-right: 20px; /* Ajustar el margen derecho entre los checkboxes según sea necesario */
+}
+
+#mi-lista {
+  padding-left: 40px;
+}
+
+/* Responsive */
+/*------------*/
+
+@media only screen and (min-width: 768px) and (max-width: 1180px) and (orientation: landscape) {
+  #table-stock {
+    background-color: #ccc;
+    border: 1px solid #333;
+    border-radius: 10px;
+    height: 450px;
+  }
+}
+
+/* Estilos para pantallas de escritorio */
+@media screen and (min-width: 992px) and (max-width: 2200px) {
+  .card-booking {
+    background-color: #3c8dbc !important;
+    border-radius: 5px;
+    box-shadow: 7px 10px 17px rgb(0 0 0 / 48%);
+    padding: 10px;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  .card-booking p {
+    margin: 6px;
+  }
+
+  .fc .fc-list-table td {
+    padding: 8px 37px !important;
+  }
+
+  .fc-list-event-graphic:focus-visible {
+    outline: none;
+  }
+}
+
+/* Estilos para pantallas de tablet con resolución de 1366x1024 */
+@media (min-width: 1366px) and (max-width: 1366px) and (min-height: 1024px) and (max-height: 1024px) {
+  .type-food {
+    display: flex;
+    border-right: 1px solid black;
+    width: 35% !important;
+  }
+
+  .table-stock {
+    border-radius: 30px 0px 10px 10px;
+    box-shadow: grey 0px 0px 18px;
+    width: 87% !important;
+  }
+
+  .table-provider {
+    border-radius: 30px 0px 10px 10px;
+    box-shadow: grey 0px 0px 18px;
+    width: 87% !important;
+  }
+
+  .table-personal {
+    border-radius: 30px 0px 10px 10px;
+    box-shadow: grey 0px 0px 18px;
+    width: 87% !important;
+  }
+
+  .table-sells {
+    border-radius: 30px 0px 10px 10px;
+    box-shadow: grey 0px 0px 18px;
+    width: 87% !important;
+  }
+
+  .container-mesas {
+    width: 1207px !important;
+  }
+
+  .calendar-container {
+    max-width: 1200px;
+    height: 700px;
+  }
+
+  .table-bill {
+    border-radius: 30px 0px 10px 10px;
+    box-shadow: grey 0px 0px 18px;
+    width: 87% !important;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 460px !important;
+    height: 214px;
+    font-size: 14px !important;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* Estilos para tablets */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+  #unique-mesa {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-booking {
+    background-color: #3c8dbc;
+    border-radius: 5px;
+    box-shadow: 7px 10px 17px rgb(0 0 0 / 48%);
+    margin-bottom: 10px;
+    padding: 0px !important;
+    color: white;
+  }
+
+  .card-booking p {
+    margin: 6px;
+  }
+
+  .btn-danger {
+    background-color: #dd4b39 !important;
+    border-color: #d73925 !important;
+    padding: 5px !important;
+    margin: 5px !important;
+  }
+
+  .fc .fc-list-table td {
+    padding: 8px 37px !important;
+  }
+}
+
+/* Tablet 960x600 (Bar colon) */
+@media (min-width: 768px) and (max-width: 1020px) {
+  .eye,
+  .donwload,
+  .trash {
+    padding: 5px !important;
+    width: 22px;
+    height: 23px;
+    display: grid;
+    float: left;
+    padding: 5px;
+    margin: 2px !important;
+    display: flex !important;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .unique-mesa {
+    width: 25% !important;
+    display: flex;
+    padding: 0px;
+    flex-direction: column;
+    align-items: center;
+    width: 6%;
+  }
+
+  .unique-mesa label {
+    text-align: center;
+  }
+
+  .dist-mesas {
+    /* border: 1px solid black; */
+    height: 284px;
+    border-radius: 20px;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+  }
+
+  .container-mesas {
+    width: 750px !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+  }
+
+  .card-img-top {
+    width: 44px;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 284px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .content-select {
+    background-color: white;
+    border: 1px solid black;
+    padding: 16px;
+    border-radius: 10px;
+    height: 141px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  #barra {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    padding: 0px !important;
+  }
+
+  .new-container {
+    padding: 0px !important;
+  }
+
+  #view-table-dash {
+    width: 80%;
+    height: 263px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow: auto;
+  }
+
+  .button-type-food {
+    width: 68px;
+    height: 60px;
+    background-color: white;
+    border-radius: 8px;
+    margin: 0px 1px 5px 0px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border: 1px solid #605ca8; */
+    box-shadow: 5px 3px 4px rgba(0, 0, 0, 0.4);
+    padding: 0px;
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+      0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+      0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .food-by-type .button-type-food-left,
+  .food-button .button-type-food-right {
+    width: 68px;
+    height: 60px;
+    background-color: white;
+    border-radius: 8px;
+    margin: 0px 1px 5px 0px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border: 1px solid #605ca8; */
+    box-shadow: 5px 3px 4px rgba(0, 0, 0, 0.4);
+    padding: 0px;
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+      0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+      0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    /* Estilos específicos para el div interno de los botones */
+  }
+
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    border-radius: 30px 0px 10px 10px;
+    box-shadow: grey 0px 0px 18px;
+    width: 60% !important;
+  }
+
+  #div-table {
+    padding: 24px !important;
+  }
+
+  .control-switches {
+    bottom: 0px !important;
+  }
+
+  .table-roles {
+    width: 100% !important;
+    margin: 5px;
+  }
+
+  #calendar {
+    width: 60%;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  .swal2-popup {
+    width: 500px !important;
+    height: 400px !important;
+    font-size: 14px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 77%;
+  }
+
+  .bg-info {
+    background-color: #589abb !important;
+    border-radius: 25px !important;
+  }
+
+  .icon {
+    padding: 22px !important;
+    font-size: 37px !important;
+  }
+
+  #div-stats {
+    padding: 36px;
+  }
+
+  .small-box-footer {
+    border-radius: 0px 0px 25px 25px !important;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+/* Media para telefonos moviles */
+
+@media (max-width: 768px) {
+
+  .additional-content button {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 45px;
+    font-size: 10px;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    margin-bottom: 5px; /* Ajusta el espacio entre botones según sea necesario */
+  }
+  .new-container {
+    padding: 0px;
+  }
+
+  .button-container {
+    margin-top: 20px;
+  }
+
+  .container {
+    width: 345px !important;
+    margin-right: 3% !important;
+    margin-left: 3% !important;
+  }
+
+  #div-pizarra {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 11px;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.5rem !important;
+    width: 6%;
+  }
+
+    .unique-mesa {
+        display: flex;
+        padding: 3px;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 0.5rem!important;
+        width: 6%;
+        font-size:11px;
+    }
+
+  .card-img,
+  .card-img-bottom,
+  .card-img-top {
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    width: 95%;
+  }
+
+    .card-img, .card-img-bottom, .card-img-top {
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        width: 66% !important;
+    }
+
+  /* .button-type-food {
+        width: 54px !important;
+        height: 60px !important;
+        background-color: white;
+        border-radius: 8px;
+        margin: 5px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 5px 3px 4px rgba(0, 0, 0, 0.4);
+        --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, .2), 0 1px 2px 0 rgba(34, 33, 52, .06);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    } */
+
+    .button-type-food-left {
+      width: 51px !important;
+      height: 47px !important;
+        background-color: white;
+        border-radius: 8px;
+        margin: 5px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* border: 1px solid #605ca8; */
+        box-shadow: 5px 3px 4px rgba(0, 0, 0, 0.4);
+        --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, .2), 0 1px 2px 0 rgba(34, 33, 52, .06);
+        --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    }
+
+  .button-type-food-right {
+    width: 63px !important;
+    height: 53px !important;
+    background-color: white;
+    border-radius: 8px;
+    margin: 5px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border: 1px solid #605ca8; */
+    box-shadow: 5px 3px 4px rgba(0, 0, 0, 0.4);
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+      0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+      0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  #header-comandero{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+  }
+
+  .div-comensales{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #input-comensales{
+    width: 21%;
+
+  }
+
+  .li-pedido{
+    width: 110% !important;
+    font-size:9px; 
+  }
+
+  /* #display-type-2,
+    #display-type-3 {
+        padding: 0px !important;
+    } */
+
+  .food-by-type {
+    padding: 0px !important;
+    margin: 0px;
+  }
+
+  #food-container {
+    padding: 10px !important;
+  }
+
+    #display-type-1,
+    #display-type-2,
+    #display-type-3 {
+        padding-left: 5px !important;
+        padding-right: 4px !important;
+        display: flex;
+        /* flex-direction: row; */
+        flex-wrap: wrap;
+        
+    }
+
+    .container-buttons-settings {
+      max-width: 800px;
+      margin: 10px auto;
+      text-align: center;
+  }
+
+  #logo-trash{
+    width: 35px;
+   }
+  #logo-kitchen{
+    width: 35px;
+  }
+
+  .type-food {
+    border-bottom: 1px solid black;
+    border-right: none;
+    padding: 9px !important;
+  }
+
+  .content-select {
+    width: 18vh;
+    background-color: white;
+    padding: 4vh;
+    border-radius: 10px;
+    height: 158px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2),
+      0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color),
+      0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  [id^="button-"] {
+    padding: 0px !important;
+  }
+
+  /* .button-group {
+    display: flex !important;
+    width: 24%;
+    justify-content: flex-start;
+  } */
+
+  #div-table {
+    padding: 0px !important;
+  }
+
+  .btn-form,
+  #download-csv,
+  #download-pdf,
+  #download-xlsx {
+    width: 121px !important;
+    margin: 4px !important;
+    font-size: 9px !important;
+  }
+
+  .content-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .form-add {
+    text-align: center;
+  }
+
+  .form-add .v-line:nth-of-type(2) {
+    display: none;
+  }
+
+  .small-box {
+    border-radius: 2px;
+    position: relative;
+    display: block;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 23px !important;
+  }
+
+  .display-mesas-lista {
+    display: block;
+  }
+
+  .dist-mesas {
+    padding: 12px;
+    /* Modifica el valor de padding según tus necesidades */
+  }
+
+  #visual-mesas {
+    margin-bottom: 13px;
+  }
+
+  .selected {
+    width: 60%;
+  }
+
+  .mesa-uniones {
+    width: 100%;
+  }
+
+  .lista-unidas {
+    padding: 5px 0px 0px 0px;
+    width: 100%;
+  }
+
+  .mesas-unidad,
+  .mesa-principal {
+    width: 50%;
+  }
+
+  .mesas-unidad > h4 {
+    text-align: center;
+  }
+
+  .additional-content {
+    /* display: none; */
+    position: fixed;
+    top: 69%; /* Ajusta según sea necesario */
+    transform: translateY(-50%);
+    /* display: flex; */
+    flex-direction: column;
+    align-items: flex-end;
+    right: 20px;
+    z-index: 999;
+  }
+
+  .show-hide-button {
+    display: block;
+    position: fixed;
+    bottom: 42px;
+    right: 23px;
+    cursor: pointer;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    /* border: none; */
+    border-radius: 50%;
+    border-color: black;
+    width: 53px;
+    height: 53px;
+    font-size: 18px;
+    text-align: center;
+    line-height: 40px;
+    transition: transform 0.3s;
+  }
+
+  .div-bind {
+    display: block;
+  }
+
+  .fc-toolbar-title {
+    font-size: 13px !important;
+    /* Ajusta el tamaño del título del calendario */
+  }
+
+  .fc-button-group {
+    width: 100% !important;
+    /* Hace que los botones se expandan para adaptarse al ancho de la pantalla */
+  }
+
+  .fc-button {
+    width: 25% !important;
+    /* Divide el ancho igualmente entre los botones */
+  }
+
+  .fc-dayGridMonth-button,
+  .fc-timeGridWeek-button,
+  .fc-timeGridDay-button,
+  .fc-listWeek-button {
+    display: none !important;
+  }
+
+  .fc-button-group {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-between !important;
+  }
+
+  .fc-button {
+    flex: 1 !important;
+    text-align: center !important;
+  }
+
+  .fc-button span {
+    font-size: 18px !important;
+  }
+
+  .fc-toolbar-chunk .fc-button {
+    font-size: 13px !important;
+  }
+
+  .fc-listWeek-button {
+    width: 46px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 29px;
+    width: 100% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+    .mx-auto.w-50 {
+        width: 92% !important; /* o el valor que prefieras para dispositivos móviles */
+      }
+
+      .w-75{
+        width: 92% !important;
+      }
+
+      .btn-outline-primary{
+        margin: 4px;
+        font-size: 12px;
+      }
+
+      .text-2xl{
+        font-size: 1.5rem;
+      }
+
+      #elegir-icono{
+        font-size:0.75rem;
+      }
+
+      button[id^="elegir-icono-"]{
+        font-size:0.75rem;
+      }
+
+      .div-first{
+        margin: 7px 0px 12px 3px;
+      }
+
+      #num-mesa{
+        width: 33%;
+      }
+      .div-download-qr{
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .input-numero{
+        width: 25%;
+      }
+
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 244px !important;
+    height: 176px;
+    font-size: 7px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 94%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #state-table-1 {
+    text-align: end;
+    width: 50%;
+    color: #4caf50;
+  }
+}
+
+/* Media query para pantallas de portátiles */
+@media only screen and (min-width: 1440px) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  #calendar {
+    width: 90%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 83px !important;
+  }
+
+  .food-by-type .button-type-food-left,
+  .food-button .button-type-food-right {
+    width: 83px !important;
+  }
+
+  .container-mesas {
+    width: 88% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 58px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 550px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 460px !important;
+    height: 214px;
+    font-size: 14px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+    .swal2-container.swal2-top-end>.ventana-cocina {
+        width: 460px !important;
+        height: 214px;
+        font-size: 14px !important;
+    }
+
+    .swal2-container.swal2-center>.observaciones-cocina {
+        width: 434px !important;
+        height: 325px;
+        font-size: 14px !important;
+        bottom: 51%;
+    }
+
+    .li-comida {
+        width: 27%;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+@media only screen and (min-width: 1280px) and (max-width: 1430px) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .button-type-food-right {
+    width: 59px !important;
+    height: 45px !important;
+}
+
+.li-pedido{
+  width: 70% ;
+}
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 8%
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 61px;
+    height: 45px;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 57px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+}
+
+@media (max-width: 1280px) and (orientation: landscape) {
+
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .button-type-food-right {
+    width: 59px !important;
+    height: 45px !important;
+}
+
+.li-pedido{
+  width: 70% ;
+}
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 8%
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 61px;
+    height: 45px;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 57px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+
+
+}
+@media only screen and (min-width: 1024px) and (max-width: 768px) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .button-type-food-right {
+    width: 59px !important;
+    height: 45px !important;
+}
+
+.li-pedido{
+  width: 70% ;
+}
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 6%
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 61px;
+    height: 45px;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 57px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+}
+
+
+
+@media only screen and (width: 810px) and (height: 1080px ) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .dist-mesas{
+    width: 50% !important;
+  }
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 6%
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 51px !important;
+    height: 35px !important;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 57px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+}
+
+@media only screen and (width: 965px) and (height: 810px) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .col-md-4{
+    max-width: 16.333333% !important;
+  }
+
+  .dist-mesas {
+    /* border: 1px solid black; */
+    height: 487px !important;
+    border-radius: 20px;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 6%
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 61px;
+    height: 45px;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 57px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+}
+
+
+@media only screen and (width: 810px) and (height: 965px) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .col-md-4{
+    max-width: 16.333333% !important;
+  }
+
+  .dist-mesas {
+    /* border: 1px solid black; */
+    height: 487px !important;
+    border-radius: 20px;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 6%
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 61px;
+    height: 45px;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 57px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+}
+
+
+@media only screen and (width: 1024px) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 6%
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 61px;
+    height: 45px;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 57px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+}
+@media (min-width: 1920px) {
+  .modal-dialog-left {
+    margin-left: 23% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .modal-right .modal-dialog {
+    margin-right: 0;
+    margin-left: auto;
+    transform: translateX(100%);
+}
+
+}
+
+.pagototal-modal{
+  height: 450px; /* Establece la altura deseada */
+}
+
+@media only screen and (width: 854px) and (height: 534px) {
+  .table-stock,
+  .table-provider,
+  .table-personal,
+  .table-sells,
+  .table-bill {
+    width: 100% !important;
+  }
+
+  .col-md-4{
+    max-width: 16.333333% !important;
+  }
+
+  .dist-mesas {
+    /* border: 1px solid black; */
+    height: 487px !important;
+    border-radius: 20px;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+  .modal-dialog-left {
+    margin-left: 12% !important;
+    margin-right: auto !important;
+    transform: translateX(0) !important;
+    max-width: 399px !important;
+  }
+
+  .container {
+    margin-right: 4% !important;
+    margin-left: 4% !important;
+    width: 95% !important;
+  }
+
+  .small-box {
+    display: flex !important;
+  }
+
+  .small-box.bg-info {
+    display: flex !important;
+    justify-content: space-between;
+  }
+
+  .unique-mesa {
+    display: flex;
+    padding: 14px !important;
+    flex-direction: column;
+    align-items: center;
+    width: 6% !important
+  }
+
+  #div-table {
+    padding: 16px !important;
+  }
+
+  #calendar {
+    width: 100%;
+    height: auto;
+  }
+
+  .tabulator-cell {
+    height: 51px !important;
+  }
+
+  .register-user,
+  .roles-user {
+    padding: 15px;
+    width: 58% !important;
+    box-shadow: grey 0px 0px 18px;
+    border-radius: 30px 0px 10px 10px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 50%;
+    padding-right: 21.5px !important;
+    padding-left: 21.5px !important;
+  }
+
+  .content-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .fc-day-grid-event {
+    width: auto !important;
+
+    max-width: 100%;
+  }
+
+  #display-type-2,
+  #display-type-3,
+  #display-type-1 {
+    padding: 0px !important;
+    display: flex;
+    /* flex-direction: row; */
+    flex-wrap: wrap;
+  }
+
+  .button-type-food {
+    width: 75px !important;
+  }
+
+  .food-button .button-type-food-left,
+  .food-by-type .button-type-food-right {
+    width: 61px;
+    height: 45px;
+  }
+
+  .icono-food{
+    width: 34%;
+
+  }
+
+  #texto-food{
+ font-size: 10px;
+  }
+  .container-mesas {
+    width: 93% !important;
+  }
+
+  .display-mesas-lista {
+    display: flex !important;
+    width: 100% !important;
+  }
+
+  #visual-mesas {
+    width: 79%;
+  }
+
+  #visual-lista {
+    width: 62%;
+  }
+
+  .card-img-top {
+    width: 41px !important;
+  }
+
+  .contenido-mesa {
+    /* border: 1px solid black; */
+    --tw-shadow: 0 1px 3px 0 rgba(34, 33, 52, 0.2), 0 1px 2px 0 rgba(34, 33, 52, 0.06);
+    --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    height: 500px;
+    border-radius: 20px;
+    overflow: auto;
+    background-color: #fff;
+  }
+
+  #cuadro-uniones {
+    padding-left: 0px !important;
+  }
+
+  .selected {
+    background-color: #605ca8;
+    border-radius: 13px;
+    padding: 4px;
+    color: white;
+    width: 47%;
+  }
+
+  .swal2-container.swal2-top-end > .ventana-cocina {
+    width: 462px !important;
+    height: 251px;
+    font-size: 9px !important;
+  }
+
+  .swal2-container.swal2-center > .observaciones-cocina {
+    width: 434px !important;
+    height: 243px;
+    font-size: 14px !important;
+    bottom: 51%;
+  }
+
+  .li-comida {
+    width: 75%;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-button {
+    height: 25%;
+  }
+
+  .swal2-container.swal2-center > .add-comida {
+    height: 430px !important;
+  }
+
+  .additional-content button {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 51px;
+    font-size: 10px;
+    text-align: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+}
+
+
+@media (min-width: 1000px) and (max-width: 1020px) and (min-height: 650px) and (max-height: 660px) {
+  .dist-mesas {
+    /* border: 1px solid black; */
+    height: 487px !important;
+    border-radius: 20px;
+    /* display: flex; */
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.25);
+  }
+
+  .unique-mesa {
+    width: 7% !important;
+    padding: 2px !important;
+  }
+}
+

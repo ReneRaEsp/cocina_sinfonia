@@ -1,0 +1,69 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    Pdf: '%kernel.project_dir%/public/pdf'
+    uploads_directory: '%kernel.project_dir%/public/ticketfacturasPdf'
+    food_image: '%kernel.project_dir%/public/foodimg'
+    typefood_image: '%kernel.project_dir%/public/typefoodimg'
+
+services:
+    # default configuration for services in *this* file
+
+    App\Controller\DashboardController:
+        arguments:
+            $security: '@security.helper'
+    
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    my_admin_bundle.show_user_listener:
+        class: App\EventListener\NavbarUserListener
+        tags:
+            - { name: kernel.event_listener, event: theme.navbar_user, method: onShowUser }
+
+    my_admin_bundle.menu_listener:
+        class: App\EventListener\MenuBuilderListener
+        tags:
+            - { name: kernel.event_listener, event: theme.sidebar_setup_menu, method: onSetupMenu }
+    
+    App\EventSubscriber\MenuBuilderSubscriber:
+        arguments:
+                - '@fos_user.security.login_manager'
+        tags:
+            - { name: kernel.event_subscriber }
+
+    App\Form\ProveedoresType:
+        tags:
+            - { name: form.type, alias: Proveedores }
+
+    App\Form\TipoComidaType:
+        tags:
+            - { name: form.type, alias: TipoComida }
+
+    App\EventSubscriber\NavbarUserSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+                
+                
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'       
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones  
+    App\Controller\ErrorController:
+        public: true
+        tags: ['controller.service_arguments']
+
+    App\EventListener\LoginListener:
+        tags:
+            - { name: 'kernel.event_listener', method: onSecurityInteractiveLogin }

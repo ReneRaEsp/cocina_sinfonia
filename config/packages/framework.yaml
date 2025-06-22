@@ -1,0 +1,47 @@
+# see https://symfony.com/doc/current/reference/configuration/framework.html
+framework:
+    error_controller: App\Controller\ErrorController::accessDenied
+    translator: ~
+    assets:
+            packages:
+                adminlte:
+                    base_path: 'bundles/adminlte'
+    secret: '%env(APP_SECRET)%'
+    #csrf_protection: true
+    http_method_override: false
+
+    # Enables session support. Note that the session will ONLY be started if you read or write from it.
+    # Remove or comment this section to explicitly disable session support.
+    session:
+        handler_id: 'session.handler.native_file'
+        save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+        cookie_secure: auto
+        cookie_samesite: lax
+        storage_factory_id: session.storage.factory.native
+        cookie_lifetime: 21600    
+        gc_maxlifetime: 21600
+
+    #esi: true
+    #fragments: true
+    php_errors:
+        log: true    
+
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file
+            
+
+fos_user:
+    registration:
+            confirmation:
+                enabled: true
+    db_driver: orm
+    firewall_name: main
+    user_class: App\Entity\User
+    from_email:
+           address: jaumealcantarago@gmail.com
+           sender_name: "Jaume Alcantara"
+    service:
+            mailer: 'fos_user.mailer.noop'            

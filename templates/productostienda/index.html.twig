@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Tienda{% endblock %}
+{% block page_title %} Tienda {% endblock %}
+                
+
+{% block page_content %}
+<body>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Añade un nuevo producto</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+        {{ form_end(form) }}
+      </div>
+      {# <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> #}
+    </div>
+  </div>
+</div>
+
+ <div class="">
+        <div class="row">
+        <div class="12 d-flex justify-content-center m-3">
+ 		     <button type="button" class="v-btn v-btn--elevated v-theme--light bg-light-blue-darken-4 ma-2 v-btn--density-default v-btn--size-default v-btn--variant-elevated" data-toggle="modal" data-target="#exampleModalCenter">
+                         Añadir Producto
+               	     </button>
+		</div>
+            <div class="col-lg-md-xs-12 " style="">
+                <div class="content-form">
+                      <!--  <div class="form-add">
+                            <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#exampleModalCenter">
+                            Añadir producto al stock
+                            </button>
+                            <span class="v-line"></span>
+                            <button id="download-csv" class="btn btn-primary">Descargar CSV</button>
+                            <span class="v-line"></span>
+                            <button id="download-pdf" class="btn btn-primary">Descargar PDF</button>
+                            <span class="v-line"></span>
+                            <button id="download-xlsx" class="btn btn-primary">Descargar Excel</button>
+                        </div>
+                    </div> -->
+            </div> 
+        </div>
+    </div>
+    <div id="appTienda" style="max-width: 100vw;" data-tienda="{{ productos|json_encode }}"></div>
+    </body>
+
+    {% endblock %}

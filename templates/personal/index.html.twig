@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+{% endblock %}
+
+{% block title %}Personal{% endblock %}
+{% block page_title %} Personal {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+
+<body>
+<div class="row" id="div-stats">
+
+{% for user_entry in users_entry %}
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div class="small-box bg-info">
+        <div class="inner">
+            <h4><strong>{{user_entry.username}}</strong></h4>
+            <p>Última conexión: {{ user_entry.lastLogin | default('Este usuario no se ha conectado') }}</p>
+        </div>
+        <div class="icon">
+            <i class="fa-solid fa-user"></i>
+        </div>
+    </div>
+    </div>
+ {% endfor %}   
+</div>
+
+<div id="appPersonal" data-users="{{ users|json_encode }}" ></div>
+  <!--  <div class="container">
+        <div class="row">
+            <div class="col-lg-md-xs-12 table-personal" style="">
+                <div style="padding:60px;" id="div-table">
+                  <div id="table-stock"></div>
+                </div> 
+            </div> 
+        </div>
+    </div>-->
+
+    {# Bloque JavaScript #}
+    <script>
+    var table = new Tabulator("#table-stock", {
+//    height:"331px",
+    layout:"fitColumns",
+    tooltipsHeader: false,
+    data:{{ users|json_encode|raw }},
+    pagination:"local",
+    paginationSize:5,
+    paginationSizeSelector:[10, 15, 20],
+    movableColumns:true,
+    paginationCounter:"rows",
+    pagination:"local",
+    columns:[
+        {title:"Nombre de usuario", field:"username", sorter:"string", headerFilter:"input"},
+        {title:"Email", field:"email", sorter:"string", headerFilter:"input"},
+        {title:"Último inicio de sesión", field:"lastLogin",sorter:"date", headerFilter:"input"},
+        {# {title:"Roles ", field:"roles",sorter:"string", hozAlign:"center", headerFilter:"input"}, #}
+            ],
+        });
+
+
+    </script>
+</body>
+{% endblock %}

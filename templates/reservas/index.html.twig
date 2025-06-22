@@ -1,0 +1,217 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Agrega aquí tus estilos adicionales específicos de la vista dashboard.html.twig #}
+    <link rel="stylesheet" href="{{ asset('bundles/adminlte/adminlte.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {# Agrega aquí tus scripts adicionales específicos de la vista dashboard.html.twig #}
+    <script src="{{ asset('bundles/adminlte/adminlte.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/dist/index.global.min.js') }}"></script>
+    <script src="{{ asset('fullcalendar-6.1.4/packages/moment/index.global.min.js') }}"></script>
+    <script src="{{ asset('bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+{% endblock %}
+
+{% block title %}Reservas{% endblock %}
+{% block page_title %} Reservas {% endblock %}
+{% block page_subtitle %} {% endblock %}
+
+{% block page_content %}
+<body>
+<!-- Modal -->
+<div class="modal fade" id="modalReservas" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Crear nueva reserva</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal -->
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+             <button type="button" class="btn btn-primary btn-form" data-toggle="modal" data-target="#modalReservas">Añade una reserva</button>     
+             <div id="calendar" width="200" height="200" class="calendar-container" ></div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var layout = window.innerWidth < 768 ? "listWeek" : "dayGridMonth";
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'es',
+        contentHeight: 'auto',
+        headerToolbar: {
+            start: 'prev,today,next',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        buttonText: {
+            today: 'Hoy',
+            month: 'Mes',
+            week: 'Semana',
+            day: 'Día',
+            list: 'Agenda'
+        },    
+        initialView: layout,
+        eventContent: function(info) {
+            var view = calendar.view;
+            if (view.type === 'dayGridMonth') {
+                return {
+                    html: '<div class="card-booking">' + 
+                              '<p>' + info.event.title + '</p>' +
+                              '<p>Comensales: ' + info.event.extendedProps.comensales + '</p>'+
+                              '<p>Hora: ' + info.event.extendedProps.hora + '</p>'+
+                              '<p>Teléfono: ' + info.event.extendedProps.telefono + '</p>' +
+                              '<button class="btn btn-danger btn-sm delete-reserva-btn" data-id="' + info.event.id + '">Eliminar reserva</button>' +
+                          '</div>'
+                };
+            } else if (view.type === 'timeGridWeek') {
+                return {
+                    html: '<div class="fc-content">' + 
+                              '<div class="fc-title">' + info.event.title + '</div>' +
+                              '<div class=""> Comensales: ' + info.event.extendedProps.comensales + '</div>' +
+                          '</div>'
+                };
+            } else if (view.type === 'timeGridDay'){
+                return {
+                    html: '<div class="fc-content">' + 
+                              '<div class="fc-title">' + info.event.title + '</div>' +
+                              '<div class=""> Comensales: ' + info.event.extendedProps.comensales + '</div>' +
+                          '</div>'
+                };
+
+            } else if(view.type === 'listWeek'){
+                return {
+                    html: '<div class="card-booking" style="width:100%;">' + 
+                              '<p>' + info.event.title + '</p>' +
+                              '<p>Comensales: ' + info.event.extendedProps.comensales + '</p>'+
+                              '<p>Hora: ' + info.event.extendedProps.hora + '</p>'+
+                              '<p>Teléfono: ' + info.event.extendedProps.telefono + '</p>' +
+                              '<button class="btn btn-danger btn-sm delete-reserva-btn" data-id="' + info.event.id + '">Eliminar reserva</button>' +
+                          '</div>'
+                };
+
+            }
+        },
+        scrollTime: '08:00:00', // Hora de inicio
+        slotMinTime: '12:00:00',    // Hora de inicio
+        slotMaxTime: '24:00:00',    // Hora de finalización
+        slotDuration: '00:30:00', // Duración de casillas
+        //slotLabelInterval: '01:00:00', // Agrupar casillas bajo etiquetas de hora
+        events: {{ reservas|raw }},
+        dayMaxEvents: 2,
+        eventLimit: true,
+        views: {
+            dayGrid: {
+                moreLinkText: 'Ver más' // Cambia el texto del enlace "más"
+            },
+            timeGridDay: {
+                moreLinkText: 'Ver más' // Cambia el texto del enlace "más"
+            }
+        },
+    });
+    calendar.render();
+    
+    // Event listener para el botón de eliminar reserva
+    calendarEl.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-reserva-btn')) {
+            var reservaId = event.target.dataset.id;
+
+            Swal.fire({
+                title: '¿Está seguro que desea eliminar esta reserva?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Hacer una petición AJAX al controlador para eliminar la reserva
+                    $.ajax({
+                        url: '/eliminar-reserva/' + reservaId,
+                        type: 'DELETE',
+                        success: function() {
+                            // Eliminar la reserva del calendario
+                            var event = calendar.getEventById(reservaId);
+                            event.remove();
+
+                            Swal.fire({
+                                title: 'Reserva eliminada exitosamente',
+                                icon: 'success',
+                                confirmButtonColor: '#28a745',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        },
+                        error: function() {
+                            Swal.fire({
+                                title: 'Error al eliminar la reserva',
+                                text: 'Intente nuevamente más tarde',
+                                icon: 'error',
+                                confirmButtonColor: '#dc3545',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    calendar.render();
+});
+
+
+
+//Funcion para dar el okey de la carga de nueva reserva
+         function showOkDialogBooking() {
+            Swal.fire({
+            title: 'Reserva añadida',
+            text: 'La reserva se ha añadido correctamente',
+            icon: 'success',
+            confirmButtonText: 'OK',
+            });
+        }
+
+        
+
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    {% if booking_added %}        
+            showOkDialogBooking();
+    {% endif %}
+
+    flatpickr('.flatpickr', {
+        enableTime: true,
+        dateFormat: 'Y-m-d H:i:S',// Formato de fecha d-m-Y
+        locale: 'es',
+        // Otros ajustes de configuración de Flatpickr aquí, según tus necesidades.
+    });
+});
+
+</script>
+{% endblock %}

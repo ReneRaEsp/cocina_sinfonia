@@ -1,0 +1,508 @@
+{# {% extends 'base.html.twig' %} #}
+
+{% block stylesheets %}
+{{ encore_entry_link_tags('app') }}
+    <link rel="stylesheet" href="{{ asset('css/main_pedidos_mesa.css') }}">
+    <link rel="stylesheet" href="{{ asset('sweetalert2/dist/sweetalert2.min.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_link_tags('app') }}
+    
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{{ asset('sweetalert2/dist/sweetalert2.min.js') }}"></script>
+
+{% block page_content %}
+<body>
+    <div class="carta">
+        <div class="img-carta">
+            <img src='{{asset("img/carta.png")}}' id="carta"></img>
+        </div>
+        <div class="div-scroll">
+            <div class="contenedor-scroll">
+                <div class="botones-categoria" id="botonesCategoria">
+                    <!-- Los botones se generarán dinámicamente aquí -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Contenedor para los platos -->
+        <div id="contenedorPlatos" class="titlepage">
+
+        {% for tipo in tiposDeComida %}
+            <div id="{{tipo.name}}" class="categoria-contenedor">
+                <!-- Se pintan los platos del Array de entrantes -->
+            </div>
+        {% endfor %}
+        </div>
+
+        <!-- Agrega más productos según sea necesario -->
+        <div id="menu"></div>
+         <!-- Barra lateral para mostrar el pedido -->
+         <div id="barraLateral" class="barra-lateral">
+            <button id="cerrarBarraLateral" onclick="cerrarBarraLateral()">&times;</button>
+            <div class="contenedor-barra-lateral">
+                <h2 class="tupedido">Tu Pedido</h2>
+                <div class="contenido-pedido" id="listaPedidosBarraLateral"></div>
+                <div class="btnpedido">
+                    <button id="botonpedido" onclick="realizarPedido()">Realizar Pedido</button>
+                </div>
+            </div>
+
+            <div id="modal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="cerrarModal()">&times;</span>
+                    <h2>¡Muchas gracias por tu pedido!</h2>
+                    <div id="listaPedidos"></div>
+                    <div class="centrar">
+                        <!-- <img id="gifModal" src="chicote.gif" alt="Gif"> -->
+                        <button class="gif" onclick="cerrarModal()">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="boton">
+            <button id="verPedido" onclick="verPedido()"><i class="fa-solid fa-cart-shopping"></i></button>
+        </div>
+
+        
+
+        <div id="avisoModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="cerrarAvisoModal()">&times;</span>
+                <h2>Aviso</h2>
+                <p id="mensajeAviso"></p>
+                <button onclick="cerrarAvisoModal()">Cerrar</button>
+            </div>
+        </div>
+
+
+    </div>
+    
+</body>
+
+<script>
+
+var pedidosMesa = [];
+
+    //Logica para pintar botones con un bucle
+    const categorias = {{tiposDeComida|json_encode|raw}};
+    const nombresCategorias = categorias.map(categoria => categoria.name);
+    var primerCategoria;
+
+    // Verificar si el array tiene al menos un elemento
+    if (categorias.length > 0) {
+        primerCategoria = categorias[0].name;
+    }
+
+
+    function generarBotonesCategorias() {
+        const botonesCategoria = document.getElementById('botonesCategoria');
+
+        nombresCategorias.forEach(categoria => {
+            const boton = document.createElement('button');
+            boton.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+            boton.onclick = () => mostrarCategoria(categoria);
+            botonesCategoria.appendChild(boton);
+        });
+    }
+
+    function verPedido() {
+    const barraLateral = document.getElementById('barraLateral');
+    const listaPedidosBarraLateral = document.getElementById('listaPedidosBarraLateral');
+
+    // Limpiar contenido anterior
+    listaPedidosBarraLateral.innerHTML = '';
+
+    
+
+    // Obtener la lista de platos pedidos
+    //const listaPedidos = obtenerListaPedidos();
+
+    // Mostrar cada plato en la lista de la barra lateral
+    pedidosMesa.forEach(pedido => {
+        console.log(pedido);
+        const pedidoDiv = document.createElement('div');
+        pedidoDiv.classList.add('list-view');
+        if(pedido.extra !== ''){
+            pedidoDiv.textContent = '- '+pedido.nombre +' ( extras: '+pedido.extra+')';
+            listaPedidosBarraLateral.appendChild(pedidoDiv);
+        } else {
+            pedidoDiv.textContent = '- '+pedido.nombre;
+            listaPedidosBarraLateral.appendChild(pedidoDiv);
+        }
+    });
+
+    // Mostrar la barra lateral con animación
+    barraLateral.style.width = '100%';
+}
+
+function cerrarBarraLateral() {
+    const barraLateral = document.getElementById('barraLateral');
+    barraLateral.style.width = '0';
+}
+
+    // // Llamada a la función para generar los botones de categoría
+    generarBotonesCategorias();
+
+    //Entrantes
+
+    // Array para almacenar los nombres de los entrantes
+    platos = {{comidaTipo|json_encode|raw}}
+
+
+    // Función para agregar un nuevo Entrante al array y al HTML
+    function agregarPlato(categoriaNombre, idPlato, nombrePlato, descripcionPlato, precio, extras ) {
+
+        // Crea el elemento `producto`
+        const productoDiv = document.createElement("div");
+        productoDiv.classList.add("producto");
+
+        // Agrega el nombre del plato en negrita en la parte superior
+        const nombreSpan = document.createElement("span");
+        nombreSpan.classList.add("nombre");
+        nombreSpan.innerHTML = `<strong>${nombrePlato}&nbsp;&nbsp;&nbsp;${precio}€</strong>`;
+        productoDiv.appendChild(nombreSpan);
+
+        // Agrega span con el id del producto
+        const idSpan = document.createElement("span");
+        idSpan.classList.add('plato-id');
+        idSpan.innerHTML = idPlato;
+        idSpan.style.display="none";
+        productoDiv.appendChild(idSpan);
+
+        // Agrega la descripción del plato en el medio
+        const descripcionParrafo = document.createElement("p");
+        descripcionParrafo.classList.add('desc');
+        descripcionParrafo.textContent = descripcionPlato;
+        productoDiv.appendChild(descripcionParrafo);
+
+        // Crear el contenedor div
+        const cantidadContainer = document.createElement("div");
+        cantidadContainer.classList.add("cantidad-container");
+        cantidadContainer.style.width = "62%";
+        cantidadContainer.style.display = "flex";
+        cantidadContainer.style.flexDirection = "row";
+        cantidadContainer.style.justifyContent = "space-between";
+        cantidadContainer.style.fontSize = "40px";
+
+        // Crear los botones de decremento e incremento
+        const decrementButton = document.createElement("button");
+        decrementButton.classList.add("cantidad-button");
+        decrementButton.innerHTML = '<i class="fa-solid fa-minus"></i>';
+        decrementButton.style.width = "50px";
+        decrementButton.style.height = "50px";
+        decrementButton.style.borderRadius = "50%";
+
+        const cantidadSpan = document.createElement("span");
+        cantidadSpan.classList.add("cantidad-span");
+        cantidadSpan.style.display="flex";
+        cantidadSpan.style.flexDirection="column";
+        cantidadSpan.style.justifyContent = "center";
+        cantidadSpan.textContent = "0";
+
+        const incrementButton = document.createElement("button");
+        incrementButton.classList.add("cantidad-button");
+        incrementButton.innerHTML = '<i class="fa-solid fa-plus"></i>';
+        incrementButton.style.width = "50px";
+        incrementButton.style.height = "50px";
+        incrementButton.style.borderRadius = "50%";
+
+        // Agregar eventos a los botones
+        decrementButton.addEventListener("click", () => {
+            // Lógica para decrementar la cantidad
+            // Puedes implementar la lógica según tus necesidades
+            
+            for (var i = pedidosMesa.length - 1; i >= 0; i--) {
+                    if (pedidosMesa[i].id === idPlato) {
+                    pedidosMesa.splice(i, 1);
+                    break; // Rompe el bucle una vez que se elimina el elemento
+                    }
+                }
+            actualizarCantidad(-1);
+        });
+
+        incrementButton.addEventListener("click", () => {
+            // Lógica para incrementar la cantidad
+            // Puedes implementar la lógica según tus necesidades
+            let checkboxesHtml = '';
+            var extrasSeleccionados;
+            if (extras.length !== 0){
+
+                extras.forEach(extra => {
+                checkboxesHtml += `
+                    <input type="checkbox" id="${extra}" name="${extra}">
+                    <label for="${extra}">${extra}</label><br>
+                `;
+            });
+             Swal.fire({
+                title: 'Selecciona extras',
+                html: checkboxesHtml,
+                confirmButtonText: 'Confirmar',
+                showCancelButton: true,
+                customClass: ".extras-lista",
+                 preConfirm: () => {
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                    extrasSeleccionados = Array.from(checkboxes).map(checkbox => checkbox.name);
+                    actualizarCantidad(+1);
+                    return extrasSeleccionados;
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    stringExtras = extrasSeleccionados.join(','); 
+
+                    pedidosMesa.push({ nombre: nombrePlato, extra: stringExtras, id: idPlato });
+
+                }
+            });
+
+            } else {
+
+                actualizarCantidad(+1);
+                pedidosMesa.push({ nombre: nombrePlato, extra: '', id: idPlato });
+
+
+            }
+            
+
+            
+        });
+
+        function actualizarCantidad(cantidad) {
+            const cantidadActual = parseInt(cantidadSpan.textContent) + cantidad;
+            cantidadSpan.textContent = cantidadActual >= 0 ? cantidadActual : 0;
+        }
+
+        // Añadir los botones al contenedor div
+        cantidadContainer.appendChild(decrementButton);
+        cantidadContainer.appendChild(cantidadSpan);
+        cantidadContainer.appendChild(incrementButton);
+        productoDiv.appendChild(cantidadContainer);
+
+
+        // Agrega el select de cantidad en la parte inferior
+        {# const cantidadSelect = document.createElement("select");
+        cantidadSelect.classList.add("cantidad");
+        cantidadSelect.id = `cantidad_${nombrePlato.toLowerCase().replace(/\s/g, "_")}`;
+
+        // Agrega opciones al select
+        for (let j = 0; j <= 15; j++) {
+            const opcion = document.createElement("option");
+            opcion.value = j;
+            opcion.textContent = j;
+            cantidadSelect.appendChild(opcion);
+        }
+        productoDiv.appendChild(cantidadSelect); #}
+
+        // Agrega el elemento `producto` al DOM
+        document.getElementById(categoriaNombre).appendChild(productoDiv);
+
+        if(categoriaNombre === primerCategoria ){
+            var divPrincipal = document.getElementById(categoriaNombre);
+            divPrincipal.style.display="flex"
+        } else {
+            var divPrincipal = document.getElementById(categoriaNombre);
+            divPrincipal.style.display="none"
+        }
+    }
+
+// Llamadas a la función agregarPlato para cada plato en el array
+for (let i = 0; i < platos.length; i++) {
+    const categoriaNombre = Object.keys(platos[i])[0];
+    const platosDeCategoria = platos[i][categoriaNombre];
+
+    // Luego puedes iterar sobre los platos de la categoría y hacer lo que necesites
+    for (let j = 0; j < platosDeCategoria.length; j++) {
+        agregarPlato(categoriaNombre, platosDeCategoria[j].id, platosDeCategoria[j].name, platosDeCategoria[j].desc, platosDeCategoria[j].precio, platosDeCategoria[j].extras);
+    }
+}
+
+
+function reiniciarSelectores() {
+    // Obtén todos los elementos select con la clase "cantidad"
+    const selectores = document.querySelectorAll('.cantidad-span');
+
+    pedidosMesa = [];
+
+    // Reinicia el valor de cada selector a cero
+    selectores.forEach(selector => {
+        selector.innerHTML = 0;
+    });
+}    
+
+function realizarPedido() {
+    // Obtener la lista de platos pedidos
+    //const listaPedidos = obtenerListaPedidos();
+    
+    //const pedidosMesa = obtenerListaPedidosArray();
+
+    // Verificar que se haya seleccionado al menos un plato
+    if (pedidosMesa.length === 0) {
+        mostrarAvisoModal("Por favor, selecciona al menos un plato antes de realizar el pedido.");
+    } else {
+
+        $.ajax({
+            url: "{{ path('add_pedido') }}",
+            type: 'POST',
+            data: {
+                pedido: pedidosMesa,
+                nummesa: {{numMesa}},
+            },
+
+            success: function (response){
+
+            },
+            error:  function (response){
+                console.log(response)
+            }
+        })
+        // Mostrar el modal con la lista de platos pedidos
+        mostrarModal(pedidosMesa);
+
+        // Reiniciar los selectores después de realizar el pedido
+        reiniciarSelectores();
+
+        // Cerrar la barra lateral y el modal después de 3 segundos
+        setTimeout(() => {
+            cerrarBarraLateral();
+            cerrarModal();
+        }, 3000);
+    }
+}
+
+{# function obtenerListaPedidos() {
+    const listaPedidos = [];
+
+    // Iterar sobre los elementos con clase "producto" y obtener los datos
+    const productos = document.querySelectorAll('.producto');
+    productos.forEach(producto => {
+        const nombrePlato = producto.querySelector('.nombre').textContent;
+        const cantidad = producto.querySelector('.cantidad').value;
+
+        // Agregar a la lista si la cantidad es mayor que 0
+        if (cantidad > 0) {
+            listaPedidos.push(`${nombrePlato} - Cantidad: ${cantidad}`);
+        }
+    });
+
+    return listaPedidos;
+}
+
+function obtenerListaPedidosArray() {
+    const pedidosMesa = [];
+
+    // Iterar sobre los elementos con clase "producto" y obtener los datos
+    const productos = document.querySelectorAll('.producto');
+    productos.forEach(producto => {
+        const nombrePlato = producto.querySelector('.nombre').textContent;
+        const cantidad = producto.querySelector('.cantidad').value;
+        const idPlato = producto.querySelector('.plato-id').textContent;
+
+        // Agregar a la lista si la cantidad es mayor que 0
+        if (cantidad > 0) {
+            pedidosMesa.push({ nombre: nombrePlato, cantidad: cantidad, id: idPlato });
+        }
+    });
+
+    return pedidosMesa;
+} #}
+
+function mostrarModal(listaPedidos) {
+    const modal = document.getElementById('modal');
+    const listaPedidosDiv = document.getElementById('listaPedidos');
+    // const gifModal = document.getElementById('gifModal');
+
+    // Limpiar contenido anterior
+    listaPedidosDiv.innerHTML = '';
+
+    console.log(listaPedidos)
+
+    // Mostrar cada plato en la lista
+    listaPedidos.forEach(pedido => {
+        const pedidoDiv = document.createElement('div');
+        if(pedido.extra !== ''){
+            pedidoDiv.textContent = '- '+pedido.nombre +' ( extras: '+pedido.extra+')';
+            listaPedidosDiv.appendChild(pedidoDiv);
+        } else {
+            pedidoDiv.textContent = '- '+pedido.nombre;
+            listaPedidosDiv.appendChild(pedidoDiv);
+        }
+    });
+
+    // Cambiar la fuente del gif
+    // gifModal.src = 'chicote.gif';
+
+    // Mostrar el modal
+    modal.style.display = 'block';
+}
+
+function cerrarModal() {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'none';
+}
+
+function mostrarAvisoModal(aviso) {
+    const avisoModal = document.getElementById('avisoModal');
+    const mensajeAviso = document.getElementById('mensajeAviso');
+
+    // Asignar el mensaje del aviso
+    mensajeAviso.textContent = aviso;
+
+    // Mostrar el aviso modal
+    avisoModal.style.display = 'block';
+}
+
+function cerrarAvisoModal() {
+    const avisoModal = document.getElementById('avisoModal');
+    avisoModal.style.display = 'none';
+}
+
+
+    function mostrarCategoria(categoria) {
+    // Ocultar todos los contenedores
+    nombresCategorias.forEach(contenedor => {
+        document.getElementById(contenedor).style.display = 'none';
+    });
+
+    // Mostrar el contenedor de la categoría seleccionada
+    document.getElementById(categoria).style.display = 'flex';
+    }
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var contenedor = document.getElementById("botonesCategoria");
+        var botones = contenedor.children; // Obtener directamente los hijos
+
+        // Mostrar solo 4 elementos inicialmente
+        for (var i = 0; i < botones.length; i++) {
+            if (i >= 4) {
+                botones[i].style.display = "none";
+            }
+        }
+
+        // Agregar botón "Mostrar Más"
+        var mostrarMas = document.createElement("button");
+        mostrarMas.innerHTML = '<i class="fas fa-plus"></i>';
+        mostrarMas.classList.add("boton-redondo");
+        mostrarMas.addEventListener("click", function () {
+            for (var i = 0; i < botones.length; i++) {
+                botones[i].style.display = "inline-block";
+            }
+            mostrarMas.style.display = "none";
+        });
+        contenedor.parentNode.appendChild(mostrarMas);
+    });
+
+
+</script>
+</html>
+
+
+
+{% endblock %}
