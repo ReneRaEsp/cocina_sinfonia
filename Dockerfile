@@ -27,6 +27,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Configura Git seguro y ejecuta composer
+ENV SYMFONY_SKIP_SCRIPT=1
 RUN git config --global --add safe.directory /var/www/html && \
     composer install --no-dev --optimize-autoloader
 
